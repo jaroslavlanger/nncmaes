@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from contextlib import suppress
+import math
 from numbers import Real
 import os
 import random
@@ -301,7 +302,7 @@ class WrappedCma(Cma):
     def __init__(
         self,
         *,
-        x0,
+        x0: Iterable[Real],
         lb=None,
         ub=None,
         lambda_=None,
@@ -581,19 +582,6 @@ def predict_zeros(*, x_train, y_train, x_test, **ignored):
     return zeros, zeros
 
 
-def evaluate_all(
-    *, pred=None, pred_std=None, points, problem
-) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.uint]]:
-    eval_idx = np.arange(points.shape[0], dtype=np.uint)
-    values = np.array(
-        [
-            problem(p) if not problem.all_evals_used else np.float64(np.nan)
-            for p in points
-        ]
-    )[:, None]
-    return values, eval_idx
-
-
 class SurrogateCallable(Protocol):
     def __call__(
         self,
@@ -646,13 +634,83 @@ class Surrogate:
         return pred_mean, pred_std
 
 
+class EvolutionControl(Protocol):
+    def __call__(
+        self,
+        *,
+        pred: npt.NDArray[np.float64],
+        pred_std: npt.NDArray[np.float64],
+        points: npt.NDArray[np.float64],
+        problem: Problem,
+    ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.uint]]: ...
+
+
+def evaluate_all(
+    *,
+    pred: Optional[npt.NDArray[np.float64]] = None,
+    pred_std: Optional[npt.NDArray[np.float64]] = None,
+    points: npt.NDArray[np.float64],
+    problem: Problem,
+) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.uint]]:
+    eval_idx = np.arange(points.shape[0], dtype=np.uint)
+    values = np.array(
+        [
+            problem(p) if not problem.all_evals_used else np.float64(np.nan)
+            for p in points
+        ]
+    )[:, None]
+    return values, eval_idx
+
+
+class AcquisitionFunction(Protocol):
+    def __call__(
+        self, pred: npt.NDArray[np.float64], pred_std: npt.NDArray[np.float64]
+    ) -> npt.NDArray[np.float64]: ...
+
+
+def mean_criterion(
+    pred: npt.NDArray[np.float64], pred_std: npt.NDArray[np.float64]
+) -> npt.NDArray[np.float64]:
+    return pred
+
+
+class EvaluateBestPointsByCriterion:
+    def __init__(self, *, eval_ratio=0.05, criterion: AcquisitionFunction):
+        self.__criterion = criterion
+        self.__eval_ratio = eval_ratio
+
+    def __call__(
+        self,
+        *,
+        pred: npt.NDArray[np.float64],
+        pred_std: npt.NDArray[np.float64],
+        points: npt.NDArray[np.float64],
+        problem: Problem,
+    ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.uint]]:
+        eval_order_idx = (
+            self.__criterion(pred, pred_std).argsort(axis=0).astype(np.uint).squeeze()
+        )
+        n_eval = math.ceil(self.__eval_ratio * pred.shape[0])
+        for idx in eval_order_idx[:n_eval]:
+            pred[idx] = (
+                problem(points[idx])
+                if not problem.all_evals_used
+                else np.float64(np.nan)
+            )
+        pred[eval_order_idx[n_eval:]] += (
+            np.nanmin(pred[eval_order_idx[:n_eval]])
+            - pred[eval_order_idx[n_eval:]].min()
+        )
+        return pred, eval_order_idx[:n_eval]
+
+
 def seek_minimum(
     problem: Problem,
     *,
     es: Cma,
     surrogate: Optional[SurrogateCallable] = None,
     n_min_coef: float = 1e-8,
-    evolution_control=evaluate_all,
+    evolution_control: EvolutionControl = evaluate_all,
     seed=None,
     log: Optional[Callable] = None,
 ):
@@ -758,6 +816,7 @@ if __name__ == "__main__":
                 shift_and_scale=shift_and_scale_x_by_es_y_by_train,
             ),
             n_min_coef=1,
+            evolution_control=EvaluateBestPointsByCriterion(criterion=mean_criterion),
             seed=seed,
             log=lambda **kwargs: print(report(**kwargs)),
         )
