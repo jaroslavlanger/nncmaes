@@ -592,87 +592,142 @@ def predict_zeros(
     zeros = np.zeros((x_test.shape[0], y_train.shape[-1]))
     return zeros, zeros
 
-# https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L15-L91
-class NN():
-    def __init__(self, x_dim, y_dim, hidden_size, init_stddev_1_w, init_stddev_1_b, 
-                 init_stddev_2_w, n, learning_rate, ens):
 
+# https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L15-L91
+class NN:
+    def __init__(
+        self,
+        x_dim,
+        y_dim,
+        hidden_size,
+        init_stddev_1_w,
+        init_stddev_1_b,
+        init_stddev_2_w,
+        n,
+        learning_rate,
+        ens,
+    ):
         # setting up as for a usual NN
         self.x_dim = x_dim
         self.y_dim = y_dim
-        self.hidden_size = hidden_size 
+        self.hidden_size = hidden_size
         self.n = n
         self.learning_rate = learning_rate
-        
+
         # set up NN
-        self.inputs = tf.placeholder(tf.float64, [None, x_dim], name='inputs')
-        self.y_target = tf.placeholder(tf.float64, [None, y_dim], name='target')
-        
-        activation_fns = [tensorflow.keras.activations.selu, tf.nn.tanh, tensorflow.keras.activations.gelu, tensorflow.keras.activations.softsign, tf.math.erf, tf.nn.swish, tensorflow.keras.activations.linear]
-        
-        if ens <= len(activation_fns)-1:
-            self.layer_1_w = tf.layers.Dense(hidden_size,
-            activation = activation_fns[ens],
-            kernel_initializer=tf.random_normal_initializer(mean=0.,stddev=init_stddev_1_w),
-            bias_initializer=tf.random_normal_initializer(mean=0.,stddev=init_stddev_1_b))
+        self.inputs = tf.placeholder(tf.float64, [None, x_dim], name="inputs")
+        self.y_target = tf.placeholder(tf.float64, [None, y_dim], name="target")
+
+        activation_fns = [
+            tensorflow.keras.activations.selu,  # pyright: ignore [reportAttributeAccessIssue]
+            tf.nn.tanh,
+            tensorflow.keras.activations.gelu,  # pyright: ignore [reportAttributeAccessIssue]
+            tensorflow.keras.activations.softsign,  # pyright: ignore [reportAttributeAccessIssue]
+            tf.math.erf,
+            tf.nn.swish,
+            tensorflow.keras.activations.linear,  # pyright: ignore [reportAttributeAccessIssue]
+        ]
+
+        if ens <= len(activation_fns) - 1:
+            self.layer_1_w = tf.layers.Dense(
+                hidden_size,
+                activation=activation_fns[ens],
+                kernel_initializer=tf.random_normal_initializer(
+                    mean=0.0, stddev=init_stddev_1_w
+                ),
+                bias_initializer=tf.random_normal_initializer(
+                    mean=0.0, stddev=init_stddev_1_b
+                ),
+            )
         else:
-            af_ind = randint(0,3)
-            self.layer_1_w = tf.layers.Dense(hidden_size,
-            activation= activation_fns[af_ind],
-            kernel_initializer=tf.random_normal_initializer(mean=0.,stddev=init_stddev_1_w),
-            bias_initializer=tf.random_normal_initializer(mean=0.,stddev=init_stddev_1_b))
-        
+            af_ind = randint(0, 3)
+            self.layer_1_w = tf.layers.Dense(
+                hidden_size,
+                activation=activation_fns[af_ind],
+                kernel_initializer=tf.random_normal_initializer(
+                    mean=0.0, stddev=init_stddev_1_w
+                ),
+                bias_initializer=tf.random_normal_initializer(
+                    mean=0.0, stddev=init_stddev_1_b
+                ),
+            )
+
         self.layer_1 = self.layer_1_w.apply(self.inputs)
-        
-        self.output_w = tf.layers.Dense(y_dim, 
-            activation=None, use_bias=False,
-            kernel_initializer=tf.random_normal_initializer(mean=0.,stddev=init_stddev_2_w))
-        
+
+        self.output_w = tf.layers.Dense(
+            y_dim,
+            activation=None,
+            use_bias=False,
+            kernel_initializer=tf.random_normal_initializer(
+                mean=0.0, stddev=init_stddev_2_w
+            ),
+        )
+
         self.output = self.output_w.apply(self.layer_1)
-        
+
         # set up loss and optimiser - this is modified later with anchoring regularisation
         self.opt_method = tf.train.AdamOptimizer(self.learning_rate)
-        self.mse_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
-        self.loss_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
+        self.mse_ = (
+            1
+            / tf.shape(self.inputs, out_type=tf.int64)[0]
+            * tf.reduce_sum(tf.square(self.y_target - self.output))
+        )
+        self.loss_ = (
+            1
+            / tf.shape(self.inputs, out_type=tf.int64)[0]
+            * tf.reduce_sum(tf.square(self.y_target - self.output))
+        )
         self.optimizer = self.opt_method.minimize(self.loss_)
         return
-    
-    
+
     def get_weights(self, sess):
-        '''method to return current params'''
-        
+        """method to return current params"""
+
         ops = [self.layer_1_w.kernel, self.layer_1_w.bias, self.output_w.kernel]
         w1, b1, w2 = sess.run(ops)
-        
-        return w1, b1, w2 
-    
-    
-    def anchor(self, sess, lambda_):   #lambda_anchor
-        '''regularise around initial parameters''' 
-        
+
+        return w1, b1, w2
+
+    def anchor(self, sess, lambda_):  # lambda_anchor
+        """regularise around initial parameters"""
+
         w1, b1, w2 = self.get_weights(sess)
 
         # get initial params
-        self.w1_init, self.b1_init, self.w2_init = w1, b1, w2 
-        
-        loss = lambda_[0]*tf.reduce_sum(tf.square(self.w1_init - self.layer_1_w.kernel))
-        loss += lambda_[1]*tf.reduce_sum(tf.square(self.b1_init - self.layer_1_w.bias))
-        loss += lambda_[2]*tf.reduce_sum(tf.square(self.w2_init - self.output_w.kernel))
-        
+        self.w1_init, self.b1_init, self.w2_init = w1, b1, w2
+
+        loss = lambda_[0] * tf.reduce_sum(
+            tf.square(self.w1_init - self.layer_1_w.kernel)
+        )
+        loss += lambda_[1] * tf.reduce_sum(
+            tf.square(self.b1_init - self.layer_1_w.bias)
+        )
+        loss += lambda_[2] * tf.reduce_sum(
+            tf.square(self.w2_init - self.output_w.kernel)
+        )
+
         # combine with original loss
-        self.loss_ = self.loss_ + 1/tf.shape(self.inputs, out_type=tf.int64)[0] * loss 
+        self.loss_ = self.loss_ + 1 / tf.shape(self.inputs, out_type=tf.int64)[0] * loss
         self.optimizer = self.opt_method.minimize(self.loss_)
         return
-      
+
     def predict(self, x, sess):
-        '''predict method'''
-        
+        """predict method"""
+
         feed = {self.inputs: x}
         y_pred = sess.run(self.output, feed_dict=feed)
         return y_pred
+
+
 # https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L15-L91
 
-def raf(*, x_train: npt.NDArray[np.float64], y_train: npt.NDArray[np.float64], x_test: npt.NDArray[np.float64]):
+
+def raf(
+    *,
+    x_train: npt.NDArray[np.float64],
+    y_train: npt.NDArray[np.float64],
+    x_test: npt.NDArray[np.float64],
+):
     X_train, y_train, X_val = x_train, y_train, x_test
     # https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L94-L157
     n = X_train.shape[0]
@@ -681,64 +736,97 @@ def raf(*, x_train: npt.NDArray[np.float64], y_train: npt.NDArray[np.float64], x
 
     n_ensembles = 5
     hidden_size = 100
-    init_stddev_1_w =  np.sqrt(10)
-    init_stddev_1_b = init_stddev_1_w # set these equal
-    init_stddev_2_w = 1.0/np.sqrt(hidden_size) # normal scaling
-    data_noise = 0.01 #estimated noise variance, feel free to experiment with different values
-    lambda_anchor = data_noise/(np.array([init_stddev_1_w,init_stddev_1_b,init_stddev_2_w])**2)
+    init_stddev_1_w = np.sqrt(10)
+    init_stddev_1_b = init_stddev_1_w  # set these equal
+    init_stddev_2_w = 1.0 / np.sqrt(hidden_size)  # normal scaling
+    data_noise = (
+        0.01  # estimated noise variance, feel free to experiment with different values
+    )
+    lambda_anchor = data_noise / (
+        np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_2_w]) ** 2
+    )
 
     n_epochs = 1000
     learning_rate = 0.01
 
-    NNs=[]
-    y_prior=[]
+    NNs = []
+    y_prior = []
     tf.reset_default_graph()
     sess = tf.Session()
 
     # loop to initialise all ensemble members, get priors
-    for ens in range(0,n_ensembles):
-        NNs.append(NN(x_dim, y_dim, hidden_size, 
-                      init_stddev_1_w, init_stddev_1_b, init_stddev_2_w, n, learning_rate, ens))
-        
+    for ens in range(0, n_ensembles):
+        NNs.append(
+            NN(
+                x_dim,
+                y_dim,
+                hidden_size,
+                init_stddev_1_w,
+                init_stddev_1_b,
+                init_stddev_2_w,
+                n,
+                learning_rate,
+                ens,
+            )
+        )
+
         # initialise only unitialized variables - stops overwriting ensembles already created
         global_vars = tf.global_variables()
-        is_not_initialized   = sess.run([tf.is_variable_initialized(var) for var in global_vars])
-        not_initialized_vars = [v for (v, f) in zip(global_vars, is_not_initialized) if not f]
+        is_not_initialized = sess.run(
+            [tf.is_variable_initialized(var) for var in global_vars]
+        )
+        not_initialized_vars = [
+            v for (v, f) in zip(global_vars, is_not_initialized) if not f
+        ]
         if len(not_initialized_vars):
             sess.run(tf.variables_initializer(not_initialized_vars))
-        
+
         # do regularisation now that we've created initialisations
-        NNs[ens].anchor(sess, lambda_anchor)  #Do that if you want to minimize the anchored loss
-        
+        NNs[ens].anchor(
+            sess, lambda_anchor
+        )  # Do that if you want to minimize the anchored loss
+
         # save their priors
         y_prior.append(NNs[ens].predict(X_val, sess))
 
-    for ens in range(0,n_ensembles):
-        
+    for ens in range(0, n_ensembles):
         feed_b = {}
         feed_b[NNs[ens].inputs] = X_train
         feed_b[NNs[ens].y_target] = y_train
-        print('\nNN:',ens)
-        
+        print("\nNN:", ens)
+
         ep_ = 0
-        while ep_ < n_epochs:    
+        while ep_ < n_epochs:
             ep_ += 1
-            blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)
-            if ep_ % (n_epochs/5) == 0:
+            blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)  # noqa: F841
+            if ep_ % (n_epochs / 5) == 0:
                 loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
                 loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                print('epoch:', ep_, ', mse_', np.round(loss_mse*1e3,3), ', loss_anch', np.round(loss_anch*1e3,3))
+                print(
+                    "epoch:",
+                    ep_,
+                    ", mse_",
+                    np.round(loss_mse * 1e3, 3),
+                    ", loss_anch",
+                    np.round(loss_anch * 1e3, 3),
+                )
                 # the anchored loss is minimized, but it's useful to keep an eye on mse too
 
     # run predictions
-    y_pred=[]
-    for ens in range(0,n_ensembles):
+    y_pred = []
+    for ens in range(0, n_ensembles):
         y_pred.append(NNs[ens].predict(X_val, sess))
 
     """Display results:"""
 
-    method_means = np.mean(np.array(y_pred)[:,:,0], axis=0).reshape(-1,)
-    method_stds = np.sqrt(np.square(np.std(np.array(y_pred)[:,:,0],axis=0, ddof=1)) + data_noise).reshape(-1,)
+    method_means = np.mean(np.array(y_pred)[:, :, 0], axis=0).reshape(
+        -1,
+    )
+    method_stds = np.sqrt(
+        np.square(np.std(np.array(y_pred)[:, :, 0], axis=0, ddof=1)) + data_noise
+    ).reshape(
+        -1,
+    )
     # https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L94-L157
     return method_means[:, None], method_stds[:, None]
 
