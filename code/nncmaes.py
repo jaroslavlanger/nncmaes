@@ -26,6 +26,7 @@ from typing import (
     Type,
     TypeVar,
 )
+import warnings
 
 import numpy as np
 from numpy.typing import NDArray
@@ -105,6 +106,10 @@ class Problem(ABC):
 
     @property
     @abstractmethod
+    def evals_left(self) -> Optional[int]: ...
+
+    @property
+    @abstractmethod
     def all_evals_used(self) -> bool: ...
 
     @property
@@ -161,6 +166,11 @@ class ProblemCocoex(Problem):
         )
 
     def __call__(self, x) -> np.float64:
+        try:
+            if self.evaluations >= self.__budget:  # type: ignore[operator]
+                return np.float64(np.nan)
+        except TypeError:
+            pass
         return self.__problem(x)
 
     def __repr__(self) -> str:
@@ -197,6 +207,10 @@ class ProblemCocoex(Problem):
     @property
     def evaluations(self) -> int:
         return self.__problem.evaluations
+
+    @property
+    def evals_left(self) -> Optional[int]:
+        return self.__budget - self.evaluations if self.__budget is not None else False
 
     @property
     def all_evals_used(self) -> bool:
@@ -237,6 +251,11 @@ class ProblemIoh(Problem):
         )
 
     def __call__(self, x) -> np.float64:
+        try:
+            if self.evaluations >= self.__budget:  # type: ignore[operator]
+                return np.float64(np.nan)
+        except TypeError:
+            pass
         return np.float64(self.__problem(x))
 
     def __repr__(self) -> str:
@@ -273,6 +292,10 @@ class ProblemIoh(Problem):
     @property
     def evaluations(self) -> int:
         return self.__problem.state.evaluations
+
+    @property
+    def evals_left(self) -> Optional[int]:
+        return self.__budget - self.evaluations if self.__budget is not None else False
 
     @property
     def all_evals_used(self) -> bool:
@@ -801,114 +824,117 @@ class NN:
         return y_pred
 
 
-def raf(
-    *,
-    x_train: NDArray[np.float64],
-    y_train: NDArray[np.float64],
-    x_test: NDArray[np.float64],
-):
-    """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
-    X_train, y_train, X_val = x_train, y_train, x_test
+class RAF(ModelFactory):
+    def __init__(self, *, data_noise: float = 0.01, debug: bool = False):
+        """
+        data_noise: estimated noise variance, feel free to experiment with different values
+        """
+        self.__data_noise = data_noise
+        self.__debug = debug
 
-    n = X_train.shape[0]
-    x_dim = X_train.shape[1]
-    y_dim = y_train.shape[1]
+    def __repr__(self) -> str:
+        return repr_default(self, data_noise=self.__data_noise)
 
-    n_ensembles = 5
-    hidden_size = 100
-    init_stddev_1_w = np.sqrt(10)
-    init_stddev_1_b = init_stddev_1_w  # set these equal
-    init_stddev_2_w = 1.0 / np.sqrt(hidden_size)  # normal scaling
-    data_noise = (
-        0.01  # estimated noise variance, feel free to experiment with different values
-    )
-    lambda_anchor = data_noise / (
-        np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_2_w]) ** 2
-    )
+    def __call__(
+        self,
+        *,
+        x_train: NDArray[np.float64],
+        y_train: NDArray[np.float64],
+        x_test: NDArray[np.float64],
+    ):
+        data_noise = self.__data_noise
+        """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
+        X_train, y_train, X_val = x_train, y_train, x_test
 
-    n_epochs = 1000
-    learning_rate = 0.01
+        n = X_train.shape[0]
+        x_dim = X_train.shape[1]
+        y_dim = y_train.shape[1]
 
-    NNs = []
-    y_prior = []
-    tf.reset_default_graph()
-    sess = tf.Session()
-
-    # loop to initialise all ensemble members, get priors
-    for ens in range(0, n_ensembles):
-        NNs.append(
-            NN(
-                x_dim,
-                y_dim,
-                hidden_size,
-                init_stddev_1_w,
-                init_stddev_1_b,
-                init_stddev_2_w,
-                n,
-                learning_rate,
-                ens,
-            )
+        n_ensembles = 5
+        hidden_size = 100
+        init_stddev_1_w = np.sqrt(10)
+        init_stddev_1_b = init_stddev_1_w  # set these equal
+        init_stddev_2_w = 1.0 / np.sqrt(hidden_size)  # normal scaling
+        lambda_anchor = data_noise / (
+            np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_2_w]) ** 2
         )
 
-        # initialise only unitialized variables - stops overwriting ensembles already created
-        global_vars = tf.global_variables()
-        is_not_initialized = sess.run(
-            [tf.is_variable_initialized(var) for var in global_vars]
-        )
-        not_initialized_vars = [
-            v for (v, f) in zip(global_vars, is_not_initialized) if not f
-        ]
-        if len(not_initialized_vars):
-            sess.run(tf.variables_initializer(not_initialized_vars))
+        n_epochs = 1000
+        learning_rate = 0.01
 
-        # do regularisation now that we've created initialisations
-        NNs[ens].anchor(
-            sess, lambda_anchor
-        )  # Do that if you want to minimize the anchored loss
+        NNs = []
+        y_prior = []
+        tf.reset_default_graph()
+        sess = tf.Session()
 
-        # save their priors
-        y_prior.append(NNs[ens].predict(X_val, sess))
-
-    for ens in range(0, n_ensembles):
-        feed_b = {}
-        feed_b[NNs[ens].inputs] = X_train
-        feed_b[NNs[ens].y_target] = y_train
-        print("\nNN:", ens)
-
-        ep_ = 0
-        while ep_ < n_epochs:
-            ep_ += 1
-            blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)  # noqa: F841
-            if ep_ % (n_epochs / 5) == 0:
-                loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
-                loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                print(
-                    "epoch:",
-                    ep_,
-                    ", mse_",
-                    np.round(loss_mse * 1e3, 3),
-                    ", loss_anch",
-                    np.round(loss_anch * 1e3, 3),
+        # loop to initialise all ensemble members, get priors
+        for ens in range(0, n_ensembles):
+            NNs.append(
+                NN(
+                    x_dim,
+                    y_dim,
+                    hidden_size,
+                    init_stddev_1_w,
+                    init_stddev_1_b,
+                    init_stddev_2_w,
+                    n,
+                    learning_rate,
+                    ens,
                 )
-                # the anchored loss is minimized, but it's useful to keep an eye on mse too
+            )
 
-    # run predictions
-    y_pred = []
-    for ens in range(0, n_ensembles):
-        y_pred.append(NNs[ens].predict(X_val, sess))
+            # initialise only unitialized variables - stops overwriting ensembles already created
+            global_vars = tf.global_variables()
+            is_not_initialized = sess.run(
+                [tf.is_variable_initialized(var) for var in global_vars]
+            )
+            not_initialized_vars = [
+                v for (v, f) in zip(global_vars, is_not_initialized) if not f
+            ]
+            if len(not_initialized_vars):
+                sess.run(tf.variables_initializer(not_initialized_vars))
 
-    """Display results:"""
+            # do regularisation now that we've created initialisations
+            NNs[ens].anchor(
+                sess, lambda_anchor
+            )  # Do that if you want to minimize the anchored loss
 
-    method_means = np.mean(np.array(y_pred)[:, :, 0], axis=0).reshape(
-        -1,
-    )
-    method_stds = np.sqrt(
-        np.square(np.std(np.array(y_pred)[:, :, 0], axis=0, ddof=1)) + data_noise
-    ).reshape(
-        -1,
-    )
+            # save their priors
+            y_prior.append(NNs[ens].predict(X_val, sess))
 
-    return method_means[:, None], method_stds[:, None]
+        for ens in range(0, n_ensembles):
+            feed_b = {}
+            feed_b[NNs[ens].inputs] = X_train
+            feed_b[NNs[ens].y_target] = y_train
+            if self.__debug:
+                print("\nNN:", ens)
+
+            ep_ = 0
+            while ep_ < n_epochs:
+                ep_ += 1
+                blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)  # noqa: F841
+                if ep_ % (n_epochs / 5) == 0:
+                    loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
+                    loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
+                    if self.__debug:
+                        print(
+                            "epoch:",
+                            ep_,
+                            ", mse_",
+                            np.round(loss_mse * 1e3, 3),
+                            ", loss_anch",
+                            np.round(loss_anch * 1e3, 3),
+                        )
+                    # the anchored loss is minimized, but it's useful to keep an eye on mse too
+
+        def raf(features):
+            y_pred = np.array([nn.predict(features, sess) for nn in NNs])
+            return Prediction(
+                np.mean(y_pred, axis=0),
+                np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise),
+            )
+
+        return raf
 
 
 class SurrogateCallable(Protocol):
@@ -995,16 +1021,16 @@ def evaluate_all(
     >>> isinstance(evaluate_all, EvolutionControl)
     True
     """
+    evals_left = problem.evals_left
+    evaluated_idx = np.arange(points.shape[0]).astype(np.uint)
     return ValuesAndEvaluatedIdx(
         values=np.array(
             [
-                problem(p)
-                if not (problem.final_target_hit or problem.all_evals_used)
-                else np.float64(-np.inf)
-                for p in points
+                problem(p) if not problem.final_target_hit else np.float64(np.nan)
+                for p in points[:evals_left]
             ]
         )[:, None],
-        evaluated_idx=np.arange(points.shape[0]).astype(np.uint),
+        evaluated_idx=evaluated_idx[:evals_left],
     )
 
 
@@ -1065,11 +1091,17 @@ class EvaluateBestPointsByCriterion(EvolutionControl):
             self.__criterion(pred).argsort(axis=0).astype(np.uint).squeeze()
         )
         n_eval = math.ceil(self.__eval_ratio * points.shape[0])
+        try:
+            n_eval = min(n_eval, problem.evals_left)  # type: ignore[assignment, type-var]
+        except:  # noqa: E722
+            pass
         pred_mean = pred.mean
         evaluated = eval_order_idx[:n_eval]
         for i in evaluated:
             pred_mean[i] = (
-                problem(points[i]) if not problem.all_evals_used else np.float64(np.nan)
+                problem(points[i])
+                if not problem.final_target_hit
+                else np.float64(np.nan)
             )
         # `Smart offset <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L234-L243>`_
         if (
@@ -1138,6 +1170,10 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 3 / self.truncation_ratio - model_size,
             )
         )
+        try:
+            number_evaluated = min(number_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
+        except:  # noqa: E722
+            pass
         eval_order_idx = (
             self.__criterion(pred).argsort(axis=0).astype(np.uint).squeeze()
         )
@@ -1146,7 +1182,11 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
         while not_evaluated.any():
             for i in (idx := eval_order_idx[:number_evaluated])[not_evaluated[idx]]:
-                values[i] = problem(points[i])
+                values[i] = (
+                    problem(points[i])
+                    if not problem.final_target_hit
+                    else np.float64(np.nan)
+                )
             evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
             n_evaluated = evaluated.sum()
             model_size = min(archive_size + n_evaluated, max_model_size)
@@ -1165,22 +1205,31 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 if n_kendall >= 2
                 else np.nan
             )  # noqa: F841
-            if tau >= self.__tau_thold:
-                if self.__offset_non_evaluated:
+            if (
+                tau >= self.__tau_thold
+                or problem.all_evals_used
+                or problem.final_target_hit
+            ):
+                pred_mean_not_evaluated = pred.mean[not_evaluated]
+                if self.__offset_non_evaluated and pred_mean_not_evaluated.size > 0:
                     eval_min = np.nanmin(values[evaluated])
-                    pred_mean_not_evaluated = pred.mean[not_evaluated]
                     values[not_evaluated] = (
                         pred_mean_not_evaluated
                         - pred_mean_not_evaluated.min()
                         + eval_min
                         + np.spacing(eval_min)
                     )
+                else:
+                    values[not_evaluated] = pred_mean_not_evaluated
                 break
-            number_evaluated += math.ceil(number_evaluated / 2)
+            eval_next = math.ceil(number_evaluated / 2)
+            try:
+                eval_next = min(eval_next, problem.evals_left)  # type: ignore[assignment, type-var]
+            except:  # noqa: E722
+                pass
+            number_evaluated += eval_next
 
-        return ValuesAndEvaluatedIdx(
-            values, np.flatnonzero(evaluated).astype(np.uint)
-        )  # TODO
+        return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
 
 
 @runtime_checkable
@@ -1304,7 +1353,7 @@ def report(*, problem, es, surrogate_and_ec, secs, seed) -> str:
                 f"{problem.instance:>2}-inst",
                 f"{problem.budget:>4}-budget",
                 f"{str(problem.final_target_hit):>5}-solved",
-                f"{problem.evaluations}-evals",
+                f"{problem.evaluations:>3}-evals",
                 f"{es.evals:>4}-cma-evals",
                 f"{secs:>4.0f}s",
                 f"{es.restarts}-restarts",
@@ -1349,15 +1398,30 @@ def get_seed_np() -> np.uint32:
     return keys[0]  # type: ignore[return-value] # pyright: ignore [reportReturnType]
 
 
-if __name__ == "__main__":
-    np.seterr("raise")
-    set_seed(seed := 1)
-    tf.compat.v1.disable_eager_execution()
-    dim, fun, inst, budget_coef = 2, 1, 1, 250
+def test(
+    *,
+    dim=None,
+    fun=None,
+    inst=None,
+    budget_coef=None,
+    seed=None,
+    save=False,
+    offset=True,
+):
+    dim = dim if dim is not None else 2
+    fun = fun if fun is not None else 1
+    inst = inst if inst is not None else 1
+    budget_coef = budget_coef if budget_coef is not None else 250
+    seed = seed if seed is not None else 1
 
-    problems = [ProblemCocoex, ProblemIoh]
-    es_list = [WrappedCma]
-    models = [predict_zeros_and_ones, predict_random]  # TODO: raf
+    warnings.simplefilter("error")
+    np.seterr("raise")
+    set_seed(seed)
+    tf.compat.v1.disable_eager_execution()
+
+    problems = [ProblemCocoex, ProblemIoh][1:]
+    es_list = [WrappedCma, WrappedModcma][:-1]
+    models = [predict_zeros_and_ones, predict_random, RAF()][2:]
     surrogates = [
         Surrogate(
             model=model,
@@ -1368,17 +1432,19 @@ if __name__ == "__main__":
     ]
     ec_list = [
         EvaluateBestPointsByCriterion(
-            criterion=mean_criterion, eval_ratio=0.1, offset_non_evaluated=True
+            criterion=mean_criterion, eval_ratio=0.1, offset_non_evaluated=offset
         ),
-        EvaluateUntilKendallThreshold(criterion=mean_criterion),
-    ]
+        EvaluateUntilKendallThreshold(
+            criterion=mean_criterion, offset_non_evaluated=offset
+        ),
+    ][1:]
     surr_ec_list = [
         None,
         *[
             SurrogateAndEc(surrogate=surrogate, evolution_control=ec, get_n_min=get_dim)
             for surrogate, ec in product(surrogates, ec_list)
         ],
-    ]
+    ][1:]
 
     for problem_class, es_class, surr_and_ec in product(
         problems, es_list, surr_ec_list
@@ -1396,8 +1462,17 @@ if __name__ == "__main__":
             seed=seed,
             log=lambda **kwargs: print(report(**kwargs)),  # TODO: log protocol
         )
-        if SAVE := False:
+        if save:
             with open(
                 f"d{dim:0>2}_f{fun:0>2}_i{inst:0>2}_b{budget_coef:0>3}_x_y.pickle", "wb"
             ) as f:
                 pickle.dump((x, y), f, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+if __name__ == "__main__":
+    fun = None
+    try:
+        fun = int(sys.argv[1])
+    except:  # noqa: E722
+        pass
+    test(fun=fun)
