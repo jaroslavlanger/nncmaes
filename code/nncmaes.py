@@ -40,6 +40,8 @@ import ioh  # type: ignore
 from cma import CMAEvolutionStrategy  # type: ignore
 from modcma import AskTellCMAES  # type: ignore
 
+N_MAX_COEF_DEFAULT = 20
+
 
 def repr_default(self, *attributes, **attrs_with_name) -> str:
     def format_attr(attr) -> str:
@@ -547,7 +549,23 @@ class Subset(ABC):
 class ClosestToAnyTestPoint(Subset):
     """<https://github.com/bajeluk/surrogate-cmaes/blob/fe33fda66e11c6949fe857289184007788c34794/src/data/Archive.m#L204-L244>"""
 
-    # TODO .min(axis=2).argpartition(n_max-1).astype(np.uint)[:n_max]"""
+    def __init__(
+        self,
+        *,
+        norm: Callable[[np.ndarray], np.float64] | Type[Norm] = np.linalg.norm,
+        n_max_coef=None,
+    ):
+        raise NotImplementedError
+
+    def __call__(
+        self,
+        *,
+        x_train: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+        y_train: np.ndarray[tuple[N, Literal[1]], np.dtype[np.float64]],
+        x_test: XPop,
+        es: Cma,
+    ) -> NDArray[np.uint]:
+        raise NotImplementedError  # TODO .min(axis=2).argpartition(n_max-1).astype(np.uint)[:n_max]"""
 
 
 class ClosestToEachTestPoint(Subset):
@@ -586,10 +604,10 @@ class ClosestToEachTestPoint(Subset):
         self,
         *,
         norm: Callable[[np.ndarray], np.float64] | Type[Norm] = np.linalg.norm,
-        n_max_coef=20,
+        n_max_coef=None,
     ):
         self.__norm = norm
-        self.__n_max_coef = n_max_coef
+        self.__n_max_coef = n_max_coef if n_max_coef is not None else N_MAX_COEF_DEFAULT
 
     def __repr__(self) -> str:
         return repr_default(self, self.__norm, n_max_coef=self.__n_max_coef)
@@ -824,12 +842,12 @@ class NN:
         return y_pred
 
 
-class RAF(ModelFactory):
-    def __init__(self, *, data_noise: float = 0.01, debug: bool = False):
+class Raf(ModelFactory):
+    def __init__(self, *, data_noise: Optional[float] = None, debug: bool = False):
         """
         data_noise: estimated noise variance, feel free to experiment with different values
         """
-        self.__data_noise = data_noise
+        self.__data_noise = data_noise if data_noise is not None else 0.01
         self.__debug = debug
 
     def __repr__(self) -> str:
@@ -949,10 +967,24 @@ class SurrogateCallable(Protocol):
 
 
 class Surrogate:
-    def __init__(self, *, model: Model | ModelFactory, subset: Subset, shift_and_scale):
-        self.__model = model
-        self.__subset = subset
-        self.__shift_and_scale = shift_and_scale
+    def __init__(
+        self,
+        *,
+        model: Optional[Model | ModelFactory] = None,
+        subset: Optional[Subset] = None,
+        shift_and_scale=None,
+    ):
+        self.__model = model if model is not None else Raf()
+        self.__subset = (
+            subset
+            if subset is not None
+            else ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis)
+        )
+        self.__shift_and_scale = (
+            shift_and_scale
+            if shift_and_scale is not None
+            else shift_and_scale_x_by_es_y_by_train
+        )
 
     def __repr__(self) -> str:
         return repr_default(
@@ -1042,6 +1074,10 @@ class AcquisitionFunction(Protocol):
 
 def mean_criterion(pred: Prediction[N]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
     return pred.mean.squeeze()
+
+
+def pi_criterion(pred: Prediction[N]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+    raise NotImplementedError
 
 
 def ranking_difference_error():
@@ -1178,6 +1214,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             self.__criterion(pred).argsort(axis=0).astype(np.uint).squeeze()
         )
 
+        tau = np.nan
         (values := np.empty((n_points, 1))).fill(np.nan)
         evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
         while not_evaluated.any():
@@ -1229,6 +1266,21 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 pass
             number_evaluated += eval_next
 
+        # Uncomment for diagnostics, comment out for performance
+        std_of_means = pred.mean.std()
+        mean_of_stds = pred.std.mean()
+        print(
+            " | ".join(
+                [
+                    f"eval={evaluated.sum()}",
+                    f"not-eval={not_evaluated.sum()}",
+                    f"{tau=:>5.2f}",
+                    f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
+                    f"std(means)={std_of_means:.2e}",
+                    f"mean(stds)={mean_of_stds:.2e}",
+                ]
+            )
+        )
         return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
 
 
@@ -1256,7 +1308,7 @@ def get_dim(*, dim: int, **kwargs) -> int:
 class SurrogateAndEc(NamedTuple):
     surrogate: SurrogateCallable
     evolution_control: EvolutionControl
-    get_n_min: NMinCallable
+    get_n_min: NMinCallable = get_dim
 
     def __repr__(self) -> str:
         return repr_default(
@@ -1270,8 +1322,7 @@ def seek_minimum(
     es: Cma,
     surrogate_and_ec: Optional[SurrogateAndEc] = None,
     sort_archive=True,
-    seed=None,
-    log: Optional[Callable] = None,
+    log: Optional[Callable] = None,  # TODO: Log Protocol
 ) -> Archive:
     t_0 = time.perf_counter()
 
@@ -1337,13 +1388,12 @@ def seek_minimum(
             es=es,
             surrogate_and_ec=surrogate_and_ec,
             secs=t,
-            seed=seed,
         )
 
     return archive
 
 
-def report(*, problem, es, surrogate_and_ec, secs, seed) -> str:
+def report(*, problem, es, surrogate_and_ec, secs, seed=None) -> str:
     return " ".join(
         filter(
             None,
@@ -1357,12 +1407,12 @@ def report(*, problem, es, surrogate_and_ec, secs, seed) -> str:
                 f"{es.evals:>4}-cma-evals",
                 f"{secs:>4.0f}s",
                 f"{es.restarts}-restarts",
-                f"{seed:>10}-seed",
                 f"{str(es.pop_size_initial):>2}-init-pop",
                 f"{surrogate_and_ec}" if surrogate_and_ec is not None else None,
                 f"{problem.delta_to_optimum:.1e}-delta-f"
                 if hasattr(problem, "delta_to_optimum")
                 else None,
+                f"{seed:>10}-seed" if seed is not None else None,
             ),
         )
     )
@@ -1421,7 +1471,7 @@ def test(
 
     problems = [ProblemCocoex, ProblemIoh][1:]
     es_list = [WrappedCma, WrappedModcma][:-1]
-    models = [predict_zeros_and_ones, predict_random, RAF()][2:]
+    models = [predict_zeros_and_ones, predict_random, Raf(data_noise=None)][2:]
     surrogates = [
         Surrogate(
             model=model,
@@ -1459,8 +1509,7 @@ def test(
             problem,
             es=es,
             surrogate_and_ec=surr_and_ec,
-            seed=seed,
-            log=lambda **kwargs: print(report(**kwargs)),  # TODO: log protocol
+            log=lambda **kwargs: print(report(seed=seed, **kwargs)),
         )
         if save:
             with open(
