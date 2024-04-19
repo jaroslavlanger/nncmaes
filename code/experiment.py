@@ -36,7 +36,7 @@ import webbrowser  # to show post-processed results in the browser
 
 import sys
 import argparse
-from nncmaes import ProblemCocoex, seek_minimum, WrappedCma, SurrogateAndEc, Surrogate, mean_criterion, pi_criterion, EvaluateUntilKendallThreshold, tf, report
+from nncmaes import ProblemCocoex, seek_minimum, WrappedCma, SurrogateAndEc, Surrogate, Raf, mean_criterion, pi_criterion, EvaluateUntilKendallThreshold, tf, report
 tf.compat.v1.disable_eager_execution()
 
 ### input
@@ -69,7 +69,7 @@ suite_options = " ".join(
 )
 print(f"{suite_options = }")
 
-output_folder = "_".join(["cmaes_safe",
+output_folder = "_".join(["nncmaes",
                          f"{DIMENSION:0>2}d",
                          f"{FUNCTION:0>2}f"] + (
                         [f"{INSTANCE:0>3}i"] if INSTANCE is not None else []
@@ -92,7 +92,7 @@ for problem in suite:  # this loop will take several minutes or longer
             problem=ProblemCocoex(problem, budget_coef=budget_multiplier),
             es=WrappedCma(x0=x0),
             surrogate_and_ec=SurrogateAndEc(
-                surrogate=Surrogate(),
+                surrogate=Surrogate(model=Raf(data_noise=0)),
                 evolution_control=EvaluateUntilKendallThreshold(criterion=criterion)
             ),
             log=lambda **kwargs: print(report(**kwargs)),

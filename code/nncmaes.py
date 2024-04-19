@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 from collections.abc import Iterable
 from contextlib import suppress
 from dataclasses import dataclass
-from functools import wraps
+from functools import wraps, partial
 from itertools import product
 import math
 from numbers import Real
@@ -546,6 +546,22 @@ class Subset(ABC):
     def __repr__(self) -> str: ...
 
 
+class LastN(Subset):
+    def __repr__(self) -> str:
+        return self.__class__.__name__
+
+    def __call__(
+        self,
+        *,
+        x_train: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+        y_train: np.ndarray[tuple[N, Literal[1]], np.dtype[np.float64]],
+        x_test: XPop,
+        es: Cma,
+    ) -> NDArray[np.uint]:
+        n_total, dim = x_train.shape
+        max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)
+        return np.arange(n_total).astype(np.uint)[-max_model_size:]
+
 class ClosestToAnyTestPoint(Subset):
     """<https://github.com/bajeluk/surrogate-cmaes/blob/fe33fda66e11c6949fe857289184007788c34794/src/data/Archive.m#L204-L244>"""
 
@@ -598,16 +614,40 @@ class ClosestToEachTestPoint(Subset):
     ...               [ 3, -3],                               [ 3,  3],
     ... ]))
     array([ 1,  2, 11, 12], dtype=uint64)
+
+    >>> ClosestToEachTestPoint(norm_max=lambda d: 1, n_max_coef=4)(y_train=None, es=None,
+    ... x_train=np.array([
+    ... # idx:  0                   1                             2         3
+    ...     [-4, -4],           [-4, -2],                     [-4,  3], [-4,  4],
+    ... # idx:                                          4                   5
+    ...                                             [-3,  2],           [-3,  4],
+    ... # idx:  6                                                 7
+    ...     [-2, -4],                                         [-2,  3],
+    ... # idx:  8                   9                                      10
+    ...     [ 3, -4],           [ 3, -2],                               [ 3,  4],
+    ... # idx: 11        12                                      13        14
+    ...     [ 4, -4], [ 4, -3],                               [ 4,  3], [ 4,  4],
+    ... ]),
+    ... x_test=np.array([
+    ...               [-3, -3],                               [-3,  3],
+    ...               [ 3, -3],                               [ 3,  3],
+    ... ]))
+    array([ 2,  8, 10,  4,  9, 13,  5, 12], dtype=uint64)
     """
+    @staticmethod
+    def norm_max(dim):
+        return 4 * np.sqrt(distributions.chi2.ppf(0.99, df=dim))
 
     def __init__(
         self,
         *,
         norm: Callable[[np.ndarray], np.float64] | Type[Norm] = np.linalg.norm,
+        norm_max: Optional[Callable[[int], np.float64]] = None,
         n_max_coef=None,
     ):
         self.__norm = norm
         self.__n_max_coef = n_max_coef if n_max_coef is not None else N_MAX_COEF_DEFAULT
+        self.__norm_max = norm_max if norm_max is not None else self.norm_max
 
     def __repr__(self) -> str:
         return repr_default(self, self.__norm, n_max_coef=self.__n_max_coef)
@@ -622,10 +662,10 @@ class ClosestToEachTestPoint(Subset):
     ) -> NDArray[np.uint]:
         n_max = self.__n_max_coef * x_train.shape[1]
         n_total, dim = x_train.shape
-        if n_max >= n_total:
-            return np.arange(n_total).astype(np.uint)
+        norm_max = self.__norm_max(dim)
         # n_per_point = int(n_max / x_test.shape[0])
         norm = self.__norm if not isinstance(self.__norm, type) else self.__norm(es=es)
+
         # distance of train point (row) and test point (column)
         norms_2d = np.apply_along_axis(  # type: ignore[call-overload]
             norm,
@@ -633,16 +673,22 @@ class ClosestToEachTestPoint(Subset):
             arr=np.repeat(x_train[:, None, :], x_test.shape[0], axis=1) - x_test,
         )
         # <https://github.com/bajeluk/surrogate-cmaes/blob/fe33fda66e11c6949fe857289184007788c34794/src/data/Archive.m#L255>
-        norm_max = 4 * distributions.chi2.ppf(0.99, df=dim)  # TODO # noqa: F841
         # Argsorts each column (train point index with smallest norm on top)
         # then flattens them by rows i.e. each test points matters the same*.
+        near_indices = np.flatnonzero((norms_2d <= norm_max).any(axis=1))
+        if n_max >= n_total:
+            return np.arange(n_total).astype(np.uint)[near_indices]
         unique_indices, their_positions = np.unique(
             norms_2d.argpartition(kth=np.arange(n_max), axis=0)
             .astype(np.uint)[:n_max]
             .flatten(),
             return_index=True,
         )
-        return unique_indices[their_positions.argsort()][:n_max]
+        near_mask = np.isin(unique_indices, near_indices)
+        idx = unique_indices[near_mask][their_positions[near_mask].argsort()][:n_max]
+        if __debug__:
+            print(f"subset-max-norm={norms_2d[idx].min(axis=1).max()} | norm-max={norm_max}")
+        return idx
 
 
 def get_mean_and_std(samples, *, weights=None):
@@ -843,15 +889,19 @@ class NN:
 
 
 class Raf(ModelFactory):
-    def __init__(self, *, data_noise: Optional[float] = None, debug: bool = False):
+    data_noise:float = 0.01
+    epochs: int = 1000
+
+    def __init__(self, *, data_noise: Optional[float] = None, epochs: Optional[int]= None, debug: bool = False):
         """
         data_noise: estimated noise variance, feel free to experiment with different values
         """
-        self.__data_noise = data_noise if data_noise is not None else 0.01
+        self.__data_noise = data_noise if data_noise is not None else self.data_noise
+        self.__epochs = epochs if epochs is not None else self.epochs
         self.__debug = debug
 
     def __repr__(self) -> str:
-        return repr_default(self, data_noise=self.__data_noise)
+        return repr_default(self, data_noise=self.__data_noise, **(dict(epochs=self.__epochs) if self.__epochs != self.epochs else {}))
 
     def __call__(
         self,
@@ -867,6 +917,9 @@ class Raf(ModelFactory):
         n = X_train.shape[0]
         x_dim = X_train.shape[1]
         y_dim = y_train.shape[1]
+        if __debug__:
+            _max_model_size = max(x_test.shape[0], x_dim * (x_dim + 3) + 2)  # for kendall only
+            _n_kendall_archive = _max_model_size - 1
 
         n_ensembles = 5
         hidden_size = 100
@@ -877,7 +930,7 @@ class Raf(ModelFactory):
             np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_2_w]) ** 2
         )
 
-        n_epochs = 1000
+        n_epochs = self.__epochs
         learning_rate = 0.01
 
         NNs = []
@@ -924,7 +977,7 @@ class Raf(ModelFactory):
             feed_b = {}
             feed_b[NNs[ens].inputs] = X_train
             feed_b[NNs[ens].y_target] = y_train
-            if self.__debug:
+            if __debug__ and self.__debug:
                 print("\nNN:", ens)
 
             ep_ = 0
@@ -934,7 +987,7 @@ class Raf(ModelFactory):
                 if ep_ % (n_epochs / 5) == 0:
                     loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
                     loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                    if self.__debug:
+                    if __debug__ and self.__debug:
                         print(
                             "epoch:",
                             ep_,
@@ -942,8 +995,12 @@ class Raf(ModelFactory):
                             np.round(loss_mse * 1e3, 3),
                             ", loss_anch",
                             np.round(loss_anch * 1e3, 3),
-                        )
+                            "tau-train={:>5.2f}".format(kendalltau(y_train[-_n_kendall_archive:], np.array(NNs[ens].predict(X_train[-_n_kendall_archive:], sess))).statistic),  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+                            )
                     # the anchored loss is minimized, but it's useful to keep an eye on mse too
+
+        if __debug__ and self.__debug:
+            print("tau-train-ens={}".format(kendalltau(y_train[-_n_kendall_archive:], np.mean(np.array([nn.predict(X_train[-_n_kendall_archive:], sess) for nn in NNs]), axis=0)).statistic))    # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
 
         def raf(features):
             y_pred = np.array([nn.predict(features, sess) for nn in NNs])
@@ -1002,6 +1059,9 @@ class Surrogate:
         subset_idx = self.__subset(
             x_train=x_train, y_train=y_train, x_test=x_test, es=es
         )
+        subset_idx = np.sort(subset_idx)
+        if __debug__:
+            print(f"subset-idx-size={subset_idx.size}")
         x_subset, y_subset = x_train[subset_idx], y_train[subset_idx]
 
         (x_shift, x_scale), (y_shift, y_scale) = self.__shift_and_scale(
@@ -1047,23 +1107,23 @@ class EvolutionControl(Protocol):
 
 
 def evaluate_all(
-    *, model: Model, points: NDArray[np.float64], problem: Problem, archive: Archive
+    *, model: Model, points: NDArray[np.float64], problem: Problem, archive: Archive, debug_tau=False,
 ) -> ValuesAndEvaluatedIdx:
     """
     >>> isinstance(evaluate_all, EvolutionControl)
     True
     """
     evals_left = problem.evals_left
-    evaluated_idx = np.arange(points.shape[0]).astype(np.uint)
-    return ValuesAndEvaluatedIdx(
-        values=np.array(
-            [
-                problem(p) if not problem.final_target_hit else np.float64(np.nan)
-                for p in points[:evals_left]
-            ]
-        )[:, None],
-        evaluated_idx=evaluated_idx[:evals_left],
-    )
+    evaluated_idx = np.arange(points.shape[0]).astype(np.uint)[:evals_left]
+    values=np.array(
+        [
+            problem(p) if not problem.final_target_hit else np.float64(np.nan)
+            for p in points[:evals_left]
+        ]
+    )[:, None]
+    if __debug__ and debug_tau:
+        print("tau-population={:>5.2f}".format(kendalltau(values, model(points[:evals_left]).mean).statistic))
+    return ValuesAndEvaluatedIdx(values=values, evaluated_idx=evaluated_idx)
 
 
 class AcquisitionFunction(Protocol):
@@ -1164,10 +1224,12 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         criterion: AcquisitionFunction,
         tau_thold: float = 0.85,
         offset_non_evaluated: bool = False,
+        debug = True,
     ):
         self.__criterion = criterion
         self.__tau_thold = tau_thold
         self.__offset_non_evaluated = offset_non_evaluated
+        self.__debug = debug
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L83>
         self.n_for_tau = lambda popsi, nevaluated: int(
             max(15, min(1.2 * nevaluated, 0.75 * popsi))
@@ -1191,15 +1253,15 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         self, *, model: Model, points: XPop, problem: Problem, archive: Archive
     ) -> ValuesAndEvaluatedIdx:
         archive_size = archive.y.shape[0]
-        n_evaluated = 0
         dim = problem.dimension
         n_points = points.shape[0]
         max_model_size = max(n_points, dim * (dim + 3) + 2)
-        model_size = min(archive_size + n_evaluated, max_model_size)
+        model_size = min(archive_size, max_model_size)
         pred = model(points)
+
         # TODO: evaluate the max size, and take the subsets later
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L296-L297>
-        number_evaluated = int(
+        n_evaluated = int(
             1
             + max(
                 n_points * self.min_evals_percent / 100,
@@ -1207,25 +1269,30 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             )
         )
         try:
-            number_evaluated = min(number_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
+            n_evaluated = min(n_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
         except:  # noqa: E722
             pass
+        if __debug__:
+            if (_n_archive := min(self.n_for_tau(n_points, n_evaluated), model_size) - n_evaluated) > 0:
+                print("tau-archive={}".format(kendalltau(archive.y[-_n_archive:], model(archive.x[-_n_archive:]).mean).statistic))
+                # TODO test Kendall weighted
+
         eval_order_idx = (
             self.__criterion(pred).argsort(axis=0).astype(np.uint).squeeze()
         )
 
         tau = np.nan
+        n_kendall = None
         (values := np.empty((n_points, 1))).fill(np.nan)
         evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
         while not_evaluated.any():
-            for i in (idx := eval_order_idx[:number_evaluated])[not_evaluated[idx]]:
+            for i in (idx := eval_order_idx[:n_evaluated])[not_evaluated[idx]]:
                 values[i] = (
                     problem(points[i])
                     if not problem.final_target_hit
                     else np.float64(np.nan)
                 )
             evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
-            n_evaluated = evaluated.sum()
             model_size = min(archive_size + n_evaluated, max_model_size)
             n_kendall = min(self.n_for_tau(n_points, n_evaluated), model_size)
             n_kendall_archive = max(n_kendall - n_evaluated, 0)
@@ -1259,28 +1326,35 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 else:
                     values[not_evaluated] = pred_mean_not_evaluated
                 break
-            eval_next = math.ceil(number_evaluated / 2)
+            eval_next = math.ceil(n_evaluated / 2)
             try:
                 eval_next = min(eval_next, problem.evals_left)  # type: ignore[assignment, type-var]
             except:  # noqa: E722
                 pass
-            number_evaluated += eval_next
+            n_evaluated += eval_next
 
         # Uncomment for diagnostics, comment out for performance
         std_of_means = pred.mean.std()
         mean_of_stds = pred.std.mean()
-        print(
-            " | ".join(
-                [
-                    f"eval={evaluated.sum()}",
-                    f"not-eval={not_evaluated.sum()}",
-                    f"{tau=:>5.2f}",
-                    f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
-                    f"std(means)={std_of_means:.2e}",
-                    f"mean(stds)={mean_of_stds:.2e}",
-                ]
+        if __debug__ and self.__debug:
+            print(
+                " | ".join(
+                    [
+                        f"eval={evaluated.sum()}",
+                        f"not-eval={not_evaluated.sum()}",
+                        f"{tau=:>5.2f}",
+                        f"{n_kendall=:>2}",
+                        f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
+                        f"std(means)={std_of_means:.2e}",
+                        f"mean(stds)={mean_of_stds:.2e}",
+                    ]
+                )
             )
-        )
+        if __debug__:
+            try:
+                evaluate_all(model=model, points=points, problem=PROBLEM_DEBUG, archive=archive, debug_tau=True)  # type: ignore[name-defined]
+            except:  # noqa: E722
+                pass
         return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
 
 
@@ -1400,7 +1474,7 @@ def report(*, problem, es, surrogate_and_ec, secs, seed=None) -> str:
             (
                 f"{problem.dimension:>2}D",
                 f"{problem.function_id:>2}-fun",
-                f"{problem.instance:>2}-inst",
+                f"{problem.instance:>3}-inst",
                 f"{problem.budget:>4}-budget",
                 f"{str(problem.final_target_hit):>5}-solved",
                 f"{problem.evaluations:>3}-evals",
@@ -1471,7 +1545,7 @@ def test(
 
     problems = [ProblemCocoex, ProblemIoh][1:]
     es_list = [WrappedCma, WrappedModcma][:-1]
-    models = [predict_zeros_and_ones, predict_random, Raf(data_noise=None)][2:]
+    models = [predict_zeros_and_ones, predict_random, Raf(data_noise=0, epochs=5000, debug=True)][2:]
     surrogates = [
         Surrogate(
             model=model,
@@ -1481,13 +1555,14 @@ def test(
         for model in models
     ]
     ec_list = [
+        partial(evaluate_all, debug_tau=True),
         EvaluateBestPointsByCriterion(
             criterion=mean_criterion, eval_ratio=0.1, offset_non_evaluated=offset
         ),
         EvaluateUntilKendallThreshold(
             criterion=mean_criterion, offset_non_evaluated=offset
         ),
-    ][1:]
+    ][2:]
     surr_ec_list = [
         None,
         *[
@@ -1501,6 +1576,10 @@ def test(
     ):
         set_seed(seed)
         problem = problem_class.get(
+            dim=dim, fun=fun, inst=inst, budget_coef=budget_coef
+        )
+        global PROBLEM_DEBUG
+        PROBLEM_DEBUG = problem_class.get(
             dim=dim, fun=fun, inst=inst, budget_coef=budget_coef
         )
         es = es_class(x0=np.zeros(problem.dimension), seed=seed)
