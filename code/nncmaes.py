@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import abstractmethod, ABC
 from collections.abc import Iterable
 from contextlib import suppress
+from copy import deepcopy
 from dataclasses import dataclass
 from functools import wraps, partial
 from itertools import product
@@ -33,15 +34,15 @@ from numpy.typing import NDArray
 from scipy.stats import distributions, kendalltau  # type: ignore[import-untyped]
 import tensorflow  # type: ignore[import-untyped]
 import tensorflow.compat.v1 as tf  # type: ignore[import-untyped]
+import torch
+from torch.nn import Module, Linear, Dropout
+import torch.nn.functional as F
 
 with suppress(ImportError):
     import cocoex  # type: ignore
 import ioh  # type: ignore
 from cma import CMAEvolutionStrategy  # type: ignore
 from modcma import AskTellCMAES  # type: ignore
-
-N_MAX_COEF_DEFAULT = 20
-
 
 def repr_default(self, *attributes, **attrs_with_name) -> str:
     def format_attr(attr) -> str:
@@ -634,6 +635,8 @@ class ClosestToEachTestPoint(Subset):
     ... ]))
     array([ 2,  8, 10,  4,  9, 13,  5, 12], dtype=uint64)
     """
+    n_max_coef = 20
+
     @staticmethod
     def norm_max(dim):
         return 4 * np.sqrt(distributions.chi2.ppf(0.99, df=dim))
@@ -646,7 +649,7 @@ class ClosestToEachTestPoint(Subset):
         n_max_coef=None,
     ):
         self.__norm = norm
-        self.__n_max_coef = n_max_coef if n_max_coef is not None else N_MAX_COEF_DEFAULT
+        self.__n_max_coef = n_max_coef if n_max_coef is not None else self.n_max_coef
         self.__norm_max = norm_max if norm_max is not None else self.norm_max
 
     def __repr__(self) -> str:
@@ -677,15 +680,16 @@ class ClosestToEachTestPoint(Subset):
         # then flattens them by rows i.e. each test points matters the same*.
         near_indices = np.flatnonzero((norms_2d <= norm_max).any(axis=1))
         if n_max >= n_total:
-            return np.arange(n_total).astype(np.uint)[near_indices]
-        unique_indices, their_positions = np.unique(
-            norms_2d.argpartition(kth=np.arange(n_max), axis=0)
-            .astype(np.uint)[:n_max]
-            .flatten(),
-            return_index=True,
-        )
-        near_mask = np.isin(unique_indices, near_indices)
-        idx = unique_indices[near_mask][their_positions[near_mask].argsort()][:n_max]
+            idx = np.arange(n_total).astype(np.uint)[near_indices]
+        else:
+            unique_indices, their_positions = np.unique(
+                norms_2d.argpartition(kth=np.arange(n_max), axis=0)
+                .astype(np.uint)[:n_max]
+                .flatten(),
+                return_index=True,
+            )
+            near_mask = np.isin(unique_indices, near_indices)
+            idx = unique_indices[near_mask][their_positions[near_mask].argsort()][:n_max]
         if __debug__:
             print(f"subset-max-norm={norms_2d[idx].min(axis=1).max()} | norm-max={norm_max}")
         return idx
@@ -709,6 +713,7 @@ def get_mean_and_std(samples, *, weights=None):
         else:
             mean = samples.mean(axis=0)
             std = samples.std(axis=0)
+        # breakpoint()
         std[std == 0] = 1  # when std==0, (-mean) makes any value (==0)
         if (infs := np.isposinf(std)).any():
             std[infs] = np.finfo(np.float64).max
@@ -716,10 +721,6 @@ def get_mean_and_std(samples, *, weights=None):
         mean = 0
         std = 1
     return mean, std
-
-
-def shift_and_scale_x_by_es_y_by_train(*, x_train, y_train, x_test, es):
-    return (es.mean, es.std), get_mean_and_std(y_train)
 
 
 class Archive(NamedTuple):
@@ -887,6 +888,78 @@ class NN:
         y_pred = sess.run(self.output, feed_dict=feed)
         return y_pred
 
+class NN2:
+    def __init__(self, x_dim, y_dim, hidden_size, init_stddev_1_w, init_stddev_1_b, 
+                 init_stddev_2_w, n, learning_rate, ens):
+
+        # setting up as for a usual NN
+        self.x_dim = x_dim
+        self.y_dim = y_dim
+        self.hidden_size = hidden_size 
+        self.n = n
+        self.learning_rate = learning_rate
+        
+        # set up NN
+        self.inputs = tf.placeholder(tf.float64, [None, x_dim], name='inputs')
+        self.y_target = tf.placeholder(tf.float64, [None, y_dim], name='target')
+        activation_fns = [tensorflow.keras.activations.selu, tf.nn.tanh, tensorflow.keras.activations.gelu, tensorflow.keras.activations.softsign, tf.math.erf, tf.nn.swish, tensorflow.keras.activations.linear]  # pyright: ignore [reportAttributeAccessIssue]
+
+        
+        if ens <= len(activation_fns)-1:
+            self.layer_1_w = tf.layers.Dense(hidden_size, activation = activation_fns[ens], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_1_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_1_b))
+            self.layer_2_w = tf.layers.Dense(hidden_size, activation = activation_fns[ens], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_2_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
+        
+        else:
+            af_ind = randint(0,len(activation_fns)-1)
+            self.layer_1_w = tf.layers.Dense(hidden_size, activation = activation_fns[af_ind], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_1_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_1_b)) 
+            self.layer_2_w = tf.layers.Dense(hidden_size, activation = activation_fns[af_ind], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_2_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
+        
+        self.layer_1 = self.layer_1_w.apply(self.inputs)
+        self.layer_2 = self.layer_2_w.apply(self.layer_1)
+        self.output_w = tf.layers.Dense(y_dim, activation=None, use_bias=False, kernel_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
+        self.output = self.output_w.apply(self.layer_2)
+        
+        # set up loss and optimiser - this is modified later with anchoring regularisation
+        self.opt_method = tf.train.AdamOptimizer(self.learning_rate)
+        self.mse_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
+        self.loss_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
+        self.optimizer = self.opt_method.minimize(self.loss_)
+        return
+    
+    
+    def get_weights(self, sess):
+        '''method to return current params'''
+        
+        ops = [self.layer_1_w.kernel, self.layer_1_w.bias, self.layer_2_w.kernel, self.layer_2_w.bias, self.output_w.kernel]
+        w1, b1, w2, b2, w3 = sess.run(ops) 
+        
+        return w1, b1, w2, b2, w3
+    
+    
+    def anchor(self, sess, lambda_):   #lambda_anchor
+        '''regularise around initial parameters''' 
+        
+        w1, b1, w2, b2, w3 = self.get_weights(sess)
+        self.w1_init, self.b1_init, self.w2_init, self.b2_init, self.w3_init = w1, b1, w2, b2, w3
+        
+        loss = lambda_[0]*tf.reduce_sum(tf.square(self.w1_init - self.layer_1_w.kernel))
+        loss += lambda_[1]*tf.reduce_sum(tf.square(self.b1_init - self.layer_1_w.bias))
+        loss += lambda_[2]*tf.reduce_sum(tf.square(self.w2_init - self.layer_2_w.kernel))
+        loss += lambda_[2]*tf.reduce_sum(tf.square(self.b2_init - self.layer_2_w.bias))
+        loss += lambda_[2]*tf.reduce_sum(tf.square(self.w3_init - self.output_w.kernel))
+
+        # combine with original loss
+        self.loss_ = self.loss_ + 1/tf.shape(self.inputs, out_type=tf.int64)[0] * loss 
+        self.optimizer = self.opt_method.minimize(self.loss_)
+        return
+      
+    def predict(self, x, sess):
+        '''predict method'''
+        
+        feed = {self.inputs: x}
+        y_pred = sess.run(self.output, feed_dict=feed)
+        return y_pred
+
 
 class Raf(ModelFactory):
     data_noise:float = 0.01
@@ -909,6 +982,7 @@ class Raf(ModelFactory):
         x_train: NDArray[np.float64],
         y_train: NDArray[np.float64],
         x_test: NDArray[np.float64],
+        weights: NDArray[np.float64],
     ):
         data_noise = self.__data_noise
         """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
@@ -1011,6 +1085,272 @@ class Raf(ModelFactory):
 
         return raf
 
+class Raf2(ModelFactory):
+    data_noise:float = 0.01
+    epochs: int = 1000
+
+    def __init__(self, *, data_noise: Optional[float] = None, epochs: Optional[int]= None, debug: bool = False):
+        """
+        data_noise: estimated noise variance, feel free to experiment with different values
+        """
+        self.__data_noise = data_noise if data_noise is not None else self.data_noise
+        self.__epochs = epochs if epochs is not None else self.epochs
+        self.__debug = debug
+
+    def __repr__(self) -> str:
+        return repr_default(self, data_noise=self.__data_noise, **(dict(epochs=self.__epochs) if self.__epochs != self.epochs else {}))
+
+    def __call__(
+        self,
+        *,
+        x_train: NDArray[np.float64],
+        y_train: NDArray[np.float64],
+        x_test: NDArray[np.float64],
+    ):
+        data_noise = self.__data_noise
+        """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/additional_experiments/rafs_complex_arch.py#L97-L145>`_"""
+        X_train, y_train, X_val = x_train, y_train, x_test
+
+        # hyperparameters
+        n = X_train.shape[0]
+        x_dim = X_train.shape[1]
+        y_dim = y_train.shape[1]
+        n_ensembles = 5
+        hidden_size = 128
+        init_stddev_1_w =  np.sqrt(10)
+        init_stddev_1_b = init_stddev_1_w # set these equal
+        init_stddev_2_w = 1.0/np.sqrt(hidden_size) # normal scaling
+        lambda_anchor = data_noise/(np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_2_w])**2)
+        n_epochs = 1000
+        learning_rate = 0.01
+
+
+        NNs=[]
+        y_prior=[]
+        tf.reset_default_graph()
+        sess = tf.Session()
+
+        # loop to initialise all ensemble members, get priors
+        for ens in range(0,n_ensembles):
+            NNs.append(NN2(x_dim, y_dim, hidden_size, 
+                          init_stddev_1_w, init_stddev_1_b, init_stddev_2_w, n, learning_rate, ens))
+            
+            # initialise only unitialized variables - stops overwriting ensembles already created
+            global_vars = tf.global_variables()
+            is_not_initialized   = sess.run([tf.is_variable_initialized(var) for var in global_vars])
+            not_initialized_vars = [v for (v, f) in zip(global_vars, is_not_initialized) if not f]
+            if len(not_initialized_vars):
+                sess.run(tf.variables_initializer(not_initialized_vars))
+            
+            # do regularisation now that we've created initialisations
+            NNs[ens].anchor(sess, lambda_anchor)  #Do that if you want to minimize the anchored loss
+            
+            # save their priors
+            y_prior.append(NNs[ens].predict(X_val, sess))
+
+        for ens in range(0,n_ensembles):
+            
+            feed_b = {}
+            feed_b[NNs[ens].inputs] = X_train
+            feed_b[NNs[ens].y_target] = y_train
+            print('\nNN:',ens)
+            
+            ep_ = 0
+            while ep_ < n_epochs:    
+                ep_ += 1
+                _blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)
+                if ep_ % (n_epochs/5) == 0:
+                    loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
+                    loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
+                    print('epoch:', ep_, ', mse_', np.round(loss_mse*1e3,3), ', loss_anch', np.round(loss_anch*1e3,3))
+                    # the anchored loss is minimized, but it's useful to keep an eye on mse too
+
+        def raf(features):
+            y_pred = np.array([nn.predict(features, sess) for nn in NNs])
+            return Prediction(
+                np.mean(y_pred, axis=0),
+                np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise),
+            )
+        return raf
+
+class NeuralNetwork(Module):
+    def __init__(self, activation, *, width=128, dropout_p=.0, dim):
+        super(NeuralNetwork,self).__init__()
+        self.width = width
+        self.dropout_p=dropout_p
+        self.activation = activation
+
+        # self.n_0 = nn.BatchNorm1d(dim)
+        self.l_1 = Linear(dim,self.width)
+        self.drop = Dropout(self.dropout_p) if self.dropout_p > 0 else None
+        #self.l_2 = nn.Linear(self.width,self.width)
+        self.l__1 = Linear(self.width, 1)
+        self.transforms = [
+            # self.n_0,
+            self.l_1,
+        ] + (
+            [self.drop] if self.drop is not None else []
+        ) + [
+            activation,
+            self.l__1,
+        ]
+
+    def forward(self, x):
+        for t in self.transforms:
+            x = t(x)
+        return x
+
+    def __str__(self) -> str:
+        return '-'.join([
+            ''.join([str(tmp)[0] for tmp in self.transforms if isinstance(tmp, Module)]),
+            str(self.width),
+            self.activation.__name__,
+        ] + ([f"drop{self.dropout_p}"] if self.dropout_p > 0 else []))
+
+def train_network(network, x, y, *, weights, plot=None, epochs=1000, mse_stop=-np.inf, lr=0.001, device):
+    best_loss = np.inf
+    best_model = network.state_dict()
+
+    if plot:
+        (fig, ax, dh) = plot
+
+    # lr = 3e-4
+    optimizer = torch.optim.Adam(network.parameters(), lr=lr)
+    # loss_fn = torch.nn.MSELoss()
+    def loss_fn(output, target, weights):
+        return torch.mean((weights * (output - target))**2)
+
+    loss = np.inf
+    losses = []
+
+    x = torch.Tensor(x).to(device)
+    y = torch.Tensor(y).to(device)
+
+    weights = torch.Tensor(weights.squeeze()[:, None])
+
+    epochs_iter = range(1, epochs+1)
+    for epoch in epochs_iter:
+        network.train()
+        optimizer.zero_grad()
+        loss_fn(y, network(x), weights).backward()
+        optimizer.step()
+
+        network.eval()
+        with torch.no_grad():
+            loss = loss_fn(y, network(x), weights).item()
+        losses.append(loss)
+        if loss < best_loss:
+            best_loss = loss
+            best_model = deepcopy(network.state_dict())
+        if loss < mse_stop:
+            break
+
+        if epoch%200 == 0 and plot:
+            ax.clear() # pyright: ignore [reportPossiblyUnboundVariable]
+            ax.semilogy(losses, ',') # pyright: ignore [reportPossiblyUnboundVariable]
+            dh.update(fig) # pyright: ignore [reportPossiblyUnboundVariable]
+
+    network.load_state_dict(best_model)
+    return losses
+
+
+class Eaf(ModelFactory):
+    width = 128
+    lr = 0.01
+    epochs = 1000
+    mse_stop = -np.inf
+
+    def __init__(self, *, weights=None, width=None, lr=None, epochs=None, mse_stop=None, plot=None, **ignored):
+        """Train and predict ensemble of NNs with different activation functions"""
+
+    def __call__(
+        self,
+        *,
+        x_train: NDArray[np.float64],
+        y_train: NDArray[np.float64],
+        x_test: NDArray[np.float64],
+        weights: Optional[NDArray[np.float64]] = None,
+    ):
+        # lr=0.06
+        # width=1024
+        afs = [
+            F.sigmoid,
+            # F.hardsigmoid,
+            F.relu,
+            # F.softplus,
+            # F.gelu,
+            F.silu,
+            # F.mish,
+            # F.leaky_relu,
+            # F.elu,
+            # F.celu,
+            # F.selu,
+            # F.tanh,
+            F.hardtanh,
+            # F.softsign,
+            torch.erf,
+        ]
+        dim = x_train.shape[-1]
+        device = (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        nets = {f.__name__: NeuralNetwork(f, width=self.width, dropout_p=.0, dim=dim).to(device) for f in afs}
+
+        # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+        # weights = (1 / (1 + norms))**2
+        # weights = (1 / (1 + np.linalg.norm(x_train - x_test[0], axis=1)))**4
+        # weights = (1 + np.linalg.norm(x_train - x_test[0], axis=1))**4
+
+        if weights is None:
+            # Hansen's 20..1
+            # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
+            weights = np.ones_like(y_train)
+
+        losses = {}
+        for name, net in nets.items():
+            losses[name] = train_network(net, x_train, y_train,
+                                         weights=weights,
+                                         epochs=self.epochs,
+                                         mse_stop=self.mse_stop,
+                                         lr=self.lr,
+                                         device=device,
+                                         )
+
+        if __debug__:
+            with torch.no_grad():
+                _max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)  # for kendall only
+                _n_kendall_archive = _max_model_size - 1
+                x = torch.Tensor(x_train[-_n_kendall_archive:]).to(device)
+                y = np.array([net.eval()(x).cpu().numpy() for net in nets.values()])
+                tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(y, axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+                # if tau < 0.7:
+                #     breakpoint()
+                print("tau-train-ens={}".format(tau))
+
+        def eaf(x_test):
+            x_test_tsr = torch.Tensor(x_test).to(device)
+            y_preds = {}
+            with torch.no_grad():
+                for name, net in nets.items():
+                    y_preds[name] = net.eval()(x_test_tsr).cpu().numpy()
+
+            # y_preds_scaled = {name: scale_y_back(y_) for name, y_ in y_preds.items()}
+            y_pred_arr = np.array(list(y_preds.values()))
+
+            pred_mean = y_pred_arr.mean(axis=0)
+            pred_std = y_pred_arr.std(axis=0)
+
+            if len(pred_mean) < len(x_test):
+                raise ValueError("len(pred_mean) < len(x_test)")
+            return Prediction(pred_mean, pred_std)
+
+        return eaf
+
+
 
 class SurrogateCallable(Protocol):
     def __call__(
@@ -1024,12 +1364,21 @@ class SurrogateCallable(Protocol):
 
 
 class Surrogate:
+    @staticmethod
+    def shift_and_scale_x(*, x_train, y_train, x_test, es, weights):
+        return (es.mean, es.std)
+
+    @staticmethod
+    def shift_and_scale_y(*, x_train, y_train, x_test, es, weights):
+        return get_mean_and_std(y_train, weights=weights)
+
     def __init__(
         self,
         *,
         model: Optional[Model | ModelFactory] = None,
         subset: Optional[Subset] = None,
-        shift_and_scale=None,
+        shift_and_scale_x=None,
+        shift_and_scale_y=None,
     ):
         self.__model = model if model is not None else Raf()
         self.__subset = (
@@ -1037,16 +1386,11 @@ class Surrogate:
             if subset is not None
             else ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis)
         )
-        self.__shift_and_scale = (
-            shift_and_scale
-            if shift_and_scale is not None
-            else shift_and_scale_x_by_es_y_by_train
-        )
+        self.__shift_and_scale_x = shift_and_scale_x if shift_and_scale_x is not None else self.shift_and_scale_x
+        self.__shift_and_scale_y = shift_and_scale_y if shift_and_scale_y is not None else self.shift_and_scale_y
 
     def __repr__(self) -> str:
-        return repr_default(
-            self, model=self.__model, subset=self.__subset, sns=self.__shift_and_scale
-        )
+        return repr_default(self, model=self.__model, subset=self.__subset)
 
     def __call__(
         self,
@@ -1064,16 +1408,22 @@ class Surrogate:
             print(f"subset-idx-size={subset_idx.size}")
         x_subset, y_subset = x_train[subset_idx], y_train[subset_idx]
 
-        (x_shift, x_scale), (y_shift, y_scale) = self.__shift_and_scale(
-            x_train=x_subset, y_train=y_subset, x_test=x_test, es=es
-        )
+        norms = np.array([es.mahalanobis_norm(x) for x in x_subset - es.mean])
+        # TODO: Hansen's 20..1
+        # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
+        weights = np.e ** -norms
+
+        (x_shift, x_scale) = self.__shift_and_scale_x(x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+        (y_shift, y_scale) = self.__shift_and_scale_y(x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+
         x_train_scaled = (x_subset - x_shift) / x_scale
         y_train_scaled = (y_subset - y_shift) / y_scale
+        # breakpoint()
         x_test_scaled = (x_test - x_shift) / x_scale
 
         model = (
             self.__model(
-                x_train=x_train_scaled, y_train=y_train_scaled, x_test=x_test_scaled
+                x_train=x_train_scaled, y_train=y_train_scaled, x_test=x_test_scaled, weights=weights
             )
             if isinstance(self.__model, ModelFactory)
             else self.__model
@@ -1238,7 +1588,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         self.min_evals_percent = 2
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L370-L372>
         self.truncation_ratio = max(
-            (3 / 4, (3 - (max_relative_size_end := 2)) / 2)  # noqa: F841
+            (3 / 4, (3 - (_max_relative_size_end := 2)) / 2)
         )  # use only truncation_ratio best in _n_for_model_building
 
     def __repr__(self) -> str:
@@ -1545,12 +1895,12 @@ def test(
 
     problems = [ProblemCocoex, ProblemIoh][1:]
     es_list = [WrappedCma, WrappedModcma][:-1]
-    models = [predict_zeros_and_ones, predict_random, Raf(data_noise=0, epochs=5000, debug=True)][2:]
+    models = [predict_zeros_and_ones, predict_random, Raf(), Raf2(), Eaf()][4:]
     surrogates = [
         Surrogate(
             model=model,
-            subset=ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis),
-            shift_and_scale=shift_and_scale_x_by_es_y_by_train,
+            # subset=ClosestToEachTestPoint(n_max_coef=10, norm=Mahalanobis),
+            subset=LastN(),
         )
         for model in models
     ]
