@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -l select=1:ncpus=1:mem=1gb:scratch_local=1gb
 #PBS -l walltime=24:00:00
-N_TEST="001"
+N_TEST="002" # MinAdjustedLog Transformation
 
 if [ -z ${crit+x} ]; then
     crit="mean"

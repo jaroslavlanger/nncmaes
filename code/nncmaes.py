@@ -736,7 +736,6 @@ def get_mean_and_std(samples, *, weights=None):
         else:
             mean = samples.mean(axis=0)
             std = samples.std(axis=0)
-        # breakpoint()
         std[std == 0] = 1  # when std==0, (-mean) makes any value (==0)
         if (infs := np.isposinf(std)).any():
             std[infs] = np.finfo(np.float64).max
@@ -911,79 +910,6 @@ class NN:
         y_pred = sess.run(self.output, feed_dict=feed)
         return y_pred
 
-class NN2:
-    def __init__(self, x_dim, y_dim, hidden_size, init_stddev_1_w, init_stddev_1_b, 
-                 init_stddev_2_w, n, learning_rate, ens):
-
-        # setting up as for a usual NN
-        self.x_dim = x_dim
-        self.y_dim = y_dim
-        self.hidden_size = hidden_size 
-        self.n = n
-        self.learning_rate = learning_rate
-        
-        # set up NN
-        self.inputs = tf.placeholder(tf.float64, [None, x_dim], name='inputs')
-        self.y_target = tf.placeholder(tf.float64, [None, y_dim], name='target')
-        activation_fns = [tensorflow.keras.activations.selu, tf.nn.tanh, tensorflow.keras.activations.gelu, tensorflow.keras.activations.softsign, tf.math.erf, tf.nn.swish, tensorflow.keras.activations.linear]  # pyright: ignore [reportAttributeAccessIssue]
-
-        
-        if ens <= len(activation_fns)-1:
-            self.layer_1_w = tf.layers.Dense(hidden_size, activation = activation_fns[ens], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_1_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_1_b))
-            self.layer_2_w = tf.layers.Dense(hidden_size, activation = activation_fns[ens], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_2_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
-        
-        else:
-            af_ind = randint(0,len(activation_fns)-1)
-            self.layer_1_w = tf.layers.Dense(hidden_size, activation = activation_fns[af_ind], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_1_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_1_b)) 
-            self.layer_2_w = tf.layers.Dense(hidden_size, activation = activation_fns[af_ind], kernel_initializer = tf.random_normal_initializer(mean=0., stddev = init_stddev_2_w), bias_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
-        
-        self.layer_1 = self.layer_1_w.apply(self.inputs)
-        self.layer_2 = self.layer_2_w.apply(self.layer_1)
-        self.output_w = tf.layers.Dense(y_dim, activation=None, use_bias=False, kernel_initializer = tf.random_normal_initializer(mean=0., stddev=init_stddev_2_w))
-        self.output = self.output_w.apply(self.layer_2)
-        
-        # set up loss and optimiser - this is modified later with anchoring regularisation
-        self.opt_method = tf.train.AdamOptimizer(self.learning_rate)
-        self.mse_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
-        self.loss_ = 1/tf.shape(self.inputs, out_type=tf.int64)[0] * tf.reduce_sum(tf.square(self.y_target - self.output))
-        self.optimizer = self.opt_method.minimize(self.loss_)
-        return
-    
-    
-    def get_weights(self, sess):
-        '''method to return current params'''
-        
-        ops = [self.layer_1_w.kernel, self.layer_1_w.bias, self.layer_2_w.kernel, self.layer_2_w.bias, self.output_w.kernel]
-        w1, b1, w2, b2, w3 = sess.run(ops) 
-        
-        return w1, b1, w2, b2, w3
-    
-    
-    def anchor(self, sess, lambda_):   #lambda_anchor
-        '''regularise around initial parameters''' 
-        
-        w1, b1, w2, b2, w3 = self.get_weights(sess)
-        self.w1_init, self.b1_init, self.w2_init, self.b2_init, self.w3_init = w1, b1, w2, b2, w3
-        
-        loss = lambda_[0]*tf.reduce_sum(tf.square(self.w1_init - self.layer_1_w.kernel))
-        loss += lambda_[1]*tf.reduce_sum(tf.square(self.b1_init - self.layer_1_w.bias))
-        loss += lambda_[2]*tf.reduce_sum(tf.square(self.w2_init - self.layer_2_w.kernel))
-        loss += lambda_[2]*tf.reduce_sum(tf.square(self.b2_init - self.layer_2_w.bias))
-        loss += lambda_[2]*tf.reduce_sum(tf.square(self.w3_init - self.output_w.kernel))
-
-        # combine with original loss
-        self.loss_ = self.loss_ + 1/tf.shape(self.inputs, out_type=tf.int64)[0] * loss 
-        self.optimizer = self.opt_method.minimize(self.loss_)
-        return
-      
-    def predict(self, x, sess):
-        '''predict method'''
-        
-        feed = {self.inputs: x}
-        y_pred = sess.run(self.output, feed_dict=feed)
-        return y_pred
-
-
 class Raf(ModelFactory):
     data_noise:float = 0.01
     epochs: int = 1000
@@ -1014,7 +940,7 @@ class Raf(ModelFactory):
         n = X_train.shape[0]
         x_dim = X_train.shape[1]
         y_dim = y_train.shape[1]
-        if __debug__:
+        if __debug__ and self.__debug:
             _max_model_size = max(x_test.shape[0], x_dim * (x_dim + 3) + 2)  # for kendall only
             _n_kendall_archive = _max_model_size - 1
 
@@ -1111,94 +1037,6 @@ class Raf(ModelFactory):
 
         return raf
 
-class Raf2(ModelFactory):
-    data_noise:float = 0.01
-    epochs: int = 1000
-
-    def __init__(self, *, data_noise: Optional[float] = None, epochs: Optional[int]= None, debug: bool = False):
-        """
-        data_noise: estimated noise variance, feel free to experiment with different values
-        """
-        self.__data_noise = data_noise if data_noise is not None else self.data_noise
-        self.__epochs = epochs if epochs is not None else self.epochs
-        self.__debug = debug
-
-    def __repr__(self) -> str:
-        return repr_default(self, data_noise=self.__data_noise, **(dict(epochs=self.__epochs) if self.__epochs != self.epochs else {}))
-
-    def __call__(
-        self,
-        *,
-        x_train: NDArray[np.float64],
-        y_train: NDArray[np.float64],
-        x_test: NDArray[np.float64],
-    ):
-        data_noise = self.__data_noise
-        """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/additional_experiments/rafs_complex_arch.py#L97-L145>`_"""
-        X_train, y_train, X_val = x_train, y_train, x_test
-
-        # hyperparameters
-        n = X_train.shape[0]
-        x_dim = X_train.shape[1]
-        y_dim = y_train.shape[1]
-        n_ensembles = 5
-        hidden_size = 128
-        init_stddev_1_w =  np.sqrt(10)
-        init_stddev_1_b = init_stddev_1_w # set these equal
-        init_stddev_2_w = 1.0/np.sqrt(hidden_size) # normal scaling
-        lambda_anchor = data_noise/(np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_1_w, init_stddev_1_b, init_stddev_2_w])**2)
-        n_epochs = 1000
-        learning_rate = 0.01
-
-
-        NNs=[]
-        y_prior=[]
-        tf.reset_default_graph()
-        sess = tf.Session()
-
-        # loop to initialise all ensemble members, get priors
-        for ens in range(0,n_ensembles):
-            NNs.append(NN2(x_dim, y_dim, hidden_size, 
-                          init_stddev_1_w, init_stddev_1_b, init_stddev_2_w, n, learning_rate, ens))
-            
-            # initialise only unitialized variables - stops overwriting ensembles already created
-            global_vars = tf.global_variables()
-            is_not_initialized   = sess.run([tf.is_variable_initialized(var) for var in global_vars])
-            not_initialized_vars = [v for (v, f) in zip(global_vars, is_not_initialized) if not f]
-            if len(not_initialized_vars):
-                sess.run(tf.variables_initializer(not_initialized_vars))
-            
-            # do regularisation now that we've created initialisations
-            NNs[ens].anchor(sess, lambda_anchor)  #Do that if you want to minimize the anchored loss
-            
-            # save their priors
-            y_prior.append(NNs[ens].predict(X_val, sess))
-
-        for ens in range(0,n_ensembles):
-            
-            feed_b = {}
-            feed_b[NNs[ens].inputs] = X_train
-            feed_b[NNs[ens].y_target] = y_train
-            print('\nNN:',ens)
-            
-            ep_ = 0
-            while ep_ < n_epochs:    
-                ep_ += 1
-                _blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)
-                if ep_ % (n_epochs/5) == 0:
-                    loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
-                    loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                    print('epoch:', ep_, ', mse_', np.round(loss_mse*1e3,3), ', loss_anch', np.round(loss_anch*1e3,3))
-                    # the anchored loss is minimized, but it's useful to keep an eye on mse too
-
-        def raf(features):
-            y_pred = np.array([nn.predict(features, sess) for nn in NNs])
-            return Prediction(
-                np.mean(y_pred, axis=0),
-                np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise),
-            )
-        return raf
-
 class NeuralNetwork(Module):
     def __init__(self, activation, *, width=128, dropout_p=.0, dim):
         super(NeuralNetwork,self).__init__()
@@ -1244,15 +1082,12 @@ def train_network(network, x, y, *, weights, plot=None, epochs=1000, mse_stop=-n
     optimizer = torch.optim.Adam(network.parameters(), lr=lr)
     # loss_fn = torch.nn.MSELoss()
     def loss_fn(output, target, weights):
-        return torch.mean((weights * (output - target))**2)
         # return torch.mean(torch.abs((output - target)))
-    # def loss_fn(output, target, weights):
-    #     return torch.mean(torch.abs(weights * (output - target)))
-    # def loss_fn(output, target, weights):
-    #     return torch.mean(torch.abs(output - target) / target)
-    #     # return torch.mean(torch.abs((output - target) / (1 + target - target.min())))
-    # def loss_fn(output, target, weights):
-    #     return torch.mean(torch.log(output + 1) - torch.log(target + 1))
+        # return torch.mean(torch.abs(weights * (output - target)))
+        # return torch.mean(torch.abs(output - target) / target)
+        # return torch.mean(torch.abs((output - target) / (1 + target - target.min())))
+        # return torch.mean(torch.log(output + 1) - torch.log(target + 1))
+        return torch.mean((weights * (output - target))**2)
 
     loss = np.inf
     losses = []
@@ -1337,14 +1172,10 @@ class Eaf(ModelFactory):
         )
         nets = {f.__name__: NeuralNetwork(f, width=self.width, dropout_p=.0, dim=dim).to(device) for f in afs}
 
-        # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
-        # weights = (1 / (1 + norms))**2
-        # weights = (1 / (1 + np.linalg.norm(x_train - x_test[0], axis=1)))**4
-        # weights = (1 + np.linalg.norm(x_train - x_test[0], axis=1))**4
-
         if weights is None:
-            # Hansen's 20..1
-            # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
+            # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+            # weights = (1 / (1 + norms))**2
+            # weights = (1 / (1 + norms))**4
             weights = np.ones_like(y_train)
 
         losses = {}
@@ -1386,8 +1217,6 @@ class Eaf(ModelFactory):
             return Prediction(pred_mean, pred_std)
 
         return eaf
-
-
 
 class SurrogateCallable(Protocol):
     def __call__(
@@ -1673,18 +1502,19 @@ class EvaluateBestPointsByCriterion(EvolutionControl):
 
 class EvaluateUntilKendallThreshold(EvolutionControl):
     """Inspired by pycma's `fitness_models <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L258-L323>`_"""
-
     def __init__(
         self,
         *,
         criterion: AcquisitionFunction,
         tau_thold: float = 0.85,
         offset_non_evaluated: bool = False,
-        debug = True,
+        verbose = True,
+        debug = False,
     ):
         self.__criterion = criterion
         self.__tau_thold = tau_thold
         self.__offset_non_evaluated = offset_non_evaluated
+        self.__verbose = verbose
         self.__debug = debug
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L83>
         self.n_for_tau = lambda popsi, nevaluated: int(
@@ -1792,7 +1622,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         # Uncomment for diagnostics, comment out for performance
         std_of_means = pred.mean.std()
         mean_of_stds = pred.std.mean()
-        if __debug__ and self.__debug:
+        if self.__verbose:
             print(
                 " | ".join(
                     [
@@ -1806,7 +1636,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                     ]
                 )
             )
-        if __debug__:
+        if __debug__ and self.__debug:
             try:
                 evaluate_all(model=model, points=points, problem=PROBLEM_DEBUG, archive=archive, debug_tau=True)  # type: ignore[name-defined]
             except:  # noqa: E722
