@@ -213,7 +213,7 @@ class ProblemCocoex(Problem):
 
     @property
     def evals_left(self) -> Optional[int]:
-        return self.__budget - self.evaluations if self.__budget is not None else False
+        return self.__budget - self.evaluations if self.__budget is not None else None
 
     @property
     def all_evals_used(self) -> bool:
@@ -298,7 +298,7 @@ class ProblemIoh(Problem):
 
     @property
     def evals_left(self) -> Optional[int]:
-        return self.__budget - self.evaluations if self.__budget is not None else False
+        return self.__budget - self.evaluations if self.__budget is not None else None
 
     @property
     def all_evals_used(self) -> bool:
@@ -667,7 +667,7 @@ class ClosestToEachTestPoint(Subset):
         n_total, dim = x_train.shape
         norm_max = self.__norm_max(dim)
         # n_per_point = int(n_max / x_test.shape[0])
-        norm = self.__norm if not isinstance(self.__norm, type) else self.__norm(es=es)
+        norm = self.__norm if not issubclass(self.__norm, Norm) else self.__norm(es=es)
 
         # distance of train point (row) and test point (column)
         norms_2d = np.apply_along_axis(  # type: ignore[call-overload]
@@ -680,7 +680,7 @@ class ClosestToEachTestPoint(Subset):
         # then flattens them by rows i.e. each test points matters the same*.
         near_indices = np.flatnonzero((norms_2d <= norm_max).any(axis=1))
         if n_max >= n_total:
-            idx = np.arange(n_total).astype(np.uint)[near_indices]
+            idx = near_indices.astype(np.uint)
         else:
             unique_indices, their_positions = np.unique(
                 norms_2d.argpartition(kth=np.arange(n_max), axis=0)
@@ -694,6 +694,29 @@ class ClosestToEachTestPoint(Subset):
             print(f"subset-max-norm={norms_2d[idx].min(axis=1).max()} | norm-max={norm_max}")
         return idx
 
+class InNormRange(Subset):
+    norm_max = 2
+
+    def __init__(self, *, norm: Norm):
+        self.__norm = norm
+
+    def __repr__(self) -> str:
+        return repr_default(self, norm_max=self.norm_max)
+
+    def __call__(
+        self,
+        *,
+        x_train: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+        y_train: np.ndarray[tuple[N, Literal[1]], np.dtype[np.float64]],
+        x_test: XPop,
+        es: Cma,
+    ) -> NDArray[np.uint]:
+        n_total, dim = x_train.shape
+        norm = self.__norm if not issubclass(self.__norm, Norm) else self.__norm(es=es)
+        norms = np.array([norm(d) for d in x_train - es.mean])
+        near_indices = np.flatnonzero(norms <= self.norm_max)
+        idx = np.arange(n_total).astype(np.uint)[near_indices]
+        return idx
 
 def get_mean_and_std(samples, *, weights=None):
     """
@@ -1074,7 +1097,10 @@ class Raf(ModelFactory):
                     # the anchored loss is minimized, but it's useful to keep an eye on mse too
 
         if __debug__ and self.__debug:
-            print("tau-train-ens={}".format(kendalltau(y_train[-_n_kendall_archive:], np.mean(np.array([nn.predict(X_train[-_n_kendall_archive:], sess) for nn in NNs]), axis=0)).statistic))    # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+            _tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(np.array([nn.predict(X_train[-_n_kendall_archive:], sess) for nn in NNs]), axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+            # if _tau < 0.7:
+            #     breakpoint()
+            print(f"tau-train-ens={_tau}")
 
         def raf(features):
             y_pred = np.array([nn.predict(features, sess) for nn in NNs])
@@ -1219,6 +1245,14 @@ def train_network(network, x, y, *, weights, plot=None, epochs=1000, mse_stop=-n
     # loss_fn = torch.nn.MSELoss()
     def loss_fn(output, target, weights):
         return torch.mean((weights * (output - target))**2)
+        # return torch.mean(torch.abs((output - target)))
+    # def loss_fn(output, target, weights):
+    #     return torch.mean(torch.abs(weights * (output - target)))
+    # def loss_fn(output, target, weights):
+    #     return torch.mean(torch.abs(output - target) / target)
+    #     # return torch.mean(torch.abs((output - target) / (1 + target - target.min())))
+    # def loss_fn(output, target, weights):
+    #     return torch.mean(torch.log(output + 1) - torch.log(target + 1))
 
     loss = np.inf
     losses = []
@@ -1262,6 +1296,9 @@ class Eaf(ModelFactory):
 
     def __init__(self, *, weights=None, width=None, lr=None, epochs=None, mse_stop=None, plot=None, **ignored):
         """Train and predict ensemble of NNs with different activation functions"""
+
+    def __repr__(self) -> str:
+        return type(self).__name__
 
     def __call__(
         self,
@@ -1362,23 +1399,92 @@ class SurrogateCallable(Protocol):
         es: Cma,
     ) -> Model: ...
 
+class Transformation(ABC):
+    def __repr__(self) -> str:
+        return type(self).__name__
+
+    @abstractmethod
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Optional[Cma]=None, weights=None):
+        ...
+
+    @abstractmethod
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+    @abstractmethod
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+    @abstractmethod
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+class ShiftAndScale(Transformation):
+    @property
+    @abstractmethod
+    def shift(self): ...
+
+    @property
+    @abstractmethod
+    def scale(self): ...
+
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return (data - self.shift) / self.scale
+
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return data * self.scale + self.shift
+
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return std * self.scale
+
+class Standardization(ShiftAndScale):
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Cma, weights=None):
+        self.__mean, self.__std = get_mean_and_std(data, weights=weights)
+
+    @property
+    def shift(self):
+        return self.__mean
+
+    @property
+    def scale(self):
+        return self.__std
+
+class ShiftAndScaleByEs(ShiftAndScale):
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Cma, weights=None):
+        self.__mean = es.mean
+        self.__std = es.std
+
+    @property
+    def shift(self):
+        return self.__mean
+
+    @property
+    def scale(self):
+        return self.__std
+
+class MinAdjustedLog(Transformation):
+    min_offset: float = 1e-9
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Optional[Cma]=None, weights=None):
+        self.__shift = 0
+
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        self.__shift = data.min() - self.min_offset
+        return np.log(data - self.__shift)
+
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return np.e ** data + self.__shift
+
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return np.e ** std
 
 class Surrogate:
-    @staticmethod
-    def shift_and_scale_x(*, x_train, y_train, x_test, es, weights):
-        return (es.mean, es.std)
-
-    @staticmethod
-    def shift_and_scale_y(*, x_train, y_train, x_test, es, weights):
-        return get_mean_and_std(y_train, weights=weights)
-
     def __init__(
         self,
         *,
         model: Optional[Model | ModelFactory] = None,
         subset: Optional[Subset] = None,
-        shift_and_scale_x=None,
-        shift_and_scale_y=None,
+        x_transf: Optional[Type[Transformation]]=None,
+        y_transf: Optional[Type[Transformation]]=None,
     ):
         self.__model = model if model is not None else Raf()
         self.__subset = (
@@ -1386,11 +1492,11 @@ class Surrogate:
             if subset is not None
             else ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis)
         )
-        self.__shift_and_scale_x = shift_and_scale_x if shift_and_scale_x is not None else self.shift_and_scale_x
-        self.__shift_and_scale_y = shift_and_scale_y if shift_and_scale_y is not None else self.shift_and_scale_y
+        self.__x_transf = x_transf if x_transf is not None else ShiftAndScaleByEs
+        self.__y_transf = y_transf if y_transf is not None else MinAdjustedLog
 
     def __repr__(self) -> str:
-        return repr_default(self, model=self.__model, subset=self.__subset)
+        return repr_default(self, model=self.__model, subset=self.__subset, x_tf=self.__x_transf, y_tf=self.__y_transf)
 
     def __call__(
         self,
@@ -1403,27 +1509,28 @@ class Surrogate:
         subset_idx = self.__subset(
             x_train=x_train, y_train=y_train, x_test=x_test, es=es
         )
-        subset_idx = np.sort(subset_idx)
+        subset_idx = np.sort(subset_idx)  # Important for some ECs
         if __debug__:
             print(f"subset-idx-size={subset_idx.size}")
         x_subset, y_subset = x_train[subset_idx], y_train[subset_idx]
 
-        norms = np.array([es.mahalanobis_norm(x) for x in x_subset - es.mean])
-        # TODO: Hansen's 20..1
-        # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
-        weights = np.e ** -norms
+        weights = None
+        # # Hansen's 20..1
+        # weights = np.linspace(1, 20, y_subset.shape[0])[:, None]
+        # # Experimental weights inversely proportional to the Mahalanobis norm
+        # norms = np.array([es.mahalanobis_norm(x) for x in x_subset - es.mean])
+        # weights = np.e ** (-norms*2)
 
-        (x_shift, x_scale) = self.__shift_and_scale_x(x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
-        (y_shift, y_scale) = self.__shift_and_scale_y(x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+        x_transf = self.__x_transf(x_subset, x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+        y_transf = self.__y_transf(y_subset, x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
 
-        x_train_scaled = (x_subset - x_shift) / x_scale
-        y_train_scaled = (y_subset - y_shift) / y_scale
-        # breakpoint()
-        x_test_scaled = (x_test - x_shift) / x_scale
+        x_train_transf = x_transf.transform(x_subset)
+        y_train_transf = y_transf.transform(y_subset)
+        x_test_transf = x_transf.transform(x_test)
 
         model = (
             self.__model(
-                x_train=x_train_scaled, y_train=y_train_scaled, x_test=x_test_scaled, weights=weights
+                x_train=x_train_transf, y_train=y_train_transf, x_test=x_test_transf, weights=weights
             )
             if isinstance(self.__model, ModelFactory)
             else self.__model
@@ -1433,13 +1540,12 @@ class Surrogate:
         def surrogate_model(
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
         ) -> Prediction[N]:
-            features_scaled = (features - x_shift) / x_scale
-            pred_scaled = model(features_scaled)
-            pred_mean, pred_std = (
-                pred_scaled.mean * y_scale + y_shift,
-                pred_scaled.std * y_scale,
+            features_transf = x_transf.transform(features)
+            pred_transf = model(features_transf)
+            return Prediction(
+                y_transf.transform_inv(pred_transf.mean),
+                y_transf.transform_inv_std(pred_transf.std)
             )
-            return Prediction(pred_mean, pred_std)
 
         return surrogate_model
 
@@ -1895,12 +2001,14 @@ def test(
 
     problems = [ProblemCocoex, ProblemIoh][1:]
     es_list = [WrappedCma, WrappedModcma][:-1]
-    models = [predict_zeros_and_ones, predict_random, Raf(), Raf2(), Eaf()][4:]
+    models = [predict_zeros_and_ones, predict_random, Raf(debug=True), Raf2(), Eaf()][2:3]
     surrogates = [
         Surrogate(
             model=model,
-            # subset=ClosestToEachTestPoint(n_max_coef=10, norm=Mahalanobis),
-            subset=LastN(),
+            subset=ClosestToEachTestPoint(norm=Mahalanobis),
+            # subset=ClosestToEachTestPoint(n_max_coef=6, norm=Mahalanobis),
+            # subset=LastN(),
+            # subset=InNormRange(norm=Mahalanobis),
         )
         for model in models
     ]
@@ -1928,10 +2036,10 @@ def test(
         problem = problem_class.get(
             dim=dim, fun=fun, inst=inst, budget_coef=budget_coef
         )
-        global PROBLEM_DEBUG
-        PROBLEM_DEBUG = problem_class.get(
-            dim=dim, fun=fun, inst=inst, budget_coef=budget_coef
-        )
+        if __debug__:
+            global PROBLEM_DEBUG
+            PROBLEM_DEBUG = problem_class.get(dim=dim, fun=fun, inst=inst)
+
         es = es_class(x0=np.zeros(problem.dimension), seed=seed)
 
         x, y = seek_minimum(
