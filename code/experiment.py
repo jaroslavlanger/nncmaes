@@ -34,31 +34,15 @@ import scipy.optimize  # to define the solver to be benchmarked
 from numpy.random import rand  # for randomised restarts
 import webbrowser  # to show post-processed results in the browser
 
-import sys
-import argparse
-from nncmaes import ProblemCocoex, seek_minimum, WrappedCma, SurrogateAndEc, Surrogate, mean_criterion, pi_criterion, EvaluateUntilKendallThreshold, tf, report
+from nncmaes import parse_args, ProblemCocoex, seek_minimum, WrappedCma, SurrogateAndEc, Surrogate, mean_criterion, pi_criterion, EvaluateUntilKendallThreshold, tf, report
 tf.compat.v1.disable_eager_execution()
 
 ### input
-parser = argparse.ArgumentParser(description='CMAES with NN Surrogate Experiment', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--dim', type=int, choices=[2, 3, 5, 10, 20, 40], required=True,
-                    help='Input dimensionality')
-parser.add_argument('--fun', type=int, choices=list(range(1, 24 + 1)), required=True,
-                    help='Function id')
-parser.add_argument('--inst', nargs='+', type=int, choices=list(range(1, 15 + 1)),
-                    help='Instance suite numbers, all tested if not given')
-criterions = {
-    c.__name__.removesuffix('_criterion'): c
-    for c in [mean_criterion, pi_criterion]
-}
-parser.add_argument('--crit', choices=list(criterions.keys()), default='mean',
-                    help='Criterion for Evolution Control')
-args = parser.parse_args()
-print(f"{args = }")
+args = parse_args(verbose=True)
 DIMENSION = args.dim
 FUNCTION = args.fun
 INSTANCE = ','.join([str(i) for i in sorted(set(args.inst))]) if args.inst is not None else None
-criterion = criterions[args.crit]
+criterion = args.crit
 suite_name = "bbob"
 budget_multiplier = 250
 suite_options = " ".join(
@@ -69,7 +53,7 @@ suite_options = " ".join(
 )
 print(f"{suite_options = }")
 
-output_folder = "_".join(["cmaes_safe",
+output_folder = "_".join(["nncmaes",
                          f"{DIMENSION:0>2}d",
                          f"{FUNCTION:0>2}f"] + (
                         [f"{INSTANCE:0>3}i"] if INSTANCE is not None else []
