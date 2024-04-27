@@ -963,7 +963,9 @@ class Raf(ModelFactory):
     ) -> Model:
         data_noise = self.__data_noise
         """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
-        X_train, y_train, X_val = x_train, y_train, x_test
+        X_train, X_val = x_train, x_test
+        y_mean = y_train.mean()
+        y_train = y_train - y_mean  # TODO: measure if helps or redundant
 
         n = X_train.shape[0]
         x_dim = X_train.shape[1]
@@ -971,8 +973,8 @@ class Raf(ModelFactory):
         if __debug__ and self.__debug:
             _max_model_size = max(
                 x_test.shape[0], x_dim * (x_dim + 3) + 2
-            )  # for kendall only
-            _n_kendall_archive = _max_model_size - 1
+            )
+            _n_kendall_archive = min(15, _max_model_size) - 1
 
         n_ensembles = 5
         hidden_size = 100
@@ -1077,11 +1079,8 @@ class Raf(ModelFactory):
             print(f"tau-train-ens={_tau}")
 
         def raf(features):
-            y_pred = np.array([nn.predict(features, sess) for nn in NNs])
-            return Prediction(
-                np.mean(y_pred, axis=0),
-                np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise),
-            )
+            # TODO: noise np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise)
+            return np.array([nn.predict(features, sess) for nn in NNs]) + y_mean
 
         return raf
 
@@ -1294,20 +1293,15 @@ class Eaf(ModelFactory):
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
         ) -> Prediction[N]:
             x_test_tsr = torch.Tensor(x_test).to(device)
-            y_preds = {}
             with torch.no_grad():
-                for name, net in nets.items():
-                    y_preds[name] = net.eval()(x_test_tsr).cpu().numpy()
-
+                y_preds = np.array([net.eval()(x_test_tsr).cpu().numpy() for net in nets])
             # y_preds_scaled = {name: scale_y_back(y_) for name, y_ in y_preds.items()}
-            y_pred_arr = np.array(list(y_preds.values()))
 
-            pred_mean = y_pred_arr.mean(axis=0)
-            pred_std = y_pred_arr.std(axis=0)
-
-            if len(pred_mean) < len(x_test):
+            if len(y_preds.shape[1]) < x_test.shape[0]:
                 raise ValueError("len(pred_mean) < len(x_test)")
-            return Prediction(pred_mean, pred_std)
+
+            return y_preds
+            # return Prediction(y_pred_arr.mean(axis=0), y_pred_arr.std(axis=0))
 
         return eaf
 
@@ -1350,11 +1344,6 @@ class Transformation(ABC):
         self, data: np.ndarray[S, dtype[float64]], /
     ) -> np.ndarray[S, dtype[float64]]: ...
 
-    @abstractmethod
-    def transform_inv_std(
-        self, std: np.ndarray[S, dtype[float64]], /
-    ) -> np.ndarray[S, dtype[float64]]: ...
-
 
 class ShiftAndScale(Transformation):
     @property
@@ -1374,11 +1363,6 @@ class ShiftAndScale(Transformation):
         self, data: np.ndarray[S, dtype[float64]], /
     ) -> np.ndarray[S, dtype[float64]]:
         return data * self.scale + self.shift
-
-    def transform_inv_std(
-        self, std: np.ndarray[S, dtype[float64]], /
-    ) -> np.ndarray[S, dtype[float64]]:
-        return std * self.scale
 
 
 class Standardization(ShiftAndScale):
@@ -1428,7 +1412,8 @@ class ShiftAndScaleByEs(ShiftAndScale):
 
 
 class MinAdjustedLog(Transformation):
-    min_offset: float = 1e-12
+    q_improve = 0.07 # 0.03
+    # q_scale = 0.5
 
     def __init__(
         self,
@@ -1441,24 +1426,42 @@ class MinAdjustedLog(Transformation):
         es: Optional[Cma] = None,
         weights=None,
     ):
-        self.__shift = 0
+        self.__min = 0
+        # self.__min_offset: float = 1e-12
+        self.__improve = 1
+
 
     def transform(
         self, data: np.ndarray[S, dtype[float64]], /
     ) -> np.ndarray[S, dtype[float64]]:
-        self.__shift = data.min()
-        return np.log(data - self.__shift + self.min_offset)
+        # min_0, min_1 = data[data.squeeze().argpartition(1)[:2]].squeeze()
+        # self.__min_offset = (min_1 - min_0) / 2
+        # self.__improvement = (min_1 - min_0)
+        # self.__scale = np.median(data) - min_0
+        # self.__scale = np.quantile((data - self.__shift), self.q_scale)
+        self.__min = data.min()
+        self.__improve = np.quantile((data - self.__min), self.q_improve)
+        return np.log(data - self.__min + self.__improve)
 
     def transform_inv(
         self, data: np.ndarray[S, dtype[float64]], /
     ) -> np.ndarray[S, dtype[float64]]:
-        return np.e**data - self.min_offset + self.__shift
+        return np.e**data - self.__improve + self.__min
 
-    def transform_inv_std(
-        self, std: np.ndarray[S, dtype[float64]], /
+    def scale_inv(
+        self, data: np.ndarray[S, dtype[float64]], /
     ) -> np.ndarray[S, dtype[float64]]:
-        return np.e**std
+        return np.e**data
 
+    def mean_transform_inv(
+        self, data: np.ndarray[S, dtype[float64]], /
+    ) -> np.ndarray[S, dtype[float64]]:
+        return np.e**(data.mean(axis=0) + data.var(axis=0)/2) - self.__improve + self.__min
+
+    def std_transform_inv(
+        self, data: np.ndarray[S, dtype[float64]], /
+    ) -> np.ndarray[S, dtype[float64]]:
+        return np.e**(data.mean(axis=0) + data.var(axis=0)/2) * np.sqrt(np.e**data.var(axis=0) - 1)
 
 class Surrogate:
     x_transf: Type[Transformation] = ShiftAndScaleByEs
@@ -1531,7 +1534,11 @@ class Surrogate:
         )
 
         x_train_transf = x_transf.transform(x_subset)
-        y_train_transf = y_transf.transform(y_subset)
+        try:
+            y_train_transf = y_transf.transform(y_subset)
+        except Exception as e:
+            print(y_subset)
+            raise e
         x_test_transf = x_transf.transform(x_test)
 
         model = (
@@ -1548,13 +1555,28 @@ class Surrogate:
         @wraps(model)
         def surrogate_model(
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+            targets = None,
         ) -> Prediction[N]:
             features_transf = x_transf.transform(features)
             pred_transf = model(features_transf)
-            return Prediction(
-                y_transf.transform_inv(pred_transf.mean),
-                y_transf.transform_inv_std(pred_transf.std),
-            )
+            if pred_transf.size > 100:
+                breakpoint()
+            try:
+                pred_gmean = y_transf.transform_inv(np.mean(pred_transf, axis=0))
+                pred_median = y_transf.transform_inv(np.median(pred_transf, axis=0))
+                pred_gstd = y_transf.scale_inv(np.std(pred_transf, axis=0))
+                if targets is not None:
+                    print("tau-mean-first={:>+5.2f} | tau-mean-last={:>+5.2f} | tau-LogN={:>+5.2f} | tau-median={:>+5.2f}".format(
+                        kendalltau(targets, pred_mean).statistic,
+                        kendalltau(targets, np.mean(y_transf.transform_inv(pred_transf), axis=0)).statistic,
+                        kendalltau(targets, y_transf.mean_transform_inv(pred_transf)).statistic,
+                        kendalltau(targets, pred_median).statistic,
+                    ))
+                return Prediction(pred_gmean, pred_gstd)
+            except Exception as e:
+                print("pred:", pred_transf)
+                print("targets:", targets)
+                raise e
 
         return surrogate_model
 
@@ -1738,7 +1760,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         # TODO: evaluate the max size, and take the subsets later
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L296-L297>
         n_evaluated = int(
-            1
+            1  # TODO: 1 min often leads to 1 evaluation as many iterations have a perfect tau on the archive
             + max(
                 n_points * self.min_evals_percent / 100,
                 3 / self.truncation_ratio - model_size,
@@ -1784,10 +1806,10 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L780-L794>
             tau = (
                 kendalltau(
-                    np.concatenate([archive.y[-n_kendall_archive:], values[evaluated]]),
+                    np.concatenate([archive.y[archive_size-n_kendall_archive:], values[evaluated]]),
                     model(
                         np.concatenate(
-                            [archive.x[-n_kendall_archive:], points[evaluated]]
+                            [archive.x[archive_size-n_kendall_archive:], points[evaluated]]
                         )
                     ).mean,
                 ).statistic
@@ -1818,10 +1840,9 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 pass
             n_evaluated += eval_next
 
-        # Uncomment for diagnostics, comment out for performance
-        std_of_means = pred.mean.std()
-        mean_of_stds = pred.std.mean()
         if self.__verbose:
+            _std_of_means = pred.mean.std()
+            _mean_of_stds = pred.std.mean()
             print(
                 " | ".join(
                     [
@@ -1829,23 +1850,23 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                         f"not-eval={not_evaluated.sum()}",
                         f"{tau=:>5.2f}",
                         f"{n_kendall=:>2}",
-                        f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
-                        f"std(means)={std_of_means:.2e}",
-                        f"mean(stds)={mean_of_stds:.2e}",
+                        f"std(means)/mean(stds)={_std_of_means/_mean_of_stds:>6.2f}",
+                        f"std(means)={_std_of_means:.2e}",
+                        f"mean(stds)={_mean_of_stds:.2e}",
                     ]
                 )
             )
         if __debug__ and self.__debug:
             if hasattr(problem, "delta_to_optimum"):
-                print(f"delta_f={problem.delta_to_optimum:.1e}")
+                print(f"delta_f={problem.delta_to_optimum:.2e}")
             try:
-                _values_true = np.array([PROBLEM_DEBUG(p) for p in points])
-                _tau_pop = kendalltau(_values_true, model(points).mean).statistic
-                _tau_pop_off = kendalltau(_values_true, values).statistic
-                print(f"tau-population={_tau_pop:>5.2f} | tau-pop-offset={_tau_pop_off:>5.2f} | final-target-hit={problem.final_target_hit}")
+                _targets = np.array([PROBLEM_DEBUG(p) for p in points])
+                _tau_pop = kendalltau(_targets, model(points).mean).statistic
+                _tau_pop_off = kendalltau(_targets, values).statistic
+                print(f"tau-population={_tau_pop:>5.2f} | tau-pop-final={_tau_pop_off:>5.2f} | final-target-hit={problem.final_target_hit}")
                 # if _tau_pop < 0.25:
                 #     breakpoint()
-                # _preds = model(points)
+                _preds = model(points, _targets)  # Logs statistics
             except:  # noqa: E722
                 pass
         return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
@@ -2065,6 +2086,7 @@ def test(
 
     warnings.simplefilter("error")
     np.seterr("raise")
+    np.set_printoptions(threshold=np.inf)
     set_seed(seed)
     tf.compat.v1.disable_eager_execution()
 
