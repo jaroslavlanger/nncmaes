@@ -702,6 +702,7 @@ class ClosestToEachTestPoint(Subset):
             ]
         if __debug__:
             print(
+                "DEBUG:",
                 f"subset-max-norm={norms_2d[idx].min(axis=1).max()} | norm-max={norm_max}"
             )
         return idx
@@ -960,12 +961,13 @@ class Raf(ModelFactory):
         y_train: NDArray[np.float64],
         x_test: NDArray[np.float64],
         weights: Optional[NDArray[np.float64]] = None,
+        shift_y: = np.mean,
     ) -> Model:
         data_noise = self.__data_noise
         """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
         X_train, X_val = x_train, x_test
-        y_mean = y_train.mean()
-        y_train = y_train - y_mean  # TODO: measure if helps or redundant
+        y_shift = shift_y(y_train)
+        y_train = y_train - y_shift
 
         n = X_train.shape[0]
         x_dim = X_train.shape[1]
@@ -1033,7 +1035,8 @@ class Raf(ModelFactory):
             feed_b[NNs[ens].inputs] = X_train
             feed_b[NNs[ens].y_target] = y_train
             if __debug__ and self.__debug:
-                print("\nNN:", ens)
+                print("DEBUG:")
+                print("DEBUG:", "NN:", ens)
 
             ep_ = 0
             while ep_ < n_epochs:
@@ -1044,6 +1047,7 @@ class Raf(ModelFactory):
                     loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
                     if __debug__ and self.__debug:
                         print(
+                            "DEBUG:",
                             "epoch:",
                             ep_,
                             ", mse_",
@@ -1074,13 +1078,11 @@ class Raf(ModelFactory):
                     axis=0,
                 ),
             ).statistic
-            # if _tau < 0.7:
-            #     breakpoint()
-            print(f"tau-train-ens={_tau}")
+            print("DEBUG:", f"tau-train-ens={_tau}")
 
         def raf(features):
             # TODO: noise np.sqrt(np.square(np.std(y_pred, axis=0, ddof=1)) + data_noise)
-            return np.array([nn.predict(features, sess) for nn in NNs]) + y_mean
+            return np.array([nn.predict(features, sess) for nn in NNs]) + y_shift
 
         return raf
 
@@ -1287,7 +1289,7 @@ class Eaf(ModelFactory):
                 ).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
                 # if tau < 0.7:
                 #     breakpoint()
-                print("tau-train-ens={}".format(tau))
+                print("DEBUG:", f"tau-train-ens={tau}")
 
         def eaf(
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
@@ -1440,8 +1442,11 @@ class MinAdjustedLog(Transformation):
         # self.__scale = np.median(data) - min_0
         # self.__scale = np.quantile((data - self.__shift), self.q_scale)
         self.__min = data.min()
-        self.__improve = np.quantile((data - self.__min), self.q_improve)
-        return np.log(data - self.__min + self.__improve)
+        data_sub_min = data - self.__min
+        self.__improve = np.quantile(data_sub_min, self.q_improve)
+        if self.__improve == 0:
+            self.__improve = data_sub_min[np.flatnonzero(data_sub_min)].min()
+        return np.log(data_sub_min + self.__improve)
 
     def transform_inv(
         self, data: np.ndarray[S, dtype[float64]], /
@@ -1506,7 +1511,7 @@ class Surrogate:
         )
         subset_idx = np.sort(subset_idx)  # Important for some ECs
         if __debug__:
-            print(f"subset-idx-size={subset_idx.size}")
+            print("DEBUG:", f"{subset_idx.size=}")
         x_subset, y_subset = x_train[subset_idx], y_train[subset_idx]
 
         weights = None
@@ -1537,7 +1542,7 @@ class Surrogate:
         try:
             y_train_transf = y_transf.transform(y_subset)
         except Exception as e:
-            print(y_subset)
+            print(f"{y_subset=}")
             raise e
         x_test_transf = x_transf.transform(x_test)
 
@@ -1555,28 +1560,31 @@ class Surrogate:
         @wraps(model)
         def surrogate_model(
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
-            targets = None,
+            debug_targets = None,
         ) -> Prediction[N]:
             features_transf = x_transf.transform(features)
             pred_transf = model(features_transf)
-            if pred_transf.size > 100:
-                breakpoint()
             try:
                 pred_gmean = y_transf.transform_inv(np.mean(pred_transf, axis=0))
-                pred_median = y_transf.transform_inv(np.median(pred_transf, axis=0))
                 pred_gstd = y_transf.scale_inv(np.std(pred_transf, axis=0))
-                if targets is not None:
-                    print("tau-mean-first={:>+5.2f} | tau-mean-last={:>+5.2f} | tau-LogN={:>+5.2f} | tau-median={:>+5.2f}".format(
-                        kendalltau(targets, pred_mean).statistic,
-                        kendalltau(targets, np.mean(y_transf.transform_inv(pred_transf), axis=0)).statistic,
-                        kendalltau(targets, y_transf.mean_transform_inv(pred_transf)).statistic,
-                        kendalltau(targets, pred_median).statistic,
-                    ))
-                return Prediction(pred_gmean, pred_gstd)
             except Exception as e:
-                print("pred:", pred_transf)
-                print("targets:", targets)
+                print(f"{pred_transf=}")
                 raise e
+
+            if __debug__ and debug_targets is not None:
+                try:
+                    print("DEBUG:", "tau-mean-first={:>+5.2f} | tau-mean-last={:>+5.2f} | tau-LogN={:>+5.2f} | tau-median={:>+5.2f}".format(
+                        kendalltau(debug_targets, pred_gmean).statistic,
+                        kendalltau(debug_targets, np.mean(y_transf.transform_inv(pred_transf), axis=0)).statistic,
+                        kendalltau(debug_targets, y_transf.mean_transform_inv(pred_transf)).statistic,
+                        kendalltau(debug_targets, y_transf.transform_inv(np.median(pred_transf, axis=0))).statistic,
+                    ))
+                except Exception as e:
+                    print("DEBUG:", f"{pred_transf=}")
+                    print("DEBUG:", f"{debug_targets=}")
+                    print("DEBUG:", f"{repr(e)=}")
+
+            return Prediction(pred_gmean, pred_gstd)
 
         return surrogate_model
 
@@ -1599,7 +1607,7 @@ def evaluate_all(
     points: NDArray[np.float64],
     problem: Problem,
     archive: Archive,
-    debug_tau=False,
+    show_tau=False,
     value_after_target_hit=np.float64(np.nan),
 ) -> ValuesAndEvaluatedIdx:
     """
@@ -1616,9 +1624,11 @@ def evaluate_all(
         if value_after_target_hit is not None
         else [problem(p) for p in points[:evals_left]]
     )[:, None]
-    if __debug__ and debug_tau:
-        _tau_pop = kendalltau(values, model(points[:evals_left]).mean).statistic
-        print(f"tau-population={_tau_pop:>5.2f}, final-target-hit={problem.final_target_hit}")
+    if show_tau:
+        print("tau-population={tau_pop:>5.2f} | final-target-hit={target_hit}".format(
+            tau=kendalltau(values, model(points[:evals_left]).mean).statistic,
+            target_hit=problem.final_target_hit,
+        ))
     return ValuesAndEvaluatedIdx(values=values, evaluated_idx=evaluated_idx)
 
 
@@ -1770,17 +1780,22 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             n_evaluated = min(n_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
         except:  # noqa: E722
             pass
-        if __debug__:
+        if __debug__ and self.__debug:
             if (
                 _n_archive := min(self.n_for_tau(n_points, n_evaluated), model_size)
                 - n_evaluated
             ) > 0:
+                _tau_archive = kendalltau(archive.y[-_n_archive:], model(archive.x[-_n_archive:]).mean).statistic
+                _std_of_means = pred.mean.std()
+                _mean_of_stds = pred.std.mean()
                 print(
-                    "tau-archive={}".format(
-                        kendalltau(
-                            archive.y[-_n_archive:], model(archive.x[-_n_archive:]).mean
-                        ).statistic
-                    )
+                    "DEBUG:",
+                    " | ".join([
+                        f"tau-archive={_tau_archive}",
+                        f"std(means)={_std_of_means:.2e}",
+                        f"mean(stds)={_mean_of_stds:.2e}",
+                        f"std(means)/mean(stds)={_std_of_means/_mean_of_stds:>6.2f}",
+                    ])
                 )
                 # TODO test Kendall weighted
 
@@ -1841,8 +1856,6 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             n_evaluated += eval_next
 
         if self.__verbose:
-            _std_of_means = pred.mean.std()
-            _mean_of_stds = pred.std.mean()
             print(
                 " | ".join(
                     [
@@ -1850,24 +1863,23 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                         f"not-eval={not_evaluated.sum()}",
                         f"{tau=:>5.2f}",
                         f"{n_kendall=:>2}",
-                        f"std(means)/mean(stds)={_std_of_means/_mean_of_stds:>6.2f}",
-                        f"std(means)={_std_of_means:.2e}",
-                        f"mean(stds)={_mean_of_stds:.2e}",
                     ]
                 )
             )
         if __debug__ and self.__debug:
             if hasattr(problem, "delta_to_optimum"):
-                print(f"delta_f={problem.delta_to_optimum:.2e}")
+                print("DEBUG:", f"delta_f={problem.delta_to_optimum:.2e}")
             try:
                 _targets = np.array([PROBLEM_DEBUG(p) for p in points])
                 _tau_pop = kendalltau(_targets, model(points).mean).statistic
                 _tau_pop_off = kendalltau(_targets, values).statistic
-                print(f"tau-population={_tau_pop:>5.2f} | tau-pop-final={_tau_pop_off:>5.2f} | final-target-hit={problem.final_target_hit}")
+                print("DEBUG:", f"tau-population={_tau_pop:>5.2f} | tau-pop-final={_tau_pop_off:>5.2f} | final-target-hit={problem.final_target_hit}")
                 # if _tau_pop < 0.25:
                 #     breakpoint()
                 _preds = model(points, _targets)  # Logs statistics
-            except:  # noqa: E722
+            except Exception as e:  # noqa: E722
+                print("DEBUG:", f"{archive.y=}")
+                print("DEBUG:", f"{repr(e)=}")
                 pass
         return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
 
@@ -1960,6 +1972,8 @@ def seek_minimum(
         points = es.ask()
 
         values, eval_idx = get_values_and_eval_idx(problem, es, points, archive)
+        if verbose:
+            print(f"evaluated={eval_idx.size} | not-evaluated={values.size - eval_idx.size}")
 
         if sort_archive:
             eval_idx = eval_idx[values.squeeze()[eval_idx].argsort()[::-1]]
@@ -2061,7 +2075,7 @@ def parse_args(verbose=False) -> Arguments:
                         help='Criterion for Evolution Control')
     args = parser.parse_args()
     if verbose:
-        print(f"{args = }")
+        print(f"Arguments: {args}")
     return Arguments(dim=args.dim, fun=args.fun, inst=args.inst, crit=criteria[args.crit])
 
 def test(
@@ -2083,10 +2097,18 @@ def test(
     budget_coef = budget_coef if budget_coef is not None else 250
     seed = seed if seed is not None else 1
 
-
-    warnings.simplefilter("error")
+    # `Default filters <https://docs.python.org/3/library/warnings.html#default-warning-filter>`_
+    warnings.filterwarnings(append=True, action="default", category=DeprecationWarning, module="__main__")
+    warnings.filterwarnings(append=True, action="ignore", category=DeprecationWarning)
+    warnings.filterwarnings(append=True, action="ignore", category=PendingDeprecationWarning)
+    warnings.filterwarnings(append=True, action="ignore", category=ImportWarning)
+    warnings.filterwarnings(append=True, action="ignore", category=ResourceWarning)
+    # Every UserWarning from the cma module should be printed.
+    warnings.filterwarnings(append=True, action="always", category=UserWarning, module="cma")
+    # Other warnings should raise an exception.
+    warnings.filterwarnings(append=True, action="error")
     np.seterr("raise")
-    np.set_printoptions(threshold=np.inf)
+    np.set_printoptions(threshold=sys.maxsize, floatmode='unique')
     set_seed(seed)
     tf.compat.v1.disable_eager_execution()
 
@@ -2100,13 +2122,13 @@ def test(
     es = es_class(x0=np.zeros(problem.dimension), seed=seed)
 
     name = '__'.join([str(i) for i in (problem, es, surr_and_ec)])
-    print('===', name)
 
     x, y = seek_minimum(
         problem,
         es=es,
         surrogate_and_ec=surr_and_ec,
         log=lambda **kwargs: print(report(seed=seed, **kwargs)),
+        verbose=True,
     )
     if pickle_prefix is not None:
         with open(f"{pickle_prefix}_x-y.pickle", "wb") as f:
@@ -2131,7 +2153,7 @@ def test_all(**test_kwargs):
     criteria = [mean_criterion]
     offsets = [True, False]
     ec_list = [
-        partial(evaluate_all, debug_tau=True),
+        partial(evaluate_all, show_tau=True),
         *[
             EvaluateBestPointsByCriterion(
                 criterion=mean_criterion, eval_ratio=0.1, offset_non_evaluated=offset
