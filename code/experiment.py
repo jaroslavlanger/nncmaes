@@ -34,7 +34,18 @@ import scipy.optimize  # to define the solver to be benchmarked
 from numpy.random import rand  # for randomised restarts
 import webbrowser  # to show post-processed results in the browser
 
-from nncmaes import parse_args, ProblemCocoex, seek_minimum, WrappedCma, SurrogateAndEc, Surrogate, mean_criterion, pi_criterion, EvaluateUntilKendallThreshold, tf, report
+from nncmaes import (
+    parse_args,
+    ProblemCocoex,
+    seek_minimum,
+    Pycma,
+    SurrogateAndEc,
+    Surrogate,
+    ClosestToEachTestPoint,
+    Mahalanobis,
+    EvaluateUntilKendallThreshold,
+    tf
+)
 tf.compat.v1.disable_eager_execution()
 
 ### input
@@ -74,12 +85,11 @@ for problem in suite:  # this loop will take several minutes or longer
     while (problem.evaluations < budget and not problem.final_target_hit):
         seek_minimum(
             problem=ProblemCocoex(problem, budget_coef=budget_multiplier),
-            es=WrappedCma(x0=x0),
+            es=Pycma(x0=x0),
             surrogate_and_ec=SurrogateAndEc(
-                surrogate=Surrogate(),
-                evolution_control=EvaluateUntilKendallThreshold(criterion=criterion)
+                surrogate=Surrogate(subset=ClosestToEachTestPoint(norm=Mahalanobis, verbose=True)),
+                evolution_control=EvaluateUntilKendallThreshold(criterion=criterion, offset_non_evaluated=True, show_pred=True)
             ),
-            log=lambda **kwargs: print(report(**kwargs)),
         )
         # fmin(problem, x0, disp=False)  # here we assume that `fmin` evaluates the final/returned solution
         x0 = problem.lower_bounds + ((rand(problem.dimension) + rand(problem.dimension)) *

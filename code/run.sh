@@ -14,11 +14,20 @@ if [ -z ${PYTHON+x} ]; then
     export PATH="$PYTHONUSERBASE/bin:$PATH"
     export PYTHONPATH="$PYTHONUSERBASE/lib/python3.9/site-packages:$PYTHONPATH"
 fi
+
+if [ -z ${inst+x} ]; then
+    inst_name=""
+    inst_param=""
+else
+    inst_name=$(printf "_i%02d" $inst)
+    inst_param="--inst ${inst}"
+fi
+
 # storage root for the scripts and outputs
 [ -z ${STORAGE+x} ] && STORAGE="/storage/brno2"
 # directory for outputs to be copied to
 DATADIR="${STORAGE}/home/${USER}/test${N_TEST}/${crit}"
-exp_name="exp_${crit}_${dim}d_${fun}f_${inst}i"
+exp_name=$(printf "d%02d_f%02d%s_%s" "$dim" "$fun" "$inst_name" "$crit")
 experiment="${STORAGE}/home/${USER}/experiment.py"
 
 mkdir -p $DATADIR || { echo >&2 "Creating ${DATADIR} failed!"; exit 1; }
@@ -37,12 +46,6 @@ test -n "$SCRATCHDIR" || { echo >&2 "Variable SCRATCHDIR is not set!"; exit 2; }
 # go to scratch directory for __pycache__ and exdata
 cd ${SCRATCHDIR}
 
-if [ -z ${inst+x} ]; then
-    INST_FULL=""
-else
-    INST_FULL="--inst ${inst}"
-fi
-
 OUT="${exp_name}.out"
 if [ -z ${KEEP_ERR+x} ]; then
     KEEP_ERR=false
@@ -53,7 +56,7 @@ else
     ERR=/dev/null
 fi
 
-{ time -p ${PYTHON} ${experiment} --dim ${dim} --fun ${fun} ${INST_FULL} --crit ${crit} 2> ${ERR} > ${OUT} ; } 2>&1 \
+{ time -p ${PYTHON} -O ${experiment} --dim ${dim} --fun ${fun} ${inst_param} --crit ${crit} 2> ${ERR} > ${OUT} ; } 2>&1 \
     | tr '\n' ',' \
     | tr -d ' ' \
     | xargs printf "$(hostname -f),%s,$PBS_JOBID,${exp_name}\n" \
