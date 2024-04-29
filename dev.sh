@@ -8,7 +8,7 @@ check () {
         && python -m ruff check --fix $1 \
         && python -m mypy $1 \
         && python -m pyright $1 \
-        && python -m doctest $1
+        && python -O -m doctest $1
     )
 }
 
