@@ -3,8 +3,9 @@ from __future__ import annotations
 from abc import abstractmethod, ABC
 from collections.abc import Iterable
 from contextlib import suppress
+from copy import deepcopy
 from dataclasses import dataclass
-from functools import wraps
+from functools import wraps, partial
 from itertools import product
 import math
 from numbers import Real
@@ -33,15 +34,15 @@ from numpy.typing import NDArray
 from scipy.stats import distributions, kendalltau  # type: ignore[import-untyped]
 import tensorflow  # type: ignore[import-untyped]
 import tensorflow.compat.v1 as tf  # type: ignore[import-untyped]
+import torch
+from torch.nn import Module, Linear, Dropout
+import torch.nn.functional as F
 
 with suppress(ImportError):
     import cocoex  # type: ignore
 import ioh  # type: ignore
 from cma import CMAEvolutionStrategy  # type: ignore
 from modcma import AskTellCMAES  # type: ignore
-
-N_MAX_COEF_DEFAULT = 20
-
 
 def repr_default(self, *attributes, **attrs_with_name) -> str:
     def format_attr(attr) -> str:
@@ -212,7 +213,7 @@ class ProblemCocoex(Problem):
 
     @property
     def evals_left(self) -> Optional[int]:
-        return self.__budget - self.evaluations if self.__budget is not None else False
+        return self.__budget - self.evaluations if self.__budget is not None else None
 
     @property
     def all_evals_used(self) -> bool:
@@ -297,7 +298,7 @@ class ProblemIoh(Problem):
 
     @property
     def evals_left(self) -> Optional[int]:
-        return self.__budget - self.evaluations if self.__budget is not None else False
+        return self.__budget - self.evaluations if self.__budget is not None else None
 
     @property
     def all_evals_used(self) -> bool:
@@ -546,6 +547,22 @@ class Subset(ABC):
     def __repr__(self) -> str: ...
 
 
+class LastN(Subset):
+    def __repr__(self) -> str:
+        return self.__class__.__name__
+
+    def __call__(
+        self,
+        *,
+        x_train: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+        y_train: np.ndarray[tuple[N, Literal[1]], np.dtype[np.float64]],
+        x_test: XPop,
+        es: Cma,
+    ) -> NDArray[np.uint]:
+        n_total, dim = x_train.shape
+        max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)
+        return np.arange(n_total).astype(np.uint)[-max_model_size:]
+
 class ClosestToAnyTestPoint(Subset):
     """<https://github.com/bajeluk/surrogate-cmaes/blob/fe33fda66e11c6949fe857289184007788c34794/src/data/Archive.m#L204-L244>"""
 
@@ -598,16 +615,42 @@ class ClosestToEachTestPoint(Subset):
     ...               [ 3, -3],                               [ 3,  3],
     ... ]))
     array([ 1,  2, 11, 12], dtype=uint64)
+
+    >>> ClosestToEachTestPoint(norm_max=lambda d: 1, n_max_coef=4)(y_train=None, es=None,
+    ... x_train=np.array([
+    ... # idx:  0                   1                             2         3
+    ...     [-4, -4],           [-4, -2],                     [-4,  3], [-4,  4],
+    ... # idx:                                          4                   5
+    ...                                             [-3,  2],           [-3,  4],
+    ... # idx:  6                                                 7
+    ...     [-2, -4],                                         [-2,  3],
+    ... # idx:  8                   9                                      10
+    ...     [ 3, -4],           [ 3, -2],                               [ 3,  4],
+    ... # idx: 11        12                                      13        14
+    ...     [ 4, -4], [ 4, -3],                               [ 4,  3], [ 4,  4],
+    ... ]),
+    ... x_test=np.array([
+    ...               [-3, -3],                               [-3,  3],
+    ...               [ 3, -3],                               [ 3,  3],
+    ... ]))
+    array([ 2,  8, 10,  4,  9, 13,  5, 12], dtype=uint64)
     """
+    n_max_coef = 20
+
+    @staticmethod
+    def norm_max(dim):
+        return 4 * np.sqrt(distributions.chi2.ppf(0.99, df=dim))
 
     def __init__(
         self,
         *,
         norm: Callable[[np.ndarray], np.float64] | Type[Norm] = np.linalg.norm,
+        norm_max: Optional[Callable[[int], np.float64]] = None,
         n_max_coef=None,
     ):
         self.__norm = norm
-        self.__n_max_coef = n_max_coef if n_max_coef is not None else N_MAX_COEF_DEFAULT
+        self.__n_max_coef = n_max_coef if n_max_coef is not None else self.n_max_coef
+        self.__norm_max = norm_max if norm_max is not None else self.norm_max
 
     def __repr__(self) -> str:
         return repr_default(self, self.__norm, n_max_coef=self.__n_max_coef)
@@ -622,10 +665,10 @@ class ClosestToEachTestPoint(Subset):
     ) -> NDArray[np.uint]:
         n_max = self.__n_max_coef * x_train.shape[1]
         n_total, dim = x_train.shape
-        if n_max >= n_total:
-            return np.arange(n_total).astype(np.uint)
+        norm_max = self.__norm_max(dim)
         # n_per_point = int(n_max / x_test.shape[0])
-        norm = self.__norm if not isinstance(self.__norm, type) else self.__norm(es=es)
+        norm = self.__norm if not issubclass(self.__norm, Norm) else self.__norm(es=es)
+
         # distance of train point (row) and test point (column)
         norms_2d = np.apply_along_axis(  # type: ignore[call-overload]
             norm,
@@ -633,17 +676,47 @@ class ClosestToEachTestPoint(Subset):
             arr=np.repeat(x_train[:, None, :], x_test.shape[0], axis=1) - x_test,
         )
         # <https://github.com/bajeluk/surrogate-cmaes/blob/fe33fda66e11c6949fe857289184007788c34794/src/data/Archive.m#L255>
-        norm_max = 4 * distributions.chi2.ppf(0.99, df=dim)  # TODO # noqa: F841
         # Argsorts each column (train point index with smallest norm on top)
         # then flattens them by rows i.e. each test points matters the same*.
-        unique_indices, their_positions = np.unique(
-            norms_2d.argpartition(kth=np.arange(n_max), axis=0)
-            .astype(np.uint)[:n_max]
-            .flatten(),
-            return_index=True,
-        )
-        return unique_indices[their_positions.argsort()][:n_max]
+        near_indices = np.flatnonzero((norms_2d <= norm_max).any(axis=1))
+        if n_max >= n_total:
+            idx = near_indices.astype(np.uint)
+        else:
+            unique_indices, their_positions = np.unique(
+                norms_2d.argpartition(kth=np.arange(n_max), axis=0)
+                .astype(np.uint)[:n_max]
+                .flatten(),
+                return_index=True,
+            )
+            near_mask = np.isin(unique_indices, near_indices)
+            idx = unique_indices[near_mask][their_positions[near_mask].argsort()][:n_max]
+        if __debug__:
+            print(f"subset-max-norm={norms_2d[idx].min(axis=1).max()} | norm-max={norm_max}")
+        return idx
 
+class InNormRange(Subset):
+    norm_max = 2
+
+    def __init__(self, *, norm: Norm):
+        self.__norm = norm
+
+    def __repr__(self) -> str:
+        return repr_default(self, norm_max=self.norm_max)
+
+    def __call__(
+        self,
+        *,
+        x_train: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
+        y_train: np.ndarray[tuple[N, Literal[1]], np.dtype[np.float64]],
+        x_test: XPop,
+        es: Cma,
+    ) -> NDArray[np.uint]:
+        n_total, dim = x_train.shape
+        norm = self.__norm if not issubclass(self.__norm, Norm) else self.__norm(es=es)
+        norms = np.array([norm(d) for d in x_train - es.mean])
+        near_indices = np.flatnonzero(norms <= self.norm_max)
+        idx = np.arange(n_total).astype(np.uint)[near_indices]
+        return idx
 
 def get_mean_and_std(samples, *, weights=None):
     """
@@ -670,10 +743,6 @@ def get_mean_and_std(samples, *, weights=None):
         mean = 0
         std = 1
     return mean, std
-
-
-def shift_and_scale_x_by_es_y_by_train(*, x_train, y_train, x_test, es):
-    return (es.mean, es.std), get_mean_and_std(y_train)
 
 
 class Archive(NamedTuple):
@@ -841,17 +910,20 @@ class NN:
         y_pred = sess.run(self.output, feed_dict=feed)
         return y_pred
 
-
 class Raf(ModelFactory):
-    def __init__(self, *, data_noise: Optional[float] = None, debug: bool = False):
+    data_noise:float = 0.01
+    epochs: int = 1000
+
+    def __init__(self, *, data_noise: Optional[float] = None, epochs: Optional[int]= None, debug: bool = False):
         """
         data_noise: estimated noise variance, feel free to experiment with different values
         """
-        self.__data_noise = data_noise if data_noise is not None else 0.01
+        self.__data_noise = data_noise if data_noise is not None else self.data_noise
+        self.__epochs = epochs if epochs is not None else self.epochs
         self.__debug = debug
 
     def __repr__(self) -> str:
-        return repr_default(self, data_noise=self.__data_noise)
+        return repr_default(self, data_noise=self.__data_noise, **(dict(epochs=self.__epochs) if self.__epochs != self.epochs else {}))
 
     def __call__(
         self,
@@ -859,6 +931,7 @@ class Raf(ModelFactory):
         x_train: NDArray[np.float64],
         y_train: NDArray[np.float64],
         x_test: NDArray[np.float64],
+        weights: NDArray[np.float64],
     ):
         data_noise = self.__data_noise
         """Taken form `RAFs <https://github.com/YanasGH/RAFs/blob/6a0ec46a7d9cd830e7d8e74358643aee1f65323d/main_experiments/rafs.py#L94-L157>`_"""
@@ -867,6 +940,9 @@ class Raf(ModelFactory):
         n = X_train.shape[0]
         x_dim = X_train.shape[1]
         y_dim = y_train.shape[1]
+        if __debug__ and self.__debug:
+            _max_model_size = max(x_test.shape[0], x_dim * (x_dim + 3) + 2)  # for kendall only
+            _n_kendall_archive = _max_model_size - 1
 
         n_ensembles = 5
         hidden_size = 100
@@ -877,7 +953,7 @@ class Raf(ModelFactory):
             np.array([init_stddev_1_w, init_stddev_1_b, init_stddev_2_w]) ** 2
         )
 
-        n_epochs = 1000
+        n_epochs = self.__epochs
         learning_rate = 0.01
 
         NNs = []
@@ -924,7 +1000,7 @@ class Raf(ModelFactory):
             feed_b = {}
             feed_b[NNs[ens].inputs] = X_train
             feed_b[NNs[ens].y_target] = y_train
-            if self.__debug:
+            if __debug__ and self.__debug:
                 print("\nNN:", ens)
 
             ep_ = 0
@@ -934,7 +1010,7 @@ class Raf(ModelFactory):
                 if ep_ % (n_epochs / 5) == 0:
                     loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
                     loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                    if self.__debug:
+                    if __debug__ and self.__debug:
                         print(
                             "epoch:",
                             ep_,
@@ -942,8 +1018,15 @@ class Raf(ModelFactory):
                             np.round(loss_mse * 1e3, 3),
                             ", loss_anch",
                             np.round(loss_anch * 1e3, 3),
-                        )
+                            "tau-train={:>5.2f}".format(kendalltau(y_train[-_n_kendall_archive:], np.array(NNs[ens].predict(X_train[-_n_kendall_archive:], sess))).statistic),  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+                            )
                     # the anchored loss is minimized, but it's useful to keep an eye on mse too
+
+        if __debug__ and self.__debug:
+            _tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(np.array([nn.predict(X_train[-_n_kendall_archive:], sess) for nn in NNs]), axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+            # if _tau < 0.7:
+            #     breakpoint()
+            print(f"tau-train-ens={_tau}")
 
         def raf(features):
             y_pred = np.array([nn.predict(features, sess) for nn in NNs])
@@ -954,6 +1037,186 @@ class Raf(ModelFactory):
 
         return raf
 
+class NeuralNetwork(Module):
+    def __init__(self, activation, *, width=128, dropout_p=.0, dim):
+        super(NeuralNetwork,self).__init__()
+        self.width = width
+        self.dropout_p=dropout_p
+        self.activation = activation
+
+        # self.n_0 = nn.BatchNorm1d(dim)
+        self.l_1 = Linear(dim,self.width)
+        self.drop = Dropout(self.dropout_p) if self.dropout_p > 0 else None
+        #self.l_2 = nn.Linear(self.width,self.width)
+        self.l__1 = Linear(self.width, 1)
+        self.transforms = [
+            # self.n_0,
+            self.l_1,
+        ] + (
+            [self.drop] if self.drop is not None else []
+        ) + [
+            activation,
+            self.l__1,
+        ]
+
+    def forward(self, x):
+        for t in self.transforms:
+            x = t(x)
+        return x
+
+    def __str__(self) -> str:
+        return '-'.join([
+            ''.join([str(tmp)[0] for tmp in self.transforms if isinstance(tmp, Module)]),
+            str(self.width),
+            self.activation.__name__,
+        ] + ([f"drop{self.dropout_p}"] if self.dropout_p > 0 else []))
+
+def train_network(network, x, y, *, weights, plot=None, epochs=1000, mse_stop=-np.inf, lr=0.001, device):
+    best_loss = np.inf
+    best_model = network.state_dict()
+
+    if plot:
+        (fig, ax, dh) = plot
+
+    # lr = 3e-4
+    optimizer = torch.optim.Adam(network.parameters(), lr=lr)
+    # loss_fn = torch.nn.MSELoss()
+    def loss_fn(output, target, weights):
+        # return torch.mean(torch.abs((output - target)))
+        # return torch.mean(torch.abs(weights * (output - target)))
+        # return torch.mean(torch.abs(output - target) / target)
+        # return torch.mean(torch.abs((output - target) / (1 + target - target.min())))
+        # return torch.mean(torch.log(output + 1) - torch.log(target + 1))
+        return torch.mean((weights * (output - target))**2)
+
+    loss = np.inf
+    losses = []
+
+    x = torch.Tensor(x).to(device)
+    y = torch.Tensor(y).to(device)
+
+    weights = torch.Tensor(weights.squeeze()[:, None])
+
+    epochs_iter = range(1, epochs+1)
+    for epoch in epochs_iter:
+        network.train()
+        optimizer.zero_grad()
+        loss_fn(y, network(x), weights).backward()
+        optimizer.step()
+
+        network.eval()
+        with torch.no_grad():
+            loss = loss_fn(y, network(x), weights).item()
+        losses.append(loss)
+        if loss < best_loss:
+            best_loss = loss
+            best_model = deepcopy(network.state_dict())
+        if loss < mse_stop:
+            break
+
+        if epoch%200 == 0 and plot:
+            ax.clear() # pyright: ignore [reportPossiblyUnboundVariable]
+            ax.semilogy(losses, ',') # pyright: ignore [reportPossiblyUnboundVariable]
+            dh.update(fig) # pyright: ignore [reportPossiblyUnboundVariable]
+
+    network.load_state_dict(best_model)
+    return losses
+
+
+class Eaf(ModelFactory):
+    width = 128
+    lr = 0.01
+    epochs = 1000
+    mse_stop = -np.inf
+
+    def __init__(self, *, weights=None, width=None, lr=None, epochs=None, mse_stop=None, plot=None, **ignored):
+        """Train and predict ensemble of NNs with different activation functions"""
+
+    def __repr__(self) -> str:
+        return type(self).__name__
+
+    def __call__(
+        self,
+        *,
+        x_train: NDArray[np.float64],
+        y_train: NDArray[np.float64],
+        x_test: NDArray[np.float64],
+        weights: Optional[NDArray[np.float64]] = None,
+    ):
+        # lr=0.06
+        # width=1024
+        afs = [
+            F.sigmoid,
+            # F.hardsigmoid,
+            F.relu,
+            # F.softplus,
+            # F.gelu,
+            F.silu,
+            # F.mish,
+            # F.leaky_relu,
+            # F.elu,
+            # F.celu,
+            # F.selu,
+            # F.tanh,
+            F.hardtanh,
+            # F.softsign,
+            torch.erf,
+        ]
+        dim = x_train.shape[-1]
+        device = (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        nets = {f.__name__: NeuralNetwork(f, width=self.width, dropout_p=.0, dim=dim).to(device) for f in afs}
+
+        if weights is None:
+            # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+            # weights = (1 / (1 + norms))**2
+            # weights = (1 / (1 + norms))**4
+            weights = np.ones_like(y_train)
+
+        losses = {}
+        for name, net in nets.items():
+            losses[name] = train_network(net, x_train, y_train,
+                                         weights=weights,
+                                         epochs=self.epochs,
+                                         mse_stop=self.mse_stop,
+                                         lr=self.lr,
+                                         device=device,
+                                         )
+
+        if __debug__:
+            with torch.no_grad():
+                _max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)  # for kendall only
+                _n_kendall_archive = _max_model_size - 1
+                x = torch.Tensor(x_train[-_n_kendall_archive:]).to(device)
+                y = np.array([net.eval()(x).cpu().numpy() for net in nets.values()])
+                tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(y, axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+                # if tau < 0.7:
+                #     breakpoint()
+                print("tau-train-ens={}".format(tau))
+
+        def eaf(x_test):
+            x_test_tsr = torch.Tensor(x_test).to(device)
+            y_preds = {}
+            with torch.no_grad():
+                for name, net in nets.items():
+                    y_preds[name] = net.eval()(x_test_tsr).cpu().numpy()
+
+            # y_preds_scaled = {name: scale_y_back(y_) for name, y_ in y_preds.items()}
+            y_pred_arr = np.array(list(y_preds.values()))
+
+            pred_mean = y_pred_arr.mean(axis=0)
+            pred_std = y_pred_arr.std(axis=0)
+
+            if len(pred_mean) < len(x_test):
+                raise ValueError("len(pred_mean) < len(x_test)")
+            return Prediction(pred_mean, pred_std)
+
+        return eaf
 
 class SurrogateCallable(Protocol):
     def __call__(
@@ -965,6 +1228,83 @@ class SurrogateCallable(Protocol):
         es: Cma,
     ) -> Model: ...
 
+class Transformation(ABC):
+    def __repr__(self) -> str:
+        return type(self).__name__
+
+    @abstractmethod
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Optional[Cma]=None, weights=None):
+        ...
+
+    @abstractmethod
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+    @abstractmethod
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+    @abstractmethod
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        ...
+
+class ShiftAndScale(Transformation):
+    @property
+    @abstractmethod
+    def shift(self): ...
+
+    @property
+    @abstractmethod
+    def scale(self): ...
+
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return (data - self.shift) / self.scale
+
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return data * self.scale + self.shift
+
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return std * self.scale
+
+class Standardization(ShiftAndScale):
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Cma, weights=None):
+        self.__mean, self.__std = get_mean_and_std(data, weights=weights)
+
+    @property
+    def shift(self):
+        return self.__mean
+
+    @property
+    def scale(self):
+        return self.__std
+
+class ShiftAndScaleByEs(ShiftAndScale):
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Cma, weights=None):
+        self.__mean = es.mean
+        self.__std = es.std
+
+    @property
+    def shift(self):
+        return self.__mean
+
+    @property
+    def scale(self):
+        return self.__std
+
+class MinAdjustedLog(Transformation):
+    min_offset: float = 1e-9
+    def __init__(self, data:np.ndarray[tuple[N], np.dtype[np.float64]], *, x_train=None, y_train=None, x_test=None, es: Optional[Cma]=None, weights=None):
+        self.__shift = 0
+
+    def transform(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        self.__shift = data.min() - self.min_offset
+        return np.log(data - self.__shift)
+
+    def transform_inv(self, data:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return np.e ** data + self.__shift
+
+    def transform_inv_std(self, std:np.ndarray[tuple[N], np.dtype[np.float64]]) -> np.ndarray[tuple[N], np.dtype[np.float64]]:
+        return np.e ** std
 
 class Surrogate:
     def __init__(
@@ -972,7 +1312,8 @@ class Surrogate:
         *,
         model: Optional[Model | ModelFactory] = None,
         subset: Optional[Subset] = None,
-        shift_and_scale=None,
+        x_transf: Optional[Type[Transformation]]=None,
+        y_transf: Optional[Type[Transformation]]=None,
     ):
         self.__model = model if model is not None else Raf()
         self.__subset = (
@@ -980,16 +1321,11 @@ class Surrogate:
             if subset is not None
             else ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis)
         )
-        self.__shift_and_scale = (
-            shift_and_scale
-            if shift_and_scale is not None
-            else shift_and_scale_x_by_es_y_by_train
-        )
+        self.__x_transf = x_transf if x_transf is not None else ShiftAndScaleByEs
+        self.__y_transf = y_transf if y_transf is not None else MinAdjustedLog
 
     def __repr__(self) -> str:
-        return repr_default(
-            self, model=self.__model, subset=self.__subset, sns=self.__shift_and_scale
-        )
+        return repr_default(self, model=self.__model, subset=self.__subset, x_tf=self.__x_transf, y_tf=self.__y_transf)
 
     def __call__(
         self,
@@ -1002,18 +1338,28 @@ class Surrogate:
         subset_idx = self.__subset(
             x_train=x_train, y_train=y_train, x_test=x_test, es=es
         )
+        subset_idx = np.sort(subset_idx)  # Important for some ECs
+        if __debug__:
+            print(f"subset-idx-size={subset_idx.size}")
         x_subset, y_subset = x_train[subset_idx], y_train[subset_idx]
 
-        (x_shift, x_scale), (y_shift, y_scale) = self.__shift_and_scale(
-            x_train=x_subset, y_train=y_subset, x_test=x_test, es=es
-        )
-        x_train_scaled = (x_subset - x_shift) / x_scale
-        y_train_scaled = (y_subset - y_shift) / y_scale
-        x_test_scaled = (x_test - x_shift) / x_scale
+        weights = None
+        # # Hansen's 20..1
+        # weights = np.linspace(1, 20, y_subset.shape[0])[:, None]
+        # # Experimental weights inversely proportional to the Mahalanobis norm
+        # norms = np.array([es.mahalanobis_norm(x) for x in x_subset - es.mean])
+        # weights = np.e ** (-norms*2)
+
+        x_transf = self.__x_transf(x_subset, x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+        y_transf = self.__y_transf(y_subset, x_train=x_subset, y_train=y_subset, x_test=x_test, es=es, weights=weights)
+
+        x_train_transf = x_transf.transform(x_subset)
+        y_train_transf = y_transf.transform(y_subset)
+        x_test_transf = x_transf.transform(x_test)
 
         model = (
             self.__model(
-                x_train=x_train_scaled, y_train=y_train_scaled, x_test=x_test_scaled
+                x_train=x_train_transf, y_train=y_train_transf, x_test=x_test_transf, weights=weights
             )
             if isinstance(self.__model, ModelFactory)
             else self.__model
@@ -1023,13 +1369,12 @@ class Surrogate:
         def surrogate_model(
             features: np.ndarray[tuple[N, DIM], np.dtype[np.float64]],
         ) -> Prediction[N]:
-            features_scaled = (features - x_shift) / x_scale
-            pred_scaled = model(features_scaled)
-            pred_mean, pred_std = (
-                pred_scaled.mean * y_scale + y_shift,
-                pred_scaled.std * y_scale,
+            features_transf = x_transf.transform(features)
+            pred_transf = model(features_transf)
+            return Prediction(
+                y_transf.transform_inv(pred_transf.mean),
+                y_transf.transform_inv_std(pred_transf.std)
             )
-            return Prediction(pred_mean, pred_std)
 
         return surrogate_model
 
@@ -1047,23 +1392,23 @@ class EvolutionControl(Protocol):
 
 
 def evaluate_all(
-    *, model: Model, points: NDArray[np.float64], problem: Problem, archive: Archive
+    *, model: Model, points: NDArray[np.float64], problem: Problem, archive: Archive, debug_tau=False,
 ) -> ValuesAndEvaluatedIdx:
     """
     >>> isinstance(evaluate_all, EvolutionControl)
     True
     """
     evals_left = problem.evals_left
-    evaluated_idx = np.arange(points.shape[0]).astype(np.uint)
-    return ValuesAndEvaluatedIdx(
-        values=np.array(
-            [
-                problem(p) if not problem.final_target_hit else np.float64(np.nan)
-                for p in points[:evals_left]
-            ]
-        )[:, None],
-        evaluated_idx=evaluated_idx[:evals_left],
-    )
+    evaluated_idx = np.arange(points.shape[0]).astype(np.uint)[:evals_left]
+    values=np.array(
+        [
+            problem(p) if not problem.final_target_hit else np.float64(np.nan)
+            for p in points[:evals_left]
+        ]
+    )[:, None]
+    if __debug__ and debug_tau:
+        print("tau-population={:>5.2f}".format(kendalltau(values, model(points[:evals_left]).mean).statistic))
+    return ValuesAndEvaluatedIdx(values=values, evaluated_idx=evaluated_idx)
 
 
 class AcquisitionFunction(Protocol):
@@ -1157,17 +1502,20 @@ class EvaluateBestPointsByCriterion(EvolutionControl):
 
 class EvaluateUntilKendallThreshold(EvolutionControl):
     """Inspired by pycma's `fitness_models <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L258-L323>`_"""
-
     def __init__(
         self,
         *,
         criterion: AcquisitionFunction,
         tau_thold: float = 0.85,
         offset_non_evaluated: bool = False,
+        verbose = True,
+        debug = False,
     ):
         self.__criterion = criterion
         self.__tau_thold = tau_thold
         self.__offset_non_evaluated = offset_non_evaluated
+        self.__verbose = verbose
+        self.__debug = debug
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L83>
         self.n_for_tau = lambda popsi, nevaluated: int(
             max(15, min(1.2 * nevaluated, 0.75 * popsi))
@@ -1176,7 +1524,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         self.min_evals_percent = 2
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L370-L372>
         self.truncation_ratio = max(
-            (3 / 4, (3 - (max_relative_size_end := 2)) / 2)  # noqa: F841
+            (3 / 4, (3 - (_max_relative_size_end := 2)) / 2)
         )  # use only truncation_ratio best in _n_for_model_building
 
     def __repr__(self) -> str:
@@ -1191,15 +1539,15 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         self, *, model: Model, points: XPop, problem: Problem, archive: Archive
     ) -> ValuesAndEvaluatedIdx:
         archive_size = archive.y.shape[0]
-        n_evaluated = 0
         dim = problem.dimension
         n_points = points.shape[0]
         max_model_size = max(n_points, dim * (dim + 3) + 2)
-        model_size = min(archive_size + n_evaluated, max_model_size)
+        model_size = min(archive_size, max_model_size)
         pred = model(points)
+
         # TODO: evaluate the max size, and take the subsets later
         # <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L296-L297>
-        number_evaluated = int(
+        n_evaluated = int(
             1
             + max(
                 n_points * self.min_evals_percent / 100,
@@ -1207,25 +1555,30 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
             )
         )
         try:
-            number_evaluated = min(number_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
+            n_evaluated = min(n_evaluated, problem.evals_left)  # type: ignore[assignment, type-var]
         except:  # noqa: E722
             pass
+        if __debug__:
+            if (_n_archive := min(self.n_for_tau(n_points, n_evaluated), model_size) - n_evaluated) > 0:
+                print("tau-archive={}".format(kendalltau(archive.y[-_n_archive:], model(archive.x[-_n_archive:]).mean).statistic))
+                # TODO test Kendall weighted
+
         eval_order_idx = (
             self.__criterion(pred).argsort(axis=0).astype(np.uint).squeeze()
         )
 
         tau = np.nan
+        n_kendall = None
         (values := np.empty((n_points, 1))).fill(np.nan)
         evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
         while not_evaluated.any():
-            for i in (idx := eval_order_idx[:number_evaluated])[not_evaluated[idx]]:
+            for i in (idx := eval_order_idx[:n_evaluated])[not_evaluated[idx]]:
                 values[i] = (
                     problem(points[i])
                     if not problem.final_target_hit
                     else np.float64(np.nan)
                 )
             evaluated = ~(not_evaluated := np.isnan(values.squeeze()))
-            n_evaluated = evaluated.sum()
             model_size = min(archive_size + n_evaluated, max_model_size)
             n_kendall = min(self.n_for_tau(n_points, n_evaluated), model_size)
             n_kendall_archive = max(n_kendall - n_evaluated, 0)
@@ -1259,28 +1612,35 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 else:
                     values[not_evaluated] = pred_mean_not_evaluated
                 break
-            eval_next = math.ceil(number_evaluated / 2)
+            eval_next = math.ceil(n_evaluated / 2)
             try:
                 eval_next = min(eval_next, problem.evals_left)  # type: ignore[assignment, type-var]
             except:  # noqa: E722
                 pass
-            number_evaluated += eval_next
+            n_evaluated += eval_next
 
         # Uncomment for diagnostics, comment out for performance
         std_of_means = pred.mean.std()
         mean_of_stds = pred.std.mean()
-        print(
-            " | ".join(
-                [
-                    f"eval={evaluated.sum()}",
-                    f"not-eval={not_evaluated.sum()}",
-                    f"{tau=:>5.2f}",
-                    f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
-                    f"std(means)={std_of_means:.2e}",
-                    f"mean(stds)={mean_of_stds:.2e}",
-                ]
+        if self.__verbose:
+            print(
+                " | ".join(
+                    [
+                        f"eval={evaluated.sum()}",
+                        f"not-eval={not_evaluated.sum()}",
+                        f"{tau=:>5.2f}",
+                        f"{n_kendall=:>2}",
+                        f"std(means)/mean(stds)={std_of_means/mean_of_stds:>6.2f}",
+                        f"std(means)={std_of_means:.2e}",
+                        f"mean(stds)={mean_of_stds:.2e}",
+                    ]
+                )
             )
-        )
+        if __debug__ and self.__debug:
+            try:
+                evaluate_all(model=model, points=points, problem=PROBLEM_DEBUG, archive=archive, debug_tau=True)  # type: ignore[name-defined]
+            except:  # noqa: E722
+                pass
         return ValuesAndEvaluatedIdx(values, np.flatnonzero(evaluated).astype(np.uint))
 
 
@@ -1400,7 +1760,7 @@ def report(*, problem, es, surrogate_and_ec, secs, seed=None) -> str:
             (
                 f"{problem.dimension:>2}D",
                 f"{problem.function_id:>2}-fun",
-                f"{problem.instance:>2}-inst",
+                f"{problem.instance:>3}-inst",
                 f"{problem.budget:>4}-budget",
                 f"{str(problem.final_target_hit):>5}-solved",
                 f"{problem.evaluations:>3}-evals",
@@ -1471,23 +1831,26 @@ def test(
 
     problems = [ProblemCocoex, ProblemIoh][1:]
     es_list = [WrappedCma, WrappedModcma][:-1]
-    models = [predict_zeros_and_ones, predict_random, Raf(data_noise=None)][2:]
+    models = [predict_zeros_and_ones, predict_random, Raf(debug=True), Raf2(), Eaf()][2:3]
     surrogates = [
         Surrogate(
             model=model,
-            subset=ClosestToEachTestPoint(n_max_coef=20, norm=Mahalanobis),
-            shift_and_scale=shift_and_scale_x_by_es_y_by_train,
+            subset=ClosestToEachTestPoint(norm=Mahalanobis),
+            # subset=ClosestToEachTestPoint(n_max_coef=6, norm=Mahalanobis),
+            # subset=LastN(),
+            # subset=InNormRange(norm=Mahalanobis),
         )
         for model in models
     ]
     ec_list = [
+        partial(evaluate_all, debug_tau=True),
         EvaluateBestPointsByCriterion(
             criterion=mean_criterion, eval_ratio=0.1, offset_non_evaluated=offset
         ),
         EvaluateUntilKendallThreshold(
             criterion=mean_criterion, offset_non_evaluated=offset
         ),
-    ][1:]
+    ][2:]
     surr_ec_list = [
         None,
         *[
@@ -1503,6 +1866,10 @@ def test(
         problem = problem_class.get(
             dim=dim, fun=fun, inst=inst, budget_coef=budget_coef
         )
+        if __debug__:
+            global PROBLEM_DEBUG
+            PROBLEM_DEBUG = problem_class.get(dim=dim, fun=fun, inst=inst)
+
         es = es_class(x0=np.zeros(problem.dimension), seed=seed)
 
         x, y = seek_minimum(
