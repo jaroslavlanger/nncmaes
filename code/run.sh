@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -l select=1:ncpus=1:mem=1gb:scratch_local=1gb
 #PBS -l walltime=24:00:00
-N_TEST="002" # MinAdjustedLog Transformation
+N_TEST="003-a" # Kendall threshold 0.95
 
 if [ -z ${crit+x} ]; then
     crit="mean"
@@ -63,10 +63,9 @@ fi
     >> ${DATADIR}/time-perf.txt \
     || { echo >&2 "error from python script (code: $?)!"; exit 3; }
 
-# move the output to user's DATADIR or exit in case of failure
-cp -r exdata/* ${OUT} ${DATADIR} || { echo >&2 "Result file(s) copying failed (with a code $?)!"; exit 4; }
 if ${KEEP_ERR}; then
     cp ${ERR} ${DATADIR}
 fi
+cp -r exdata/* ${OUT} ${DATADIR} || { echo >&2 "Result file(s) copying failed (with a code $?)!"; exit 4; }
 # clean the SCRATCH directory
 clean_scratch

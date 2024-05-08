@@ -1801,7 +1801,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         self,
         *,
         criterion: AcquisitionFunction,
-        tau_thold: float = 0.85,
+        tau_thold: float = 0.95,
         offset_non_evaluated: bool = False,
         verbose=True,
         show_pred=False,
