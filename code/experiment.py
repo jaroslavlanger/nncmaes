@@ -69,7 +69,7 @@ suite_options = " ".join(
 )
 print(f"{suite_options = }")
 
-output_folder = "_".join(["cmaes_safe",
+output_folder = "_".join(["nncmaes",
                          f"{DIMENSION:0>2}d",
                          f"{FUNCTION:0>2}f"] + (
                         [f"{INSTANCE:0>3}i"] if INSTANCE is not None else []
