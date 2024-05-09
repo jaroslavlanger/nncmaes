@@ -10,10 +10,11 @@
 # pip install modcma
 # # pip install cocopp
 # pip install cma
-# pip install torchinfo
 # -----------------------------------------------------------------------------
+from __future__ import annotations
 import copy
 import itertools
+import functools
 from functools import partial
 import time
 import random
@@ -21,203 +22,360 @@ import os
 import sys
 from contextlib import suppress
 import re
+from random import randint
+
+from abc import ABC, abstractmethod
+from collections.abc import Callable, Collection
+from numbers import Real
+from typing import Optional, Type, TypeVar
 
 import numpy as np
-import numpy.typing as npt
 from scipy import stats
 from scipy.special import ndtr
 
-# matplotlib_inline.backend_inline.set_matplotlib_formats('pdf', 'svg')
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib import cbook, cm
-from matplotlib.colors import LightSource
-
-import torch.nn as nn
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 
-import jax
-import jax.numpy as jnp
-# from jax import random
-from jax.example_libraries import optimizers
-from jax import jit, grad, vmap
-
-# from clu import metrics
-# from flax.training import train_state  # Useful dataclass to keep train state
-# from flax import struct                # Flax dataclasses
-# import optax                           # Common loss functions and optimizers
-
-# import neural_tangents as nt
-# from neural_tangents import stax
-
 import tensorflow
-import tensorflow.compat.v1 as tf
-tf.compat.v1.disable_eager_execution()
-from random import randint
+import tensorflow.compat.v1 as tf # pyright: ignore [reportMissingImports]
 
+import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
-from tqdm.auto import trange
 
-with suppress(ImportError): import ioh
-with suppress(ImportError): import cocoex
-with suppress(ImportError): import cma
-with suppress(ImportError): from modcma import AskTellCMAES
-with suppress(ImportError): from torchinfo import summary
-with suppress(ImportError): import matplotlib_inline
-with suppress(ImportError): import seaborn as sns
-with suppress(ImportError): import plotly.graph_objects as go
-with suppress(ImportError): from IPython.display import clear_output
+with suppress(ImportError):
+    import cocoex
+import ioh
+from cma import CMAEvolutionStrategy, BoundPenalty
+from modcma import AskTellCMAES
+with suppress(ImportError):
+    import plotly.graph_objects as go # pyright: ignore [reportMissingImports]
 
-def get_problem_ioh(function, *, instance, dimension):
-    """>>> get_problem_ioh(1, instance=1, dimension=2)"""
-    return ioh.get_problem(function, instance=instance, dimension=dimension, problem_class=ioh.ProblemClass.BBOB)
-
-def final_target_hit(problem):
-    """https://github.com/numbbo/coco/blob/master/code-experiments/src/coco_problem.c#L443-L444"""
-    if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        return problem.optimum.y + 1e-8 >= problem.state.current_best.y
-    elif isinstance(problem, cocoex.interface.Problem):
-        return problem.final_target_hit
-    else:
-        raise NotImplementedError
-
-def get_dimension(problem):
-    if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        return problem.meta_data.n_variables
-    elif isinstance(problem, cocoex.interface.Problem):
-        return problem.dimension
-    else:
-        raise NotImplementedError
-
-def get_evaluations(problem):
-    if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        return problem.state.evaluations
-    elif isinstance(problem, cocoex.interface.Problem):
-        return problem.evaluations
-    else:
-        raise NotImplementedError
-
-def current_best_y(problem):
-    if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        return problem.state.current_best.y
-    elif isinstance(problem, cocoex.interface.Problem):
-        return problem.best_observed_fvalue1
-    else:
-        raise NotImplementedError
-
-def progress(problem):
-    if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        optimum = problem.optimum.y
-        curr_best = problem.state.current_best.y
-    else:
-        raise NotImplementedError
-    if optimum >= 0:
-        if curr_best == 0:
-            return 1
-        else:
-            return optimum / curr_best
-    else:
-        return curr_best / optimum
+tf.compat.v1.disable_eager_execution()
 
 
-class WrappedCma:
-    restarts = 0
+def get_seed_np() -> np.uint32:
+    _, keys, *_ = np.random.get_state()
+    return keys[0] # pyright: ignore [reportReturnType]
 
-    def __init__(self, *, x0, lambda_=None):
-        self.x0 = x0
-        self.es = self.make_cmaes(x0=x0, lambda_=lambda_)
-        self.lambda_ = self.es.popsize
+class Problem(ABC):
+    @staticmethod
+    @abstractmethod
+    def get(*, dim, fun, inst) -> Problem:
+        ...
+    @abstractmethod
+    def __call__(self, x) -> float:
+        ...
+    @property
+    @abstractmethod
+    def function_id(self) -> int:
+        ...
+    @property
+    @abstractmethod
+    def dimension(self) -> int:
+        ...
+    # TODO: change to bounds -> bounds namedtuple
+    @property
+    @abstractmethod
+    def bounds_lower(self) -> np.ndarray:
+        ...
+    @property
+    @abstractmethod
+    def bounds_upper(self) -> np.ndarray:
+        ...
+    @property
+    @abstractmethod
+    def final_target_hit(self) -> bool:
+        """https://github.com/numbbo/coco/blob/master/code-experiments/src/coco_problem.c#L443-L444"""
+    @property
+    @abstractmethod
+    def evaluations(self) -> int:
+        ...
+    @property
+    @abstractmethod
+    def current_best_y(self) -> float:
+        ...
+
+    def is_end(self, budget) -> bool:
+        return self.final_target_hit or self.evaluations >= budget
+
+    def is_outside(self, point) -> bool:
+        tolerance = 1
+        return ((point < self.bounds_lower - tolerance) | (point > self.bounds_upper + tolerance)).any()
+
+
+class ProblemCocoex(Problem):
 
     @staticmethod
-    def make_cmaes(*, x0, lambda_):
-        return cma.CMAEvolutionStrategy(x0, 2, {
+    def get(*, dim, fun, inst) -> ProblemCocoex:
+        """>>> get_problem_cocoex(dim=2, fun=1, inst=1)"""
+        return ProblemCocoex(next(iter(cocoex.Suite("bbob", "", " ".join([  # pyright: ignore [reportPossiblyUnboundVariable]
+            f"dimensions: {dim}",
+            f"function_indices: {fun}",
+            f"instance_indices: {inst}",
+        ])))))
+
+    def __init__(self, problem):
+        if not isinstance(problem, cocoex.interface.Problem): # pyright: ignore [reportPossiblyUnboundVariable, reportAttributeAccessIssue]
+            raise ValueError(f"Wrong problem type: {type(problem)}")
+        self._problem = problem
+
+    def __call__(self, x):
+        return self._problem(x)
+
+    @property
+    def function_id(self):
+        return self._problem.id_function
+
+    @property
+    def dimension(self) -> int:
+        return self._problem.dimension
+
+    @property
+    def bounds_lower(self) -> np.ndarray:
+        return self._problem.lower_bounds
+
+    @property
+    def bounds_upper(self) -> np.ndarray:
+        return self._problem.upper_bounds
+
+    @property
+    def final_target_hit(self) -> bool:
+        return self._problem.final_target_hit
+
+    @property
+    def evaluations(self) -> int:
+        return self._problem.evaluations
+
+    @property
+    def current_best_y(self) -> float:
+        return self._problem.best_observed_fvalue1
+
+class ProblemIoh(Problem):
+
+    @staticmethod
+    def get(*, dim, fun, inst) -> ProblemIoh:
+        """>>> ProblemIoh.get(dim=2, fun=1, inst=1)"""
+        return ProblemIoh(ioh.get_problem(fun, instance=inst, dimension=dim, problem_class=ioh.ProblemClass.BBOB)) # pyright: ignore [reportCallIssue]
+
+    def __init__(self, problem):
+        if not isinstance(problem, ioh.iohcpp.problem.BBOB):
+            raise ValueError(f"Wrong problem type: {type(problem)}")
+        self._problem = problem
+
+    def __call__(self, x):
+        return self._problem(x)
+
+    @property
+    def function_id(self):
+        return self._problem.meta_data.problem_id
+
+    @property
+    def dimension(self) -> int:
+        return self._problem.meta_data.n_variables
+
+    @property
+    def bounds_lower(self) -> np.ndarray:
+        return self._problem.bounds.lb
+
+    @property
+    def bounds_upper(self) -> np.ndarray:
+        return self._problem.bounds.ub
+
+    @property
+    def final_target_hit(self) -> bool:
+        return self._problem.optimum.y + 1e-8 >= self._problem.state.current_best.y
+
+    @property
+    def evaluations(self) -> int:
+        return self._problem.state.evaluations
+
+    @property
+    def current_best_y(self) -> float:
+        return self._problem.state.current_best.y
+
+    @property
+    def progress(self) -> float:
+        optimum, curr_best = self._problem.optimum.y, self.current_best_y
+        if optimum >= 0:
+            if curr_best == 0:
+                return 1
+            else:
+                return optimum / curr_best
+        else:
+            return curr_best / optimum
+
+
+class Cma(ABC):
+    @abstractmethod
+    def __init__(self, *, x0: Collection[Real], lb, ub, lambda_=None, verbose=None):
+        ...
+    @property
+    @abstractmethod
+    def pop_size_initial(self) -> int:
+        ...
+    @property
+    @abstractmethod
+    def restarts(self) -> int:
+        ...
+    @property
+    @abstractmethod
+    def evals(self) -> int:
+        ...
+    @abstractmethod
+    def ask(self) -> np.ndarray: # TODO: [None, np.float64]
+        ...
+    @abstractmethod
+    def tell(self, points, values):
+        ...
+    @property
+    @abstractmethod
+    def mean(self) -> np.ndarray:
+        ...
+    @property
+    @abstractmethod
+    def std(self) -> np.ndarray:
+        ...
+
+class WrappedCma(Cma):
+
+    def __init__(self, *, x0, lb, ub, lambda_=None, verbose=None,
+                 seed=get_seed_np):
+        """
+        seed is called if callable and passed to the cma.CMAEvolutionStrategy
+        For the meaning see:
+        https://github.com/CMA-ES/pycma/blob/development/cma/evolution_strategy.py#L477
+        """
+        self._restarts = 0
+        self._x0, self._verbose, self._lb, self._ub = x0, verbose, lb, ub
+
+        if isinstance(seed, Callable):
+            self._seed = seed()
+        else:
+            self._seed = seed
+
+        self._es = self.make_cmaes(x0=self._x0, lambda_=lambda_, lb=self._lb, ub=self._ub,
+                                   seed=self._seed, verbose=self._verbose)
+        self._pop_size_initial = self._es.popsize
+
+    @property
+    def pop_size_initial(self) -> int:
+        return self._pop_size_initial
+
+    @property
+    def restarts(self) -> int:
+        return self._restarts
+
+    @property
+    def evals(self) -> int:
+        return self._es.countevals
+
+    @property
+    def mean(self) -> np.ndarray:
+        return self._es.mean
+
+    @property
+    def std(self) -> np.ndarray:
+        return np.sqrt(self._es.C.diagonal())*self._es.sigma
+
+    @staticmethod
+    def make_cmaes(*, x0, lambda_, lb, ub, seed, verbose):
+        # `Options <https://github.com/CMA-ES/pycma/blob/development/cma/evolution_strategy.py#L415-L524>`_
+        return CMAEvolutionStrategy(x0, 2, {
             'popsize': lambda_,
-            'verbose': -9,
+            'verbose': verbose,
+            'seed': seed,
+            # 'bounds': [list(lb), list(ub)], # TODO: when BoundPenalty with np.array does not work
+            # 'BoundaryHandler': 'BoundTransform',
+            # 'BoundaryHandler': BoundPenalty,
             # 'maxfevals': budget,
-            # 'seed': SEED,
         })
 
     def ask(self):
-        if self.es.stop():
-            self.lambda_ *= 2
-            self.es = self.make_cmaes(x0=self.x0, lambda_=self.lambda_)
-            self.restarts += 1
-        return np.array(self.es.ask())
+        if self._es.stop():
+            self._restarts += 1
+            lambda_ = 2**self._restarts * self._pop_size_initial
+            self._es = self.make_cmaes(x0=self._x0, lambda_=lambda_, lb=self._lb, ub=self._ub,
+                                       seed=self._seed, verbose=self._verbose)
+        return np.array(self._es.ask())
 
     def tell(self, points, values):
-        self.es.tell(list(points), [v[0] for v in values])
+        self._es.tell(list(points), [v[0] for v in values])
 
+def default_pop_size(dim):
+    """
+    (4 + np.floor(3 * np.log(dim))).astype(int)
+    """
+    return WrappedCma(x0=np.zeros(dim), lb=None, ub=None).pop_size_initial
 
-class WrappedModcma:
-    def __init__(self, *, dim, lambda_=None):
-        self.es = AskTellCMAES(d=dim,
+class WrappedModcma(Cma):
+    def __init__(self, *, x0: np.ndarray, lb, ub, lambda_=None):
+        # `Options <https://github.com/IOHprofiler/ModularCMAES/blob/master/modcma/parameters.py#L23-L313>`_
+        self._es = AskTellCMAES(d=x0.shape[-1],
                         budget=sys.maxsize, # None and float('inf') does not work
                         # bound_correction='COTN',
                         bound_correction="saturate",
-                        # lb=problem.bounds.lb,
-                        # ub=problem.bounds.ub,
+                        lb=lb,
+                        ub=ub,
                         lambda_=lambda_,
                         active=True,
                         local_restart="IPOP",
                         )
+        self._pop_size_initial = self._es.parameters.lambda_
+
+    @property
+    def pop_size_initial(self) -> int:
+        return self._pop_size_initial
+
+    @property
+    def restarts(self) -> int:
+        return len(self._es.parameters.restarts) -1
+
+    @property
+    def evals(self) -> int:
+        return self._es.parameters.used_budget
+
     def ask(self):
-        return np.array([self.es.ask().squeeze() for _ in range(self.es.parameters.lambda_)])
+        return np.array([self._es.ask().squeeze() for _ in range(self._es.parameters.lambda_)])
 
     def tell(self, points, values):
         for p, v in zip(points, values):
-            self.es.tell(p[:, None], v)
+            self._es.tell(p[:, None], v)
 
-    @property
-    def restarts(self):
-        return len(self.es.parameters.restarts) -1
-
-
-def solve_cmaes_get_data(problem, *, pbar=False, lambda_=None):
-    dim = get_dimension(problem)
+T = TypeVar('T', bound=Cma)
+def solve_cmaes_get_data(problem:Problem, *,
+                         cma:Type[T]=WrappedCma, lambda_:Optional[int]=None,
+                         pbar:bool=False
+                         ) -> tuple[list[np.ndarray], list[np.ndarray], T]:
+    dim = problem.dimension
     budget = int(2*1e5*dim)
-    problem.reset()
-    cma = make_cmaes(dim, lambda_=lambda_)
+    es = cma(x0=np.zeros(dim), lb=problem.bounds_lower, ub=problem.bounds_upper, lambda_=lambda_)
 
-    xs: list[list[np.ndarray[(dim), np.float64]]] = []
-    ys: list[list[float]] = []
-    pop: list = []
+    xs = [] # TODO: list[list[np.ndarray[(dim), np.float64]]] = []
+    ys = [] # TODO: list[list[float]]
 
-    # TODO change point_asks to generations
-    point_asks = range(1, budget+1)
-    if pbar:
-        point_asks = tqdm(point_asks, leave=False)
-    for point_ask in point_asks:
-        # Retrieve a single new candidate solution
-        x: np.ndarray[(dim,1), np.float64] = cma.ask()
-        pop.append(x)
+    generations = (tqdm(itertools.count(1), leave=False)
+                   if pbar else
+                   itertools.count(1))
+    close_iter = (lambda it: it.container.close() # noqa: E731
+                  if pbar else
+                  identity)
+    for gen in generations:
+        points = es.ask()
+        values = np.array([problem(p) if not problem.is_end(budget) else np.nan for p in points])[:, None]
+        xs.append(points)
+        ys.append(values)
 
-        if len(pop) == cma.parameters.lambda_:
-            xs.append([])
-            ys.append([])
-
-            for x in pop:
-                x_squeezed: np.ndarray[(dim), np.float64] = x.squeeze()
-                xs[-1].append(x_squeezed)
-                if final_target_hit(problem):
-                    ys[-1].append([np.nan])
-                    continue
-                # Evaluate the objective function
-                y: float = problem(x_squeezed)
-                # Update the algorithm with the objective function value
-                cma.tell(x, y)
-                ys[-1].append([y])
-            pop = []
-        if final_target_hit(problem):
-            if pbar:
-                point_asks.container.close()
+        if problem.is_end(budget):
+            close_iter(generations)
             break
+        es.tell(points, values)
 
     idx = np.unique([len(x) for x in xs], return_index=True)[1]
     xs_res = [np.array(xs[start:end]) for start, end in itertools.zip_longest(idx, idx[1:])]
     ys_res = [np.array(ys[start:end]) for start, end in itertools.zip_longest(idx, idx[1:])]
-    return xs_res, ys_res, cma
+    return xs_res, ys_res, es
+
 
 def get_train_test(gen_test, x, y):
     """Generation for gen_test is counted from 0"""
@@ -247,6 +405,7 @@ def get_train_test(gen_test, x, y):
     y_train = np.concatenate(y_train)
     return (x_train, y_train), (x_test, y_test)
 
+
 def get_max_distance_idx(x_train, x_test, std_multiple=10):
     """TODO r^A_max, example with SEED=3, FUNCTION=2"""
     if len(x_test) < 2:
@@ -267,16 +426,46 @@ def get_n_max_idx(x_train, x_test, *, n_max):
         .argpartition(n_max-1)[:n_max]
     )
 
-identity = lambda x: x
+def get_idx_n_max_and_max_dist(x_train, *, x_test, n_max, **ignored):
+    subset_n_max = get_n_max_idx(x_train, x_test, n_max=n_max)
+    subset_dist = get_max_distance_idx(x_train, x_test)
+    return np.intersect1d(subset_n_max, subset_dist)
 
-def make_scaler(points):
+def get_idx_pdf(x_train, *, es, **ignored):
+    x_mean = es._es.mean
+    x_std = np.sqrt(es._es.C.diagonal())*es._es.sigma
+
+    pdf_vals = stats.multivariate_normal.pdf(x_train, mean=es._es.mean, cov=es._es.C* es._es.sigma**2)
+    weights = (pdf_vals/pdf_vals.sum())[:, None]
+    subset_idx = (weights > 1e-8).flatten()
+    return np.flatnonzero(subset_idx)
+
+def get_idx_max_mahalanobis_norm(x_train, *, es, max_norm=17, **ignored):
+    mah_norms = np.array([es._es.mahalanobis_norm(d) for d in x_train - es._es.mean])
+    mask = mah_norms <= max_norm
+    return np.flatnonzero(mask)
+
+def identity(x):
+    return x
+
+def get_mean_and_std(points, *, weights=None):
     if points.size > 0:
-        mean = points.mean(axis=0)
-        std = points.std(axis=0)
+        if weights is not None:
+            mean = np.average(points, weights=weights, axis=0)
+            std = np.sqrt(np.atleast_2d(
+                np.cov(points, rowvar=False, ddof=0, aweights=weights.squeeze())
+            ).diagonal())
+        else:
+            mean = points.mean(axis=0)
+            std = points.std(axis=0)
         std[std == 0] = 1 # when std==0, (-mean) makes any value (==0)
     else:
         mean = 0
         std = 1
+    return mean, std
+
+def make_scaler(points):
+    mean, std = get_mean_and_std(points)
 
     def scale(points, mean=mean, std=std):
         return (points - mean) / std
@@ -285,6 +474,7 @@ def make_scaler(points):
         return points*std + mean
 
     return scale, scale_back, (mean, std)
+
 
 class NeuralNetwork(nn.Module):
     def __init__(self, activation, *, width=128, dropout_p=.0, dim):
@@ -302,13 +492,13 @@ class NeuralNetwork(nn.Module):
             # self.n_0,
             self.l_1,
         ] + (
-            [self.drop] if self.dropout_p > 0 else []
+            [self.drop] if self.drop is not None else []
         ) + [
             activation,
             self.l__1,
         ]
 
-    def forward(self,x):
+    def forward(self, x):
         for t in self.transforms:
             x = t(x)
         return x
@@ -321,7 +511,8 @@ class NeuralNetwork(nn.Module):
             self.activation.__name__,
         ] + ([f"drop{self.dropout_p}"] if self.dropout_p > 0 else []))
 
-def train_network(network, x, y, *, plot, epochs=1000, mse_stop=-np.inf, lr=0.001, pbar=True):
+
+def train_network(network, x, y, *, weights, plot, epochs=1000, mse_stop=-np.inf, lr=0.001, pbar=True):
     best_loss = np.inf
     best_model = network.state_dict()
 
@@ -330,46 +521,56 @@ def train_network(network, x, y, *, plot, epochs=1000, mse_stop=-np.inf, lr=0.00
 
     # lr = 3e-4
     optimizer = torch.optim.Adam(network.parameters(), lr=lr)
-    loss_fn = torch.nn.MSELoss()
+    # loss_fn = torch.nn.MSELoss()
+    def loss_fn(output, target, weights):
+        return torch.mean(weights * (output - target)**2)
+
     loss = np.inf
     losses = []
 
     x = torch.Tensor(x).to(DEVICE)
     y = torch.Tensor(y).to(DEVICE)
 
-    iter = range(1, epochs+1)
+    weights = torch.Tensor(weights[:, None])
+
+    epochs_iter = range(1, epochs+1)
     if pbar:
-        iter = tqdm(iter, leave=False)
-    for epoch in iter:
+        epochs_iter = tqdm(epochs_iter, leave=False)
+    for epoch in epochs_iter:
         network.train()
         optimizer.zero_grad()
-        loss_fn(y, network(x)).backward()
+        loss_fn(y, network(x), weights).backward()
         optimizer.step()
 
         network.eval()
         with torch.no_grad():
-            loss = loss_fn(y, network(x)).item()
+            loss = loss_fn(y, network(x), weights).item()
         if pbar:
-            iter.set_postfix({'loss': loss, 'net': network.name})
+            epochs_iter.set_postfix({'loss': loss, 'net': network.name}) # pyright: ignore [reportAttributeAccessIssue]
         losses.append(loss)
         if loss < best_loss:
             best_loss = loss
             best_model = copy.deepcopy(network.state_dict())
         if loss < mse_stop:
             if pbar:
-                iter.container.close()
+                epochs_iter.container.close() # pyright: ignore [reportAttributeAccessIssue]
             break
 
         if epoch%200 == 0 and plot:
-            ax.clear()
-            ax.semilogy(losses, ',')
-            dh.update(fig)
-    del iter # especially for tqdm
+            ax.clear() # pyright: ignore [reportPossiblyUnboundVariable]
+            ax.semilogy(losses, ',') # pyright: ignore [reportPossiblyUnboundVariable]
+            dh.update(fig) # pyright: ignore [reportPossiblyUnboundVariable]
+    del epochs_iter # especially for tqdm
 
     network.load_state_dict(best_model)
     return losses
 
-def train_and_predict_ensemble(x_train, y_train, x_test, *, dim, epochs, lr, mse_stop, width, plot=None, pbar=None):
+
+def eaf(x_train, y_train, x_test, *, weights=None,
+        width=128, lr=0.01, epochs=1000, mse_stop=-np.inf,
+        plot=None, pbar=False,
+        **ignored):
+    """Train and predict ensemble of NNs with different activation functions"""
     # lr=0.06
     # width=1024
     afs = [
@@ -389,11 +590,20 @@ def train_and_predict_ensemble(x_train, y_train, x_test, *, dim, epochs, lr, mse
         # F.softsign,
         torch.erf,
     ]
+    dim = x_train.shape[-1]
     nets = {f.__name__: NeuralNetwork(f, width=width, dropout_p=.0, dim=dim).to(DEVICE) for f in afs}
+
+    if weights is None:
+        # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+        # weights = (1 / (1 + norms))**2
+        # weights = (1 / (1 + np.linalg.norm(x_train - x_test[0], axis=1)))**4
+        # weights = (1 + np.linalg.norm(x_train - x_test[0], axis=1))**4
+        weights = np.ones_like(y_train)
 
     losses = {}
     for name, net in nets.items():
         losses[name] = train_network(net, x_train, y_train,
+                                     weights=weights,
                                      epochs=epochs,
                                      mse_stop=mse_stop,
                                      lr=lr,
@@ -416,6 +626,7 @@ def train_and_predict_ensemble(x_train, y_train, x_test, *, dim, epochs, lr, mse
         raise ValueError("len(pred_mean) < len(x_test)")
     return pred_mean, pred_std
 
+
 class NN():
     """https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L15-L91"""
     def __init__(self, x_dim, y_dim, hidden_size, init_stddev_1_w, init_stddev_1_b,
@@ -432,7 +643,7 @@ class NN():
         self.inputs = tf.placeholder(tf.float64, [None, x_dim], name='inputs')
         self.y_target = tf.placeholder(tf.float64, [None, y_dim], name='target')
 
-        activation_fns = [tensorflow.keras.activations.selu, tf.nn.tanh, tensorflow.keras.activations.gelu, tensorflow.keras.activations.softsign, tf.math.erf, tf.nn.swish, tensorflow.keras.activations.linear]
+        activation_fns = [tensorflow.keras.activations.selu, tf.nn.tanh, tensorflow.keras.activations.gelu, tensorflow.keras.activations.softsign, tf.math.erf, tf.nn.swish, tensorflow.keras.activations.linear] # pyright: ignore [reportAttributeAccessIssue]
 
         if ens <= len(activation_fns)-1:
             self.layer_1_w = tf.layers.Dense(hidden_size,
@@ -495,6 +706,7 @@ class NN():
         y_pred = sess.run(self.output, feed_dict=feed)
         return y_pred
 
+
 def raf(X_train, y_train, X_val, *, log=False):
     """https://github.com/YanasGH/RAFs/blob/main/main_experiments/rafs.py#L94-L157"""
     # hyperparameters
@@ -541,16 +753,16 @@ def raf(X_train, y_train, X_val, *, log=False):
         feed_b = {}
         feed_b[NNs[ens].inputs] = X_train
         feed_b[NNs[ens].y_target] = y_train
-        if log: print('\nNN:',ens)
+        if log: print('\nNN:',ens) # noqa: E701
 
         ep_ = 0
         while ep_ < n_epochs:
             ep_ += 1
-            blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b)
+            blank = sess.run(NNs[ens].optimizer, feed_dict=feed_b) # noqa: F841
             if ep_ % (n_epochs/5) == 0:
                 loss_mse = sess.run(NNs[ens].mse_, feed_dict=feed_b)
                 loss_anch = sess.run(NNs[ens].loss_, feed_dict=feed_b)
-                if log: print('epoch:', ep_, ', mse_', np.round(loss_mse*1e3,3), ', loss_anch', np.round(loss_anch*1e3,3))
+                if log: print('epoch:', ep_, ', mse_', np.round(loss_mse*1e3,3), ', loss_anch', np.round(loss_anch*1e3,3)) # noqa: E701
                 # the anchored loss is minimized, but it's useful to keep an eye on mse too
 
     # run predictions
@@ -564,37 +776,32 @@ def raf(X_train, y_train, X_val, *, log=False):
     method_stds = np.sqrt(np.square(np.std(np.array(y_pred)[:,:,:],axis=0, ddof=1)) + data_noise)
     return method_means, method_stds
 
-def pre_and_post_process_data(surrogate, *, n_max, subset=True, scale_x=True, scale_y=True):
-    def surrogate_(x_train, y_train, x_test, *args, **kwargs):
-        if subset:
-            subset_n_max = get_n_max_idx(x_train, x_test, n_max=n_max)
-            subset_dist = get_max_distance_idx(x_train, x_test)
-            subset_idx = np.intersect1d(subset_n_max, subset_dist)
-        else:
-            subset_idx = slice(None)
-        x_train_subset = x_train[subset_idx]
-        y_train_subset = y_train[subset_idx]
 
+def scale_and_scale_back(model, *, scale_x=True, scale_y=True):
+    @functools.wraps(model)
+    def model_(x_train, y_train, x_test, *args, **kwargs):
         if scale_x:
-            scale_x_, scale_x_back, scale_x_mean_std = make_scaler(x_train_subset)
+            x_mean, x_std = kwargs.get('mean'), kwargs.get('std')
+            if x_mean is None or x_std is None:
+                x_mean, x_std = get_mean_and_std(x_train)
         else:
-            scale_x_, scale_x_back, scale_x_mean_std = identity, identity, (0,1)
+            x_mean, x_std = 0, 1
 
         if scale_y:
-            scale_y_, scale_y_back, (scale_y_mean, scale_y_std) = make_scaler(y_train_subset)
+            y_mean, y_std = get_mean_and_std(y_train, weights=kwargs.get('weights'))
         else:
-            scale_y_, scale_y_back, (scale_y_mean, scale_y_std) = identity, identity, (0,1)
+            y_mean, y_std = 0, 1
 
-        x_train_subset_scaled = scale_x_(x_train_subset)
-        x_test_scaled = scale_x_(x_test)
-        y_train_subset_scaled = scale_y_(y_train_subset)
+        x_train_scaled = (x_train - x_mean) / x_std
+        x_test_scaled  = (x_test  - x_mean) / x_std
+        y_train_scaled = (y_train - y_mean) / y_std
 
-        pred_mean, pred_std = surrogate(x_train_subset_scaled, y_train_subset_scaled, x_test_scaled, *args, **kwargs)
+        pred_mean, pred_std = model(x_train_scaled, y_train_scaled, x_test_scaled, *args, **kwargs)
 
-        return scale_y_back(pred_mean), pred_std*scale_y_std
-    return surrogate_
+        return pred_mean*y_std + y_mean, pred_std*y_std
+    return model_
 
-def predict_zeros(x_train, y_train, x_test):
+def predict_zeros(x_train, y_train, x_test, **ignored):
     zeros = np.zeros((x_test.shape[0], y_train.shape[-1]))
     return zeros, zeros
 
@@ -635,77 +842,130 @@ def evaluate_all_criterion(mean, std=None, curr_best=None):
     n = mean.shape[0]
     return np.ones(n, dtype=bool), np.zeros(n, dtype=bool)
 
-def seek_minimum(es, *, problem, surrogate, criterion, budget):
-    dim = get_dimension(problem)
+def inverse_mahalanobis_norm(x, es):
+    w = 1 / (1+np.array([es._es.mahalanobis_norm(p - es._es.mean) for p in x]))
+    return w / w.sum() * w.size
+
+def seek_minimum(es, *, problem, surrogate, criterion, min_eval_ratio, budget, n_min=1, n_max=2**31, subset_fn=None, weigh_fn=None, debug=False):
+    dim = problem.dimension
     x_archive = np.empty((0,dim))
     y_archive = np.empty((0,1))
+    if debug:
+        evals = []
+        taus = []
+        subset_sizes = []
+        max_norms = []
+        max_mah_norms = []
 
-    def is_end(problem, budget):
-        return final_target_hit(problem) or get_evaluations(problem) >= budget
-
-    while not is_end(problem, budget):
+    while not problem.is_end(budget):
         points = es.ask()
 
-        if y_archive.size > 0:
-            pred_mean, pred_std = surrogate(x_archive, y_archive, points)
-            eval_mask, surr_mask = criterion(pred_mean, pred_std, current_best_y(problem))
+        if use_surrogate := y_archive.size >= n_min:
+            if subset_fn is not None:
+                subset_idx = subset_fn(x_archive, x_test=points, n_max=n_max, es=es)
+                if debug:
+                    subset_sizes.append(subset_idx.shape[0])
+                    max_norms.append(np.linalg.norm(x_archive[subset_idx] - es.mean, axis=1).max())
+                    max_mah_norms.append(max([es._es.mahalanobis_norm(p - es.mean) for p in x_archive[subset_idx]]))
+            else:
+                subset_idx = slice(None)
+            x_subset, y_subset = x_archive[subset_idx], y_archive[subset_idx]
+
+            if weigh_fn is not None:
+                weights = weigh_fn(x_subset, es=es)
+            else:
+                weights = np.ones_like(y_subset)
+
+            pred_mean, pred_std = surrogate(x_subset, y_subset, points, weights=weights, mean=es.mean, std=es.std)
+            idx_by_criterion = criterion(pred_mean, pred_std).argsort(axis=0).squeeze() # , problem.current_best_y
+            # y_max = y_archive.max()
         else:
             pred_mean, pred_std = predict_zeros(x_archive, y_archive, points)
-            eval_mask, surr_mask = evaluate_all_criterion(points)
-        assert np.logical_xor(eval_mask, surr_mask).all(), f"criterion outputs must be exclusive {eval_mask = }, {surr_mask}"
+            idx_by_criterion = np.arange(pred_mean.shape[0])
+            # y_max = np.inf
+        # assert np.logical_xor(eval_mask, surr_mask).all(), f"criterion outputs must be exclusive {eval_mask = }, {surr_mask}"
+        assert np.array_equal(np.sort(idx_by_criterion), np.arange(pred_mean.shape[0]))
 
-        points_eval = points[eval_mask]
-        values_eval = np.array([problem(p) for p in points_eval if not is_end(problem, budget)])[:, None]
-        x_archive = np.concatenate((x_archive, points_eval))
+        evaluated_idx = []
+        values_eval = []
+        n_evaluated = 0
+        for idx in idx_by_criterion:
+            if problem.is_end(budget):
+                break
+            evaluated_idx.append(idx)
+            values_eval.append(problem(points[idx]))
+            # values_eval.append(problem(points[idx]) if not problem.is_outside(points[idx]) else y_max)
+            n_evaluated = len(values_eval)
+
+            if use_surrogate:
+                tau = stats.kendalltau(values_eval, pred_mean[evaluated_idx]).statistic
+                if tau >= 0.75 and n_evaluated / points.shape[0] >= min_eval_ratio and n_evaluated >= 3:
+                    break
+            else:
+                tau = np.nan
+
+        values_eval = np.array(values_eval)[:, None]
+
+        if debug:
+            evals.append(n_evaluated)
+            taus.append(tau)
+
+        x_archive = np.concatenate((x_archive, points[evaluated_idx]))
         y_archive = np.concatenate((y_archive, values_eval))
-        if is_end(problem, budget):
+        if problem.is_end(budget):
             break
-        pred_mean[eval_mask] = values_eval
-        # es.tell(points_eval, values_eval)
+        pred_mean[evaluated_idx] = values_eval
         es.tell(points, pred_mean)
+
+    if debug:
+        print(f"{evals =}")
+        print(f"{taus  =}")
+        print(f"{subset_sizes =}")
+        print(f"{max_norms = }")
+        print(f"{max_mah_norms = }")
     return x_archive, y_archive
 
-def cmaes_safe(problem, *, budget, log=False, surr='EAF', lambda_=12, eval_ratio=0.05):
-    dim = get_dimension(problem)
-    # cmaes = WrappedModcma(dim=dim)
-    cmaes = WrappedCma(x0=np.zeros(dim), lambda_=lambda_)
-    n_max = 20*dim
 
-    if surr.upper() == 'EAF':
-        surrogate = pre_and_post_process_data(partial(train_and_predict_ensemble,
-                                                   dim=dim, epochs=1000,
-                                                   plot=None, pbar=None,
-                                                   lr=0.01, mse_stop=-np.inf,
-                                                   width=128),
-                                              n_max=n_max)
-    elif surr.upper() == 'RAF':
-        surrogate = pre_and_post_process_data(raf, n_max=n_max)
-    else:
-        raise ValueError(f"Wrong argument: {surr =}")
+def cmaes_safe(problem, *, budget, lambda_=None, n_min_coef=1,
+                subset_fn=get_idx_max_mahalanobis_norm, n_max_coef=None,
+                weigh_fn=inverse_mahalanobis_norm,
+                cma:Type[Cma]=WrappedCma, model=eaf, eval_ratio=0.1,
+                log=False):
+    dim = problem.dimension
 
-    seconds, (x, y) = time_first(seek_minimum)(cmaes,
-                                               problem=problem,
-                                               surrogate=surrogate,
-                                               criterion=partial(select_eval,
-                                                                 acquisition=partial(UCB, beta=1),
-                                                                 eval_ratio=eval_ratio),
-                                               budget=budget)
+    es = cma(x0=np.zeros(dim), lb=problem.bounds_lower, ub=problem.bounds_upper, lambda_=lambda_, verbose=None if log else -9)
+
+    model_auto_scale = scale_and_scale_back(model)
+
+    criterion = partial(UCB, beta=1)
+
+    seconds, (x, y) = time_first(
+            seek_minimum)(es,
+                    problem=problem,
+                    surrogate=model_auto_scale,
+                    subset_fn=subset_fn,
+                    weigh_fn=weigh_fn,
+                    n_min=dim*n_min_coef,
+                    n_max=dim*n_max_coef if n_max_coef is not None else None,
+                    criterion=criterion,
+                    min_eval_ratio=eval_ratio,
+                    budget=budget)
     if log:
-        print(f"{get_evaluations(problem) = }")
-        print(f"{budget = }")
-        print(f"{final_target_hit(problem) = }")
-        print(f"{progress(problem) =:.8%}")
-        print(f"{seconds = }")
-        print(f"{eval_ratio = }")
+        print(report(surrogate=model_auto_scale,
+                     criterion=criterion, budget=budget,
+                     secs=seconds, problem=problem, es=es))
+    return x, y
 
-def show_2d(x_train, y_train, x_test):
+
+def show_2d_static(x_train, y_train, x_test):
     plt.scatter(x_train[:, 0], x_train[:, 1], c=y_train)
     plt.scatter(x_test[:, 0], x_test[:, 1], color='tab:red', marker='x')
     plt.colorbar()
 
 def show_2d_interactive(x_train, y_train, x_test, *, points=None):
+    # TODO: show y_train as text
     idx_train = np.arange(x_train.shape[0])
-    fig = go.Figure(data=[go.Scatter(
+    fig = go.Figure(data=[go.Scatter( # pyright: ignore [reportPossiblyUnboundVariable]
         x=x_train[:, 0],
         y=x_train[:, 1],
         text=idx_train,
@@ -716,7 +976,7 @@ def show_2d_interactive(x_train, y_train, x_test, *, points=None):
             colorscale='Viridis',
             # opacity=0.8
         )
-    ), go.Scatter(
+    ), go.Scatter( # pyright: ignore [reportPossiblyUnboundVariable]
         x=x_test[:, 0],
         y=x_test[:, 1],
         text=np.arange(y_train.shape[0]),
@@ -724,7 +984,7 @@ def show_2d_interactive(x_train, y_train, x_test, *, points=None):
         mode='markers',
     )])
     if points is not None:
-        fig.add_trace(go.Scatter(
+        fig.add_trace(go.Scatter( # pyright: ignore [reportPossiblyUnboundVariable]
             x=points[:, 0],
             y=points[:, 1],
             text=np.arange(points.shape[0]),
@@ -736,7 +996,7 @@ def show_2d_interactive(x_train, y_train, x_test, *, points=None):
 
 def show_3d(x_train, y_train, x_test=None, y_test=None):
     idx_train = np.arange(x_train.shape[0])
-    fig = go.Figure(data=[go.Scatter3d(
+    fig = go.Figure(data=[go.Scatter3d( # pyright: ignore [reportPossiblyUnboundVariable]
         x=x_train[:, 0],
         y=x_train[:, 1],
         z=y_train.squeeze(), #flatten()
@@ -750,7 +1010,7 @@ def show_3d(x_train, y_train, x_test=None, y_test=None):
         )
     )])
     if x_test is not None and y_test is not None:
-        fig.add_trace(go.Scatter3d(
+        fig.add_trace(go.Scatter3d( # pyright: ignore [reportPossiblyUnboundVariable]
             x=x_test[:, 0],
             y=x_test[:, 1],
             z=y_test.squeeze(),
@@ -773,7 +1033,9 @@ def plot_predictions(pred_mean, pred_std, pred_std_scaled=None, y_test=None, idx
     pred_mean = pred_mean[idx_order]
     pred_std = pred_std[idx_order]
 
-    ax.plot(pred_mean, 'o', color=color, label=label)
+    ax.plot(pred_mean+2*pred_std, '_', color=color)
+    ax.plot(pred_mean,            'o', color=color, label=label)
+    ax.plot(pred_mean-2*pred_std, '_', color=color)
     ax.vlines(x=np.arange(pred_mean.shape[0]), ymin=pred_mean-2*pred_std, ymax=pred_mean+2*pred_std, ls=':', lw=2, color=color) # colors='teal'
 
     if y_test is not None:
@@ -787,29 +1049,35 @@ def plot_predictions(pred_mean, pred_std, pred_std_scaled=None, y_test=None, idx
         ax2.axhline(0.05, linestyle='--', color='tab:grey')
         ax2.axhline(0.025, color='tab:orange') # ideal at the end
 
-def report(*, dim, fun, lambda_, width, lr, epochs, stop, criterion, budget, points="?", secs, problem, es, seed,):
+
+def report(*, surrogate, criterion, budget, secs, problem, es,):
+    # TODO: inspect surrogate - parameters
+    # TODO: inspect criterion - eval_ratio
     return " ".join([
-        f"{dim}D",
-        f"{fun}-fun",
-        f"{lambda_:>2}-init-pop",
-        *([] if all(a is None for a in (width, lr, epochs, stop)) else [
-            f"{width}-width",
-            f"{lr}-lr",
-            f"{epochs}-epochs",
-            f"{stop}-stop",
-        ]),
-        f"{format_criterion(criterion):<26}", # "lt-0.05" # todo strip function name
-        f"{get_evaluations(problem)}-evals",
+        f"{problem.dimension}D",
+        f"{problem.function_id:>2}-fun",
+        f"{str(es.pop_size_initial):>2}-init-pop",
+        f"{surrogate.__name__}",
+        # *([] if all(a is None for a in (width, lr, epochs, stop)) else [
+        #     f"{width}-width",
+        #     f"{lr}-lr",
+        #     f"{epochs}-epochs",
+        #     f"{stop}-stop",
+        # ]),
+        f"{format_criterion(criterion):<26}", # "lt-0.05" # TODO: strip function name
+        f"{problem.evaluations}-evals",
         f"{budget:>4}-budget",
-        f"{points}-points",
+        # f"{eval_ratio}-eval-ratio",
+        f"{es.evals}-cma-evals",
         f"{secs:>4.0f}s",
-        f"{progress(problem):.12%}", # .14
-        f"{str(final_target_hit(problem)):>5}-solved",
+        *([f"{problem.progress:.12%}"] if hasattr(problem, 'progress') else []), # .14 # .8
+        f"{str(problem.final_target_hit):>5}-solved",
         f"{es.restarts}-restarts",
-        f"{seed}-seed",
+        f"{get_seed_np():>10}-seed",
     ])
 
 def time_first(f):
+    @functools.wraps(f)
     def f_(*args, **kwargs):
         t_0 = time.perf_counter()
         res = f(*args, **kwargs)
@@ -836,7 +1104,8 @@ def set_seed(seed: int = 42) -> None:
     os.environ["PYTHONHASHSEED"] = str(seed)
     print(f"Random seed set as {seed}")
 
-# TODO dataclass
+
+# TODO: dataclass
 DEVICE = (
     "cuda"
     if torch.cuda.is_available()
@@ -849,22 +1118,36 @@ SEED = (
     # 5
     # 37 # sphere all x[0] == 5
 )
-FUNCTION = 1
-INSTANCE = 1
-DIMENSION = 2
-BUDGET = 250
-EVAL_RATIO = 0.05
-LAMBDA = (
-    (4 + np.floor(3 * np.log(DIMENSION))).astype(int) # None
-    # (8 + np.floor(6 * np.log(DIMENSION))).astype(int)
-)
+BUDGET_MULTIPLIER = 250
 #------------------------------------------------------------------------------
 if __name__ == "__main__":
+    FUNCTION = 1
+    INSTANCE = 1
+    DIMENSION = 20
     set_seed(SEED)
-    problem = get_problem_ioh(FUNCTION, instance=INSTANCE, dimension=DIMENSION)
-    cmaes_safe(problem, budget=250)
+    prob_class = (ProblemCocoex
+                  if False else
+                  ProblemIoh)
+    problem = prob_class.get(dim=DIMENSION, fun=FUNCTION, inst=INSTANCE)
+    if False:
+        x, y, es = solve_cmaes_get_data(problem)
+        print(f"{problem.evaluations = }")
+    else:
+        # subset_fn = get_idx_n_max_and_max_dist
+        subset_fn = get_idx_max_mahalanobis_norm
+        # subset_fn = get_idx_pdf
+        x, y = cmaes_safe(
+            problem, budget=BUDGET_MULTIPLIER*DIMENSION*4, lambda_=None,
+            log=True, eval_ratio=1, subset_fn=subset_fn,
+            weigh_fn=inverse_mahalanobis_norm,
+            model=predict_zeros,
+        )
+        print(f"{min(y) = }")
+        import pickle
+        with open(f"d{DIMENSION:0>2}_f{FUNCTION:0>2}_i{INSTANCE:0>2}_x_y.pickle", "wb") as f:
+            pickle.dump((x,y), f, protocol=pickle.HIGHEST_PROTOCOL)
 _='''
-def fig_ax_dh():
+def fig_ax_dh(): # TODO: move up
     fig, ax = plt.subplots(layout="constrained")
     dh = display(fig, display_id=True)
     return (fig, ax, dh)
@@ -1558,6 +1841,8 @@ del(n_)
 #
 # # clear_output(wait=True)
 #
+
+# TODO: take this out
 # for name, loss in losses.items():
 #     ax.semilogy(loss, ',', label=name)
 # handles, labels = ax.get_legend_handles_labels()
@@ -1634,6 +1919,7 @@ y_exps_arr = np.array(list(y_exps.values()))
 mean = y_exps_arr.mean(axis=0)
 std = y_exps_arr.std(axis=0)
 
+# TODO: take this out
 go.Figure(data=[
     go.Surface(name='mean', x=x0, y=x1, z=mean.reshape(x1_shape, x0_shape)),
     # go.Surface(name='+2std', x=x0, y=x1, z=(mean+2*std).reshape(x1_shape, x0_shape), opacity=0.5),

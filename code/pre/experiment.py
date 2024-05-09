@@ -27,22 +27,42 @@ import cocoex, cocopp  # experimentation and post-processing modules
 import scipy.optimize  # to define the solver to be benchmarked
 from numpy.random import rand  # for randomised restarts
 import webbrowser  # to show post-processed results in the browser
-from cmaes_surrogate import cmaes_safe
+from cmaes_surrogate import ProblemCocoex, cmaes_safe, eaf, raf
 import sys
+import argparse
 
 ### input
-FUNCTION = int(sys.argv[1])
-INSTANCE = int(sys.argv[2])
+parser = argparse.ArgumentParser(description='CMAES with surrogate experiment')
+parser.add_argument('--dim', type=int, choices=[2, 3, 5, 10, 20, 40], required=True,
+                    help='Input dimensionality')
+parser.add_argument('--fun', type=int, choices=list(range(1, 24 + 1)), required=True,
+                    help='Function id')
+parser.add_argument('--inst', nargs='+', type=int, choices=list(range(1, 15 + 1)),
+                    help='Instance suite numbers')
+surrogates = {mod.__name__: mod for mod in [eaf, raf]}
+parser.add_argument('--surr', choices=list(surrogates.keys()), default=eaf.__name__,
+                    help='surrogate model')
+args = parser.parse_args()
+print(f"{args = }")
+DIMENSION = args.dim
+FUNCTION = args.fun
+INSTANCE = ','.join([str(i) for i in sorted(set(args.inst))]) if args.inst is not None else None
+model = surrogates[args.surr]
 suite_name = "bbob"
 budget_multiplier = 250
-suite_options = (""
-                 "dimensions: 2"
-                 " "
-                 f"function_indices: {FUNCTION}"
-                 # " "
-                 # f"instance_indices: {INSTANCE}"  # relative to suite instances
+suite_options = " ".join(
+    [f"dimensions: {DIMENSION}",
+     f"function_indices: {FUNCTION}",
+    ] + (
+    [f"instance_indices: {INSTANCE}"] if INSTANCE is not None else [])
 )
-output_folder = f"surrogate_f{FUNCTION}_{budget_multiplier}"
+print(f"{suite_options = }")
+
+output_folder = "_".join(["cmaes_safe",
+                         f"{DIMENSION:0>2}d",
+                         f"{FUNCTION:0>2}f"] + (
+                        [f"{INSTANCE:0>3}i"] if INSTANCE is not None else []
+                    ) + [f"{budget_multiplier}"])
 # fmin = scipy.optimize.fmin
 
 ### prepare
@@ -57,8 +77,7 @@ for problem in suite:  # this loop will take several minutes or longer
     # apply restarts while neither the problem is solved nor the budget is exhausted
     budget = problem.dimension * budget_multiplier
     while (problem.evaluations < budget and not problem.final_target_hit):
-        cmaes_safe(problem, budget=budget)
-        # cmaes_with_surrogate_ensemble(problem, budget=budget, dim=2, epochs=1000, width=124, lr=0.01)
+        cmaes_safe(ProblemCocoex(problem), budget=budget, model=model, log=True)
         # fmin(problem, x0, disp=False)  # here we assume that `fmin` evaluates the final/returned solution
         x0 = problem.lower_bounds + ((rand(problem.dimension) + rand(problem.dimension)) *
                     (problem.upper_bounds - problem.lower_bounds) / 2)
