@@ -5,7 +5,7 @@
 echo "python version: $(python3 --version)"
 
 # define a DATADIR variable: directory where the input files are taken from and where output will be copied to
-DATADIR="/storage/brno2/home/langera/test04/d2_f${f_id}_i${i_id}" # substitute username and path to to your real username and path
+DATADIR="/storage/brno2/home/langera/test05/d2_f${f_id}_i${i_id}" # substitute username and path to to your real username and path
 export PYTHONUSERBASE="/storage/brno2/home/langera/.local"
 export PATH="$PYTHONUSERBASE/bin:$PATH"
 export PYTHONPATH="$PYTHONUSERBASE/lib/python3.9/site-packages:$PYTHONPATH"

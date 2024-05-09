@@ -665,7 +665,7 @@ def seek_minimum(es, *, problem, surrogate, criterion, budget):
         es.tell(points, pred_mean)
     return x_archive, y_archive
 
-def cmaes_safe(problem, *, budget, log=False, surr='EAF', lambda_=None, eval_ratio=0.1):
+def cmaes_safe(problem, *, budget, log=False, surr='EAF', lambda_=12, eval_ratio=0.05):
     dim = get_dimension(problem)
     # cmaes = WrappedModcma(dim=dim)
     cmaes = WrappedCma(x0=np.zeros(dim), lambda_=lambda_)
