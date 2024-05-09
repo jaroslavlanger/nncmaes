@@ -20,6 +20,7 @@ import random
 import os
 import sys
 from contextlib import suppress
+import re
 
 import numpy as np
 import numpy.typing as npt
@@ -108,24 +109,76 @@ def current_best_y(problem):
 
 def progress(problem):
     if isinstance(problem, ioh.iohcpp.problem.BBOB):
-        return problem.optimum.y / problem.state.current_best.y
+        optimum = problem.optimum.y
+        curr_best = problem.state.current_best.y
     else:
         raise NotImplementedError
+    if optimum >= 0:
+        if curr_best == 0:
+            return 1
+        else:
+            return optimum / curr_best
+    else:
+        return curr_best / optimum
+
+
+class WrappedCma:
+    restarts = 0
+
+    def __init__(self, *, x0, lambda_=None):
+        self.x0 = x0
+        self.es = self.make_cmaes(x0=x0, lambda_=lambda_)
+        self.lambda_ = self.es.popsize
+
+    @staticmethod
+    def make_cmaes(*, x0, lambda_):
+        return cma.CMAEvolutionStrategy(x0, 2, {
+            'popsize': lambda_,
+            'verbose': -9,
+            # 'maxfevals': budget,
+            # 'seed': SEED,
+        })
+
+    def ask(self):
+        if self.es.stop():
+            self.lambda_ *= 2
+            self.es = self.make_cmaes(x0=self.x0, lambda_=self.lambda_)
+            self.restarts += 1
+        return np.array(self.es.ask())
+
+    def tell(self, points, values):
+        self.es.tell(list(points), [v[0] for v in values])
+
+
+class WrappedModcma:
+    def __init__(self, *, dim, lambda_=None):
+        self.es = AskTellCMAES(d=dim,
+                        budget=sys.maxsize, # None and float('inf') does not work
+                        # bound_correction='COTN',
+                        bound_correction="saturate",
+                        # lb=problem.bounds.lb,
+                        # ub=problem.bounds.ub,
+                        lambda_=lambda_,
+                        active=True,
+                        local_restart="IPOP",
+                        )
+    def ask(self):
+        return np.array([self.es.ask().squeeze() for _ in range(self.es.parameters.lambda_)])
+
+    def tell(self, points, values):
+        for p, v in zip(points, values):
+            self.es.tell(p[:, None], v)
+
+    @property
+    def restarts(self):
+        return len(self.es.parameters.restarts) -1
+
 
 def solve_cmaes_get_data(problem, *, pbar=False, lambda_=None):
     dim = get_dimension(problem)
     budget = int(2*1e5*dim)
     problem.reset()
-    cma = AskTellCMAES(d=dim,
-                       budget=sys.maxsize, # None and float('inf') does not work
-                       # bound_correction='COTN',
-                       bound_correction="saturate",
-                       # lb=problem.bounds.lb,
-                       # ub=problem.bounds.ub,
-                       lambda_=lambda_,
-                       active=True,
-                       local_restart="IPOP",
-                       )
+    cma = make_cmaes(dim, lambda_=lambda_)
 
     xs: list[list[np.ndarray[(dim), np.float64]]] = []
     ys: list[list[float]] = []
@@ -205,7 +258,7 @@ def get_max_distance_idx(x_train, x_test, std_multiple=10):
     mask = ((x_lower < x_train) & (x_train < x_upper)).all(axis=1)
     return np.flatnonzero(mask)
 
-def get_n_max_idx(x_train, x_test, n_max):
+def get_n_max_idx(x_train, x_test, *, n_max):
     n = x_train.shape[0]
     return np.arange(n) if n <= n_max else (
         np.linalg.norm(np.repeat(x_train[:, None, :], x_test.shape[0], axis=1) - x_test, axis=-1)
@@ -234,7 +287,7 @@ def make_scaler(points):
     return scale, scale_back, (mean, std)
 
 class NeuralNetwork(nn.Module):
-    def __init__(self, activation, *, width=128, dropout_p=.0, dim=1):
+    def __init__(self, activation, *, width=128, dropout_p=.0, dim):
         super(NeuralNetwork,self).__init__()
         self.width = width
         self.dropout_p=dropout_p
@@ -316,7 +369,9 @@ def train_network(network, x, y, *, plot, epochs=1000, mse_stop=-np.inf, lr=0.00
     network.load_state_dict(best_model)
     return losses
 
-def train_and_predict_ensemble(x_train, y_train, x_test, *, dim, epochs, plot, pbar, lr=0.06, mse_stop, width=1024):
+def train_and_predict_ensemble(x_train, y_train, x_test, *, dim, epochs, lr, mse_stop, width, plot=None, pbar=None):
+    # lr=0.06
+    # width=1024
     afs = [
         F.sigmoid,
         # F.hardsigmoid,
@@ -505,14 +560,14 @@ def raf(X_train, y_train, X_val, *, log=False):
 
     """Display results:"""
 
-    method_means = np.mean(np.array(y_pred)[:,:,0], axis=0).reshape(-1,)
-    method_stds = np.sqrt(np.square(np.std(np.array(y_pred)[:,:,0],axis=0, ddof=1)) + data_noise).reshape(-1,)
+    method_means = np.mean(np.array(y_pred)[:,:,:], axis=0)
+    method_stds = np.sqrt(np.square(np.std(np.array(y_pred)[:,:,:],axis=0, ddof=1)) + data_noise)
     return method_means, method_stds
 
-def pre_and_post_process_data(surrogate, subset=True, scale_x=True, scale_y=True):
+def pre_and_post_process_data(surrogate, *, n_max, subset=True, scale_x=True, scale_y=True):
     def surrogate_(x_train, y_train, x_test, *args, **kwargs):
         if subset:
-            subset_n_max = get_n_max_idx(x_train, x_test, 40)
+            subset_n_max = get_n_max_idx(x_train, x_test, n_max=n_max)
             subset_dist = get_max_distance_idx(x_train, x_test)
             subset_idx = np.intersect1d(subset_n_max, subset_dist)
         else:
@@ -567,16 +622,18 @@ def select_eval(mean, std, curr_best, *, acquisition, eval_ratio=0.8):
         eval_mask[eval_idx] = True
     return eval_mask, ~eval_mask
 
+def format_criterion(crit):
+    s = str(crit)
+    if (m := re.fullmatch(r'<function (\w+) at \w+>', s)) is not None:
+        return m.groups()[0]
+    elif (m := re.match(r'.*acquisition=.*\(<function (\w+).*>, (.*)\), (.*)\)', s)) is not None:
+        return '-'.join(m.groups()).replace('=', '-').replace('_', '-')
+    else:
+        return s
+
 def evaluate_all_criterion(mean, std=None, curr_best=None):
     n = mean.shape[0]
     return np.ones(n, dtype=bool), np.zeros(n, dtype=bool)
-
-def ask_points(es):
-    return np.array([es.ask().squeeze() for _ in range(es.parameters.lambda_)])
-
-def tell_points(es, points, values):
-    for p, v in zip(points, values):
-        es.tell(p[:, None], v)
 
 def seek_minimum(es, *, problem, surrogate, criterion, budget):
     dim = get_dimension(problem)
@@ -587,7 +644,7 @@ def seek_minimum(es, *, problem, surrogate, criterion, budget):
         return final_target_hit(problem) or get_evaluations(problem) >= budget
 
     while not is_end(problem, budget):
-        points = ask_points(es)
+        points = es.ask()
 
         if y_archive.size > 0:
             pred_mean, pred_std = surrogate(x_archive, y_archive, points)
@@ -601,32 +658,32 @@ def seek_minimum(es, *, problem, surrogate, criterion, budget):
         values_eval = np.array([problem(p) for p in points_eval if not is_end(problem, budget)])[:, None]
         x_archive = np.concatenate((x_archive, points_eval))
         y_archive = np.concatenate((y_archive, values_eval))
-
-        tell_points(es, points_eval, values_eval)
-        tell_points(es, points[surr_mask], pred_mean[surr_mask])
+        if is_end(problem, budget):
+            break
+        pred_mean[eval_mask] = values_eval
+        # es.tell(points_eval, values_eval)
+        es.tell(points, pred_mean)
     return x_archive, y_archive
 
-def cmaes_safe(problem, budget, log=False):
+def cmaes_safe(problem, *, budget, log=False, surr='EAF', lambda_=None, eval_ratio=0.1):
     dim = get_dimension(problem)
-    cma = AskTellCMAES(d=dim,
-                       budget=sys.maxsize, # None and float('inf') does not work
-                       # bound_correction='COTN',
-                       bound_correction="saturate",
-                       # lb=problem.bounds.lb,
-                       # ub=problem.bounds.ub,
-                       # lambda_=lambda_,
-                       active=True,
-                       local_restart="IPOP",
-                       )
+    # cmaes = WrappedModcma(dim=dim)
+    cmaes = WrappedCma(x0=np.zeros(dim), lambda_=lambda_)
+    n_max = 20*dim
 
-    surrogate =  pre_and_post_process_data(partial(train_and_predict_ensemble,
+    if surr.upper() == 'EAF':
+        surrogate = pre_and_post_process_data(partial(train_and_predict_ensemble,
                                                    dim=dim, epochs=1000,
                                                    plot=None, pbar=None,
                                                    lr=0.01, mse_stop=-np.inf,
-                                                   width=128))
-    # surrogate = pre_and_post_process_data(raf)
-    eval_ratio = 0.1
-    seconds, (x, y) = time_first(seek_minimum)(cma,
+                                                   width=128),
+                                              n_max=n_max)
+    elif surr.upper() == 'RAF':
+        surrogate = pre_and_post_process_data(raf, n_max=n_max)
+    else:
+        raise ValueError(f"Wrong argument: {surr =}")
+
+    seconds, (x, y) = time_first(seek_minimum)(cmaes,
                                                problem=problem,
                                                surrogate=surrogate,
                                                criterion=partial(select_eval,
@@ -730,6 +787,28 @@ def plot_predictions(pred_mean, pred_std, pred_std_scaled=None, y_test=None, idx
         ax2.axhline(0.05, linestyle='--', color='tab:grey')
         ax2.axhline(0.025, color='tab:orange') # ideal at the end
 
+def report(*, dim, fun, lambda_, width, lr, epochs, stop, criterion, budget, points="?", secs, problem, es, seed,):
+    return " ".join([
+        f"{dim}D",
+        f"{fun}-fun",
+        f"{lambda_:>2}-init-pop",
+        *([] if all(a is None for a in (width, lr, epochs, stop)) else [
+            f"{width}-width",
+            f"{lr}-lr",
+            f"{epochs}-epochs",
+            f"{stop}-stop",
+        ]),
+        f"{format_criterion(criterion):<26}", # "lt-0.05" # todo strip function name
+        f"{get_evaluations(problem)}-evals",
+        f"{budget:>4}-budget",
+        f"{points}-points",
+        f"{secs:>4.0f}s",
+        f"{progress(problem):.12%}", # .14
+        f"{str(final_target_hit(problem)):>5}-solved",
+        f"{es.restarts}-restarts",
+        f"{seed}-seed",
+    ])
+
 def time_first(f):
     def f_(*args, **kwargs):
         t_0 = time.perf_counter()
@@ -765,16 +844,25 @@ DEVICE = (
     if torch.backends.mps.is_available()
     else "cpu"
 )
-SEED = 3  # rastrigin 3 restarts
-# SEED = 37 # sphere all x[0] == 5
+SEED = (
+    3  # rastrigin 3 restarts
+    # 5
+    # 37 # sphere all x[0] == 5
+)
 FUNCTION = 1
 INSTANCE = 1
 DIMENSION = 2
+BUDGET = 250
+EVAL_RATIO = 0.05
+LAMBDA = (
+    (4 + np.floor(3 * np.log(DIMENSION))).astype(int) # None
+    # (8 + np.floor(6 * np.log(DIMENSION))).astype(int)
+)
 #------------------------------------------------------------------------------
 if __name__ == "__main__":
     set_seed(SEED)
     problem = get_problem_ioh(FUNCTION, instance=INSTANCE, dimension=DIMENSION)
-    cmaes_safe(problem, 250)
+    cmaes_safe(problem, budget=250)
 _='''
 def fig_ax_dh():
     fig, ax = plt.subplots(layout="constrained")
@@ -1189,10 +1277,10 @@ display(problem.bounds)
 # Commented out IPython magic to ensure Python compatibility.
 # %%time
 # # CMAES WITH ENSEMBLE SURROGATE
-# 
+#
 # # ST: 0 - None, all cmaes
 # # ST: 1 - not new min, lower than 0.025, not current biggest var
-# 
+#
 # # D  FUN   WIDTH      LR      EPOCHS       STOP             SELECT   POINTS     TIME   EVALS      PROGRESS           SOLVED
 # # 2D 1-fun  128-width 0.01-lr  1000-epochs        -inf-stop lt-0.05  222-points   273s  90-evals  99.99999999286628% True-solved
 # # 2D 1-fun  128-width 0.01-lr  1000-epochs        -inf-stop lt-0.05  270-points   345s  97-evals  99.99999999946183% True-solved
@@ -1227,18 +1315,18 @@ display(problem.bounds)
 # # 2D 6-fun  128-width 0.01-lr  1000-epochs        -inf-stop lt-0.05  606-points   805s 361-evals  99.99999997726978% True-solved
 # # 2D 8-fun  128-width 0.01-lr  1000-epochs        -inf-stop lt-0.05 1000-points  1266s 367-evals  99.99999998622594% False-solved
 # # 2D 8-fun  128-width 0.01-lr  1000-epochs        -inf-stop lt-0.05 1086-points  1299s 398-evals  99.99999999576680% True-solved
-# 
+#
 # # fig, ax, dh = fig_ax_dh()
-# 
+#
 # secs, (points, xs, ys, y_pred, y_std, y_std_scaled) = time_first(cmaes_with_surrogate_ensemble)(
 #     problem, dim=DIM, budget=250*DIM, epochs=(epochs := 1000), width=(width := 128), lr=(lr := 0.01),
 #     # plot=(fig,ax,dh),
 # )
-# 
+#
 # # ax.remove()
 # # dh.update(fig)
 # # plt.close(fig)
-# 
+#
 # print(f"{DIM}D {FUNCTION}-fun {width}-width {lr}-lr {epochs}-epochs -inf-stop lt-0.05 {points}-points {secs:.0f}s {problem.state.evaluations}-evals {problem_progress(problem):.14%} {final_target_hit(problem)}-solved")
 
 print(f"{DIM}D {FUNCTION}-fun {width}-width {lr}-lr {epochs}-epochs -inf-stop lt-0.05 {points}-points {t_after-t_before:.0f}s {problem.state.evaluations}-evals {problem_progress(problem):.14%} {final_target_hit(problem)}-solved")
@@ -1420,42 +1508,42 @@ del(n_)
 # Commented out IPython magic to ensure Python compatibility.
 # %%time
 # # 6-f 10-epoch 10000-epochs -> 215-secs
-# 
+#
 # # CPU
 # # 80.19142952499999
 # # 70.81149720600001
 # # 81.66691862699986
 # # 69.96062193800003
 # # 83.23485007499994
-# 
+#
 # # T4
 # # 64.56545328599998
 # # 59.345030338000015
 # # 63.690081222
 # # 62.15715136299991
 # # 66.65955229200006
-# 
+#
 # # V100
 # # 75.61252859799993
 # # 66.80958531300007
 # # 72.97188624699993
 # # 72.12785687099995
 # # 74.33493806999991
-# 
+#
 # # A100
 # # 53.01978427100005
 # # 45.43619919700001
 # # 53.815523147999954
 # # 48.03101792299998
 # # 55.738864262999925
-# 
+#
 # # TODO !!!!!!!!!!!!!!! n=10
 # mse_stop = train_y_scaled[closest_n_idx_union(centers=test_x_scaled, points=train_x_scaled, n=2)].var() / 100
 # # mse_stop = -np.inf
 # print(f"{mse_stop = }")
-# 
+#
 # fig, ax, dh = fig_ax_dh()
-# 
+#
 # losses = {}
 # for name, net in tqdm(nets.items(), leave=False):
 #     t_before = time.perf_counter()
@@ -1467,9 +1555,9 @@ del(n_)
 #                                  #pbar=False
 #                                  )
 #     print(f"{time.perf_counter() - t_before =}")
-# 
+#
 # # clear_output(wait=True)
-# 
+#
 # for name, loss in losses.items():
 #     ax.semilogy(loss, ',', label=name)
 # handles, labels = ax.get_legend_handles_labels()
@@ -1480,7 +1568,7 @@ del(n_)
 # dh.update(fig)
 # plt.close()
 # # fig.show()
-# 
+#
 # last = lambda x: x[-1]
 # for name, loss in sorted({name: min(loss) for name, loss in losses.items()}.items(), key=lambda i: i[1]):
 #     print(f"{name:<10} {loss}")

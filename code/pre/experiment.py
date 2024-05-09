@@ -32,15 +32,15 @@ import sys
 
 ### input
 FUNCTION = int(sys.argv[1])
+INSTANCE = int(sys.argv[2])
 suite_name = "bbob"
-# budget_multiplier = 250  # increase to 10, 100, ...
 budget_multiplier = 250
 suite_options = (""
                  "dimensions: 2"
                  " "
                  f"function_indices: {FUNCTION}"
                  # " "
-                 # "instance_indices: 1"  # relative to suite instances
+                 # f"instance_indices: {INSTANCE}"  # relative to suite instances
 )
 output_folder = f"surrogate_f{FUNCTION}_{budget_multiplier}"
 # fmin = scipy.optimize.fmin
@@ -65,5 +65,5 @@ for problem in suite:  # this loop will take several minutes or longer
     minimal_print(problem, final=problem.index == len(suite) - 1)
 
 ### post-process data
-cocopp.main(observer.result_folder)  # re-run folders look like "...-001" etc
+# cocopp.main(observer.result_folder)  # re-run folders look like "...-001" etc
 # webbrowser.open("file://" + os.getcwd() + "/ppdata/index.html")
