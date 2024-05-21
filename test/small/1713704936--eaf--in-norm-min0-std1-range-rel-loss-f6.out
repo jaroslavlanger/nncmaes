@@ -1,0 +1,20 @@
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sun Apr 21 15:08:23 2024)
+subset-idx-size=6
+tau-train-ens=0.9999999999999999
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1476)__call__()
+-> return surrogate_model
+(Pdb) tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7 | std(means)/mean(stds)=  2.79 | std(means)=1.73e+05 | mean(stds)=6.19e+04
+tau-population= 0.73
+subset-idx-size=7
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1362)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.23809523809523814
+(Pdb) array([[1.99979058e+01],
+       [8.39193971e+00],
+       [6.20599835e+00],
+       [3.07847203e+00],
+       [2.35411008e-01],
+       [1.29066944e-01],
+       [7.16438717e-04]])
+(Pdb) 

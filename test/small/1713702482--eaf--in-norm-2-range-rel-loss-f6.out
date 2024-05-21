@@ -1,0 +1,65 @@
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sun Apr 21 14:22:51 2024)
+subset-idx-size=6
+tau-train-ens=0.9999999999999999
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1475)__call__()
+-> return surrogate_model
+(Pdb) tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7 | std(means)/mean(stds)=  3.29 | std(means)=1.82e+05 | mean(stds)=5.55e+04
+tau-population= 0.60
+subset-idx-size=7
+tau-train-ens=1.0
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1475)__call__()
+-> return surrogate_model
+(Pdb) tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall= 8 | std(means)/mean(stds)=  0.36 | std(means)=2.76e+04 | mean(stds)=7.64e+04
+tau-population= 0.20
+subset-idx-size=8
+tau-train-ens=0.9999999999999998
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1475)__call__()
+-> return surrogate_model
+(Pdb) tau-archive=1.0
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 9 | std(means)/mean(stds)=  1.43 | std(means)=1.56e+05 | mean(stds)=1.09e+05
+tau-population= 0.60
+subset-idx-size=8
+tau-train-ens=0.9285714285714285
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1475)__call__()
+-> return surrogate_model
+(Pdb) tau-archive=0.9285714285714285
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=10 | std(means)/mean(stds)=  0.60 | std(means)=3.04e+04 | mean(stds)=5.09e+04
+tau-population= 0.20
+subset-idx-size=6
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1362)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.6
+(Pdb) array([[ 5.19596042],
+       [ 2.71194257],
+       [-0.28610858],
+       [-0.26623759],
+       [-0.16890145],
+       [-0.23489572]])
+(Pdb) array([[-0.47948684],
+       [ 1.59725963],
+       [ 1.71253094],
+       [-0.00574654],
+       [ 0.02174998],
+       [ 0.00954155]])
+(Pdb) *** Error in argument: '(nets.values())[0].eval()(torch.Tensor(x_train)).numpy()'
+(Pdb) array([[ 4.7164736 ],
+       [ 4.309202  ],
+       [ 1.4264224 ],
+       [-0.27198413],
+       [-0.14715147],
+       [-0.22535416]], dtype=float32)
+(Pdb) array([[ 5.19596042],
+       [ 2.71194257],
+       [-0.28610858],
+       [-0.26623759],
+       [-0.16890145],
+       [-0.23489572]])
+(Pdb) array([[-0.07397126],
+       [ 0.39950955],
+       [ 1.71253094],
+       [-0.00563458],
+       [ 0.01946817],
+       [ 0.00907671]])
+(Pdb) 

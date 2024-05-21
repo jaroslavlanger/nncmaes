@@ -1,0 +1,2186 @@
+Arguments: Namespace(dim=2, fun=6, inst=None, crit='mean')
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sun Apr 28 15:21:07 2024)
+iohexp--d-2--f-6--i-1--b-500__pycma--init-pop-6__(Surrogate(model=Eaf, subset=ClosestToEachTestPoint(Mahalanobis, n_max_coef=20), x_tf=ShiftAndScaleByEs, y_tf=MinAdjustedLog), EvaluateUntilKendallThreshold(mean_criterion, tau_threshold=0.85, offset=True), n_min_fn=get_dim)
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=0.813101423315702 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=6
+DEBUG: tau-train-ens=0.9999999999999999
+DEBUG: tau-archive=0.9999999999999999 | std(means)=6.11e+04 | mean(stds)=2.73e+02 | std(means)/mean(stds)=223.62 | stds=[ 16.619411  624.79675   990.19775     1.4840378   3.9988856   1.7805963]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=-0.20 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.4949648281243604 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=7
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9999999999999999 | std(means)=2.96e+04 | mean(stds)=1.06e+01 | std(means)/mean(stds)=2794.08 | stds=[53.285233   5.1227694  1.0861526  1.2426382  1.6671832  1.2034407]
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall= 8
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population=-0.47 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.47 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.2041828376373651 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=8
+DEBUG: tau-train-ens=0.9999999999999998
+DEBUG: tau-archive=1.0 | std(means)=5.24e+05 | mean(stds)=1.85e+03 | std(means)/mean(stds)=283.81 | stds=[5.2958698e+02 1.9342453e+01 1.0460388e+04 1.1479913e+00 7.4350723e+01
+ 1.2643613e+00]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall= 9
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=-0.20 | tau-LogN=-0.20 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.751245469054719 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=9
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9999999999999998 | std(means)=6.80e+03 | mean(stds)=5.55e+01 | std(means)/mean(stds)=122.57 | stds=[  8.541912  228.23198    50.428726    2.0547783  37.952423    5.8516355]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=10
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.33 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=-0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.95669526890714 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=10
+DEBUG: tau-train-ens=0.9999999999999999
+DEBUG: tau-archive=1.0 | std(means)=9.08e+05 | mean(stds)=9.99e+05 | std(means)/mean(stds)=  0.91 | stds=[2.1111324e+00 5.4455976e+00 4.5895972e+00 5.0328774e+00 5.9932500e+06
+ 2.6972058e+00]
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall=11
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: pred_transf=array([[[ 6.5977116],
+        [ 5.157937 ],
+        [ 4.6751757],
+        [10.417142 ],
+        [ 6.5961704],
+        [ 6.3810587]],
+
+       [[ 6.692817 ],
+        [ 6.9554806],
+        [ 6.7455525],
+        [10.263792 ],
+        [ 7.776262 ],
+        [ 6.8934474]],
+
+       [[ 7.9862685],
+        [ 9.956043 ],
+        [ 8.960785 ],
+        [13.801224 ],
+        [45.909187 ],
+        [ 8.875024 ]],
+
+       [[ 5.6973066],
+        [ 6.12319  ],
+        [ 5.8735332],
+        [ 9.097212 ],
+        [ 6.7548113],
+        [ 7.069305 ]],
+
+       [[ 6.3421144],
+        [ 5.693091 ],
+        [ 5.068865 ],
+        [ 9.925179 ],
+        [ 6.5140553],
+        [ 5.9918413]]], dtype=float32)
+DEBUG: debug_targets=array([ 71.48183268865722, 283.0582244436142 , 251.18977070763017,
+       976.0555250032103 , 532.0344138664456 , 433.2804566451432 ])
+DEBUG: repr(e)="FloatingPointError('overflow encountered in power')"
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.173763955973596 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=11
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9999999999999999 | std(means)=3.99e+02 | mean(stds)=3.56e+00 | std(means)/mean(stds)=112.11 | stds=[ 1.4567754 13.142492   1.4214865  1.5338525  1.9649882  1.8448098]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.9175919546560687 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=12
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.47e+01 | mean(stds)=1.40e+00 | std(means)/mean(stds)= 60.56 | stds=[1.265579  1.1312323 1.4677761 1.6877618 1.4129828 1.4256048]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.0662875772432563 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=13
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.00e+02 | mean(stds)=1.35e+00 | std(means)/mean(stds)=222.41 | stds=[1.0424651 1.4760092 1.2701916 1.5236938 1.5385871 1.2366337]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.468410090743621 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.13e+02 | mean(stds)=9.87e+00 | std(means)/mean(stds)= 11.41 | stds=[ 4.7873726 48.49121    1.1805084  1.4941716  1.5408148  1.74948  ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.065713137786981 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.71e+03 | mean(stds)=3.08e+00 | std(means)/mean(stds)=2828.27 | stds=[1.2997789 2.457591  1.5645934 9.388822  2.4739654 1.2874377]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.26e+01
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.20 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.38255534406806 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.01e+02 | mean(stds)=3.20e+00 | std(means)/mean(stds)= 31.57 | stds=[1.19143   4.852876  3.8663628 3.6994457 1.2931862 4.278329 ]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.04e+01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=5.855379888965084 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=8.18e+01 | mean(stds)=1.44e+00 | std(means)/mean(stds)= 57.03 | stds=[1.1255037 1.6233474 1.6279593 1.3312638 1.7897232 1.1126953]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=2.76e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.689845454495924 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.14e+01 | mean(stds)=1.12e+00 | std(means)/mean(stds)= 10.14 | stds=[1.0237215 1.0608468 1.1125722 1.0529904 1.1233988 1.3467729]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.76e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.985489613137357 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.72e+01 | mean(stds)=1.59e+00 | std(means)/mean(stds)= 23.45 | stds=[1.5000178 1.3376447 2.5196464 1.0835835 1.7081566 1.3611833]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=2.37e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.198908589178738 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=12
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.6363636363636364 | std(means)=5.18e+00 | mean(stds)=1.14e+00 | std(means)/mean(stds)=  4.53 | stds=[1.161983  1.3506144 1.1191384 1.0590789 1.0781236 1.0943879]
+eval=3 | not-eval=3 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=2.33e+01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=3 | not-evaluated=3
+DEBUG: subset-max-norm=11.88687489704056 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.38e+00 | mean(stds)=1.95e+00 | std(means)/mean(stds)=  3.78 | stds=[3.551493  1.0493325 1.5411421 1.7048852 1.5771519 2.2712674]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.07e+01
+DEBUG: tau-population=-0.20 | tau-pop-final=-0.33 | final-target-hit=False
+DEBUG: tau-mean-first=-0.20 | tau-mean-last=-0.20 | tau-LogN=-0.20 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.056030955534787 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.32e+00 | mean(stds)=1.56e+00 | std(means)/mean(stds)=  3.41 | stds=[1.1174066 1.019274  2.627995  1.0447327 1.8784121 1.6722282]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.861653725551667 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.32e+01 | mean(stds)=1.13e+00 | std(means)/mean(stds)= 20.52 | stds=[1.0231898 1.1232841 1.2038772 1.1370796 1.2608882 1.0263567]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population=-0.73 | tau-pop-final=-0.87 | final-target-hit=False
+DEBUG: tau-mean-first=-0.73 | tau-mean-last=-0.73 | tau-LogN=-0.73 | tau-median=-0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.026042782644684 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=5.73e+00 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  4.74 | stds=[1.043062  1.0395563 1.8085358 1.1240469 1.0401676 1.1951535]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.228911020070921 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=19
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.24e+00 | mean(stds)=1.08e+00 | std(means)/mean(stds)=  2.07 | stds=[1.0856906 1.0198568 1.1110674 1.0409377 1.1513059 1.0811405]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.658982230434418 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.59e+01 | mean(stds)=1.62e+00 | std(means)/mean(stds)=  9.80 | stds=[4.003501  1.1294316 1.379878  1.0984877 1.0734798 1.032191 ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.716361932493843 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.54e+00 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  2.95 | stds=[1.6842633 1.0377682 1.0341511 2.8736873 1.5723381 1.0230088]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.33 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.908340867584897 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=19
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.23e+00 | mean(stds)=1.04e+00 | std(means)/mean(stds)=  2.14 | stds=[1.0409386 1.0152137 1.0312641 1.0285044 1.0699759 1.0732359]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.636520471351844 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.36e+00 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  2.20 | stds=[1.0364256 1.0144907 1.0245478 1.026273  1.2747809 1.0450239]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.38e+01
+DEBUG: tau-population= 0.87 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.338029797882507 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.44e+00 | mean(stds)=1.37e+00 | std(means)/mean(stds)=  1.05 | stds=[1.2403755 1.0308585 2.4625483 1.0205969 1.0355811 1.4566709]
+eval=6 | not-eval=0 | tau= 0.82 | n_kendall=12
+DEBUG: delta_f=1.23e+01
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.87
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=12.02113103439887 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=9.58e+00 | mean(stds)=2.08e+00 | std(means)/mean(stds)=  4.61 | stds=[1.1144676 7.102661  1.1725582 1.0119177 1.0373107 1.0358148]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.23e+01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.463651466739964 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=31
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.95e-01 | mean(stds)=2.20e+00 | std(means)/mean(stds)=  0.41 | stds=[2.4178534 2.430178  2.8070781 3.0789223 1.1086681 1.3499084]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.23e+01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.106785597342187 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=33
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.48e+00 | mean(stds)=2.93e+00 | std(means)/mean(stds)=  2.22 | stds=[ 1.0610386  1.0898108 11.443144   1.6363769  1.2379951  1.0836449]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.23e+01
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.208581288027101 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=33
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=9.28e-01 | mean(stds)=1.61e+00 | std(means)/mean(stds)=  0.58 | stds=[1.0666822 3.0584538 2.2457209 1.1351625 1.055427  1.1090349]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.23e+01
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.33 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.136583621975673 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=34
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.50e+00 | mean(stds)=1.26e+00 | std(means)/mean(stds)=  2.78 | stds=[1.2229414 2.0643752 1.1054213 1.039516  1.0586785 1.0558493]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.22e+01
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.045722064524693 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=33
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.95e-01 | mean(stds)=1.64e+00 | std(means)/mean(stds)=  0.12 | stds=[1.0355979 2.23371   1.274335  2.4773602 1.2486593 1.5670584]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.22e+01
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.20 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.749526785248321 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.27e-01 | mean(stds)=1.61e+00 | std(means)/mean(stds)=  0.08 | stds=[1.0666989 1.095295  1.1999608 3.540013  1.2392137 1.5250787]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.02e+01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.06456341714501 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=34
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.17e+00 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  3.66 | stds=[1.3671823 1.9837468 1.2236614 1.620055  1.1812687 1.1164958]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.678260879508872 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=38
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.55e+00 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  5.28 | stds=[1.5555464 2.325474  1.3503    1.1169474 1.1699034 1.0693927]
+eval=6 | not-eval=0 | tau= 0.38 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.07 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.07
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.686840253291366 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.44e+02 | mean(stds)=1.16e+00 | std(means)/mean(stds)=640.56 | stds=[1.28076   1.0369573 1.059765  1.4258705 1.0616282 1.1013349]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.750896927311299 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.08e+01 | mean(stds)=1.24e+00 | std(means)/mean(stds)= 24.80 | stds=[1.0183245 1.0799297 1.1441422 1.3735652 1.0173111 1.8262882]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.953446485777625 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.59e+00 | mean(stds)=1.25e+00 | std(means)/mean(stds)=  2.08 | stds=[1.0215782 1.0481637 1.5474893 1.2639863 1.4052843 1.1997796]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.438545314609624 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=4.09e+04 | mean(stds)=4.00e+00 | std(means)/mean(stds)=10231.74 | stds=[ 1.7775468  1.1104703  1.0900527  1.6676314  1.0869639 17.27504  ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.236976633464095 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.92e+01 | mean(stds)=1.12e+00 | std(means)/mean(stds)= 17.14 | stds=[1.0271331 1.0462431 1.271881  1.0722175 1.1203233 1.1903541]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=5.632863485448721 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=9.06e-01 | mean(stds)=1.12e+00 | std(means)/mean(stds)=  0.81 | stds=[1.1426544 1.064705  1.013855  1.1634138 1.1445358 1.1667346]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.9783216231599505 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=7.88e-01 | mean(stds)=1.11e+00 | std(means)/mean(stds)=  0.71 | stds=[1.0922306 1.0985981 1.1114511 1.093702  1.2229837 1.0671288]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.285120766939093 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.82e-01 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.26 | stds=[1.0267584 1.1092077 1.2067447 1.0144622 1.0493921 1.1436698]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.20 | tau-LogN=-0.20 | tau-median=-0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.022810841577538 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.98e-01 | mean(stds)=1.02e+00 | std(means)/mean(stds)=  0.39 | stds=[1.0281308 1.0225408 1.0234637 1.0128953 1.0091982 1.0301973]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.369941449845735 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=6.72e-01 | mean(stds)=1.10e+00 | std(means)/mean(stds)=  0.61 | stds=[1.4341276 1.0072508 1.0172915 1.0396163 1.0312861 1.0622118]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.931865749905247 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=9.19e-01 | mean(stds)=1.06e+00 | std(means)/mean(stds)=  0.86 | stds=[1.0032142 1.1220589 1.0658559 1.0646437 1.0472565 1.0746139]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.841952330082543 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.25e+00 | mean(stds)=1.39e+00 | std(means)/mean(stds)=  2.34 | stds=[1.0298598 1.6705905 1.9189727 1.277873  1.041208  1.3923833]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.16e+00
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.376838113647326 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=6.06e+03 | mean(stds)=1.52e+00 | std(means)/mean(stds)=3988.76 | stds=[2.692143  1.1228223 1.1686745 1.2308702 1.758114  1.1377003]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=9.14e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.889899567941633 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.91e+00 | mean(stds)=1.44e+00 | std(means)/mean(stds)=  4.11 | stds=[1.0115609 2.041506  1.0331054 1.5905885 1.6301253 1.3192788]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=9.14e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.786273268458826 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.15e+00 | mean(stds)=1.58e+00 | std(means)/mean(stds)=  0.73 | stds=[1.0584553 1.1263796 1.4717623 2.0260015 1.8876534 1.9097749]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.14e+00
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.510715599004934 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=31
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=4.90e-01 | mean(stds)=2.06e+00 | std(means)/mean(stds)=  0.24 | stds=[2.469618  1.8009471 2.1769981 1.4169137 1.9680815 2.5324578]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.05e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=-0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.629532483768482 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=30
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.52e-01 | mean(stds)=1.36e+00 | std(means)/mean(stds)=  0.26 | stds=[1.0205185 2.5260851 1.1047682 1.0234138 1.396779  1.0896027]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.05e+00
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.988735374883278 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.54e-01 | mean(stds)=1.18e+00 | std(means)/mean(stds)=  0.30 | stds=[1.2026248 1.2791166 1.049867  1.4178969 1.0608298 1.0427811]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.05e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.264119384417672 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.54e-01 | mean(stds)=1.57e+00 | std(means)/mean(stds)=  0.10 | stds=[1.3909596 1.3641901 1.3267488 1.8858798 1.7323475 1.7161968]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.95e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.087045100328151 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=9.26e-02 | mean(stds)=1.36e+00 | std(means)/mean(stds)=  0.07 | stds=[1.1135538 1.8023484 2.150035  1.0587912 1.0411177 1.0103606]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.90e+00
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.9744438432107 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.19e-01 | mean(stds)=1.28e+00 | std(means)/mean(stds)=  0.17 | stds=[1.0592165 1.0282835 1.0761297 1.5163363 1.2452883 1.7382149]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.70e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.790844707976254 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.45e+00 | mean(stds)=2.04e+00 | std(means)/mean(stds)=  0.71 | stds=[1.2752632 1.6129018 1.0315341 1.0701476 1.0205548 6.208734 ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.66e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.312599103082283 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.33e-01 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.12 | stds=[1.0163925 1.1054167 1.0210472 1.1223505 1.0521507 1.0787423]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.66e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.363232622924045 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.50e-02 | mean(stds)=1.79e+01 | std(means)/mean(stds)=  0.00 | stds=[ 5.2073855  1.7556994 22.470509  20.970346   1.2816774 55.8051   ]
+eval=6 | not-eval=0 | tau=-0.24 | n_kendall=12
+DEBUG: delta_f=8.64e+00
+DEBUG: tau-population=-0.33 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.33
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=10.034886723222277 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.19e-01 | mean(stds)=1.29e+00 | std(means)/mean(stds)=  0.17 | stds=[1.0977191 1.2967414 1.1157696 1.1595695 1.8181796 1.2476084]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.63e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.122780036717018 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.46e-01 | mean(stds)=1.55e+00 | std(means)/mean(stds)=  0.09 | stds=[1.4719111 1.6117706 2.0916746 1.4933225 1.2941316 1.3542539]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.56e+00
+DEBUG: tau-population=-0.47 | tau-pop-final=-0.60 | final-target-hit=False
+DEBUG: tau-mean-first=-0.47 | tau-mean-last=-0.47 | tau-LogN=-0.47 | tau-median=-0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.517861218635458 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.87e-02 | mean(stds)=1.31e+00 | std(means)/mean(stds)=  0.06 | stds=[1.1770881 1.0168864 1.0233213 1.9118563 1.2598352 1.4500176]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.55e+00
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.043813276819368 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=4.22e-02 | mean(stds)=1.11e+00 | std(means)/mean(stds)=  0.04 | stds=[1.2656765 1.0974698 1.1446168 1.0296096 1.0489769 1.0731207]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.55e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.606166521077043 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.47e-01 | mean(stds)=1.64e+00 | std(means)/mean(stds)=  0.09 | stds=[1.9364713 1.2355219 1.0955621 2.7910302 1.7451459 1.0373589]
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=8.55e+00
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.744475163461836 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.98e-02 | mean(stds)=1.86e+00 | std(means)/mean(stds)=  0.04 | stds=[2.5684733 1.0583317 1.0678767 1.1711034 2.2281058 3.0520833]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.49e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.41304596851354 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.90e-02 | mean(stds)=1.51e+00 | std(means)/mean(stds)=  0.04 | stds=[1.2731692 1.2640191 1.9262301 1.1600232 1.4334117 2.0252967]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.37e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.078474083300206 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.57e-01 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.13 | stds=[1.0559536 1.0686427 1.0182554 1.0618769 1.3358519 1.6097474]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.22e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.526631688959757 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=3.38e+00 | mean(stds)=2.21e+00 | std(means)/mean(stds)=  1.53 | stds=[1.0242819 5.5996394 2.8707786 1.6789489 1.0468471 1.0350724]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=8.22e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.463912978582444 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=1.36e-01 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  0.11 | stds=[1.1877707 1.1625134 1.0386852 1.7155277 1.1114156 1.038711 ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=8.12e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.644290433325741 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=38
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=6.90e-02 | mean(stds)=1.44e+00 | std(means)/mean(stds)=  0.05 | stds=[1.0373588 1.5002534 1.2798067 1.9849387 1.3459983 1.5195792]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=8.08e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.830454691195177 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=38
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.77e-01 | mean(stds)=1.93e+00 | std(means)/mean(stds)=  0.09 | stds=[3.3728273 1.247401  3.2955413 1.0961065 1.5053865 1.0526925]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=7.79e+00
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.749110761835299 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=2.39e-01 | mean(stds)=1.91e+00 | std(means)/mean(stds)=  0.13 | stds=[1.2623117 2.081939  3.2244284 1.8901504 1.6003488 1.3970399]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=7.31e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.60 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.902642796639091 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=5.59e+00 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  3.90 | stds=[1.119635  1.1905613 1.2447375 1.4959478 2.3355    1.2160863]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=7.18e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.8405585626072707 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.70e-01 | mean(stds)=2.27e+00 | std(means)/mean(stds)=  0.16 | stds=[1.3947281 1.5724216 1.7817162 1.0315523 1.2827101 6.5776815]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=7.07e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.87 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.767745060448197 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.95e-01 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  0.66 | stds=[1.0305132 1.2294626 1.4333078 1.2639254 1.0528952 1.24349  ]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=6.88e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.7326293026836126 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.73e-01 | mean(stds)=1.97e+00 | std(means)/mean(stds)=  0.39 | stds=[1.2762091 1.5780394 1.0601823 2.2371814 2.7617157 2.8960128]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=6.46e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.60 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.3402917843426425 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.97e+00 | mean(stds)=1.90e+00 | std(means)/mean(stds)=  1.56 | stds=[1.6878253 1.5070715 1.6160468 1.020326  2.5396085 3.054375 ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=6.46e+00
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.20 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=-0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.8195351989468833 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.09e-01 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  0.34 | stds=[1.2073798 1.0493691 1.0929888 1.5111277 1.2900946 1.0887333]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.37e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.495120466456413 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=5.35e+00 | mean(stds)=1.63e+00 | std(means)/mean(stds)=  3.29 | stds=[1.6308254 1.6514816 1.8686527 2.2052572 1.1157304 1.2808188]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=5.37e+00
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.7198244235853766 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=7.44e+00 | mean(stds)=4.30e+00 | std(means)/mean(stds)=  1.73 | stds=[1.6244138 2.1045556 6.7201114 1.1852721 5.640845  8.515494 ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.87e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.20 | tau-LogN=-0.07 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.2460548958863646 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.31e+00 | mean(stds)=1.05e+00 | std(means)/mean(stds)=  1.25 | stds=[1.0560429 1.0137502 1.1260252 1.0434015 1.0306609 1.0109211]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.42e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.1108141621605596 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8909090909090909
+DEBUG: tau-archive=0.8909090909090909 | std(means)=1.43e+01 | mean(stds)=1.47e+00 | std(means)/mean(stds)=  9.72 | stds=[1.0238769 1.756388  2.2286246 1.308368  1.3785958 1.121387 ]
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=2.42e+00
+DEBUG: tau-population=-0.33 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.33 | tau-mean-last=-0.20 | tau-LogN=-0.33 | tau-median=-0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.3786476909463574 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8545454545454545
+DEBUG: tau-archive=0.8545454545454545 | std(means)=3.03e+00 | mean(stds)=2.36e+00 | std(means)/mean(stds)=  1.28 | stds=[3.3091989 1.8393589 3.2949579 2.5994463 1.732248  1.3775741]
+eval=6 | not-eval=0 | tau= 0.38 | n_kendall=12
+DEBUG: delta_f=2.42e+00
+DEBUG: tau-population= 0.33 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.20
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.112865092789466 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.77e+00 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  1.49 | stds=[1.6569597 1.0481255 1.0073475 1.0939047 1.1173156 1.198272 ]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.42e+00
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.320623359488841 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=9.32e+00 | mean(stds)=1.50e+00 | std(means)/mean(stds)=  6.22 | stds=[1.4579786 1.6009908 1.2838807 1.932596  1.6587808 1.0584184]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.74e+00
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.242742108275178 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.33e+00 | mean(stds)=1.60e+00 | std(means)/mean(stds)=  0.83 | stds=[1.0976485 1.0846556 2.5296326 2.6709068 1.1375281 1.0570921]
+eval=6 | not-eval=0 | tau= 0.78 | n_kendall=12
+DEBUG: delta_f=1.74e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=4.6848960270573 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.43e+01 | mean(stds)=2.02e+00 | std(means)/mean(stds)=  7.10 | stds=[1.4207324 1.9126943 4.289796  1.3814076 1.9967661 1.122289 ]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.74e+00
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.6200861681713423 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.89e+01 | mean(stds)=3.47e+00 | std(means)/mean(stds)= 14.10 | stds=[1.0535504 5.354692  4.953038  1.0405533 1.1599257 7.234937 ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=8.05e-01
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.87 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.799448310738695 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.64e-01 | mean(stds)=1.53e+00 | std(means)/mean(stds)=  0.56 | stds=[1.5166711 1.0710862 1.8206611 1.4156749 2.3332586 1.0457729]
+eval=6 | not-eval=0 | tau= 0.47 | n_kendall=12
+DEBUG: delta_f=4.02e-01
+DEBUG: tau-population= 0.20 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=-0.20
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=4.387615673775854 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.45e+05 | mean(stds)=3.80e+00 | std(means)/mean(stds)=64390.76 | stds=[ 1.0881834  1.3066448 11.048456   3.1323307  4.597972   1.6191285]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.02e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.274269447998938 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.94e+00 | mean(stds)=1.70e+00 | std(means)/mean(stds)=  4.09 | stds=[2.037669  1.9150122 1.9088929 1.2330657 1.3772885 1.703821 ]
+eval=6 | not-eval=0 | tau= 0.33 | n_kendall=12
+DEBUG: delta_f=3.98e-01
+DEBUG: tau-population= 0.20 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.07 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=5.443120651122278 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.71e+00 | mean(stds)=1.30e+00 | std(means)/mean(stds)=  2.86 | stds=[1.334033  1.1919726 1.1097727 1.2274423 1.8365486 1.0956233]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=3.98e-01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.189887519760815 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=2.30e-01 | mean(stds)=1.18e+00 | std(means)/mean(stds)=  0.19 | stds=[1.1216398 1.1074965 1.2576796 1.2940258 1.0789523 1.2386892]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.627746524082527 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=2.30e+00 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  1.62 | stds=[1.0791694 1.997984  1.6321768 1.4986595 1.1605657 1.1797961]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+1.00 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.71216750877325 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.58e-01 | mean(stds)=1.28e+00 | std(means)/mean(stds)=  0.20 | stds=[1.2665734 1.2239482 1.3223177 1.1861087 1.3501781 1.3149033]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.925913089759574 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.28e-02 | mean(stds)=1.14e+00 | std(means)/mean(stds)=  0.06 | stds=[1.1341468 1.041255  1.2404104 1.1277282 1.1364158 1.1322182]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.328603990892315 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.76e-02 | mean(stds)=1.10e+00 | std(means)/mean(stds)=  0.08 | stds=[1.0843235 1.0372785 1.0671157 1.0419008 1.2820785 1.1034182]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.066943260928406 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.02e-02 | mean(stds)=1.16e+00 | std(means)/mean(stds)=  0.03 | stds=[1.0240365 1.1555493 1.2123176 1.3243757 1.1954519 1.0653459]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.989950622618233 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.14e-02 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.06 | stds=[1.0785604 1.1980827 1.1757089 1.0362968 1.0106122 1.0402681]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.331721319902565 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.14e-02 | mean(stds)=1.08e+00 | std(means)/mean(stds)=  0.03 | stds=[1.0295451 1.3087851 1.0696226 1.0327845 1.0447513 1.0241873]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.09e-01
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.382117205774462 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.12e-02 | mean(stds)=1.71e+00 | std(means)/mean(stds)=  0.04 | stds=[1.3777226 1.5257154 1.2188048 3.096371  1.7514784 1.2988554]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.65e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.192475729117374 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.66e-02 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.03 | stds=[1.0248047 1.0140692 1.0624769 1.100726  1.1930269 1.0287691]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.52e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.404371337108076 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.56e-01 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  0.18 | stds=[1.426974  1.2942823 1.2528441 1.2635653 1.669473  1.6863561]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.52e-01
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.940276612645349 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.73e-01 | mean(stds)=1.66e+00 | std(means)/mean(stds)=  0.23 | stds=[1.0382382 1.8163674 1.5262125 2.068506  2.3294578 1.1681755]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.19e-01
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.084105085432734 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.76e-01 | mean(stds)=1.57e+00 | std(means)/mean(stds)=  0.11 | stds=[1.4509917 1.1130011 1.5405957 1.2592379 2.9563115 1.1215432]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.19e-01
+DEBUG: tau-population=-0.20 | tau-pop-final=-0.33 | final-target-hit=False
+DEBUG: tau-mean-first=-0.20 | tau-mean-last=-0.20 | tau-LogN=-0.20 | tau-median=-0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.558995668140726 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.49e-02 | mean(stds)=1.29e+00 | std(means)/mean(stds)=  0.02 | stds=[1.1959907 1.4368647 1.43884   1.5555954 1.0625576 1.0205474]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.89e-01
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.459212377446477 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.91e-01 | mean(stds)=1.60e+00 | std(means)/mean(stds)=  0.12 | stds=[1.0305372 1.4881159 1.4022993 1.5780082 1.1101506 3.012661 ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.62e-01
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.906349634627524 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.73e-02 | mean(stds)=1.20e+00 | std(means)/mean(stds)=  0.03 | stds=[1.210635  1.4132081 1.2679657 1.1758572 1.024281  1.0809655]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.55e-01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.600959634841608 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=9.55e-02 | mean(stds)=1.64e+00 | std(means)/mean(stds)=  0.06 | stds=[1.2855866 2.4554012 2.1972113 1.5347568 1.2279857 1.1220512]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.45e-01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.88820975274312 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.83e-02 | mean(stds)=1.16e+00 | std(means)/mean(stds)=  0.02 | stds=[1.0541401 1.0948358 1.2431556 1.0120548 1.168274  1.3712991]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.17e-01
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.361615879359588 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.87e-02 | mean(stds)=1.28e+00 | std(means)/mean(stds)=  0.04 | stds=[1.3043686 1.7642946 1.1741753 1.3618116 1.0660883 1.0206059]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=7.82e-02
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.195284466982574 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.31e-02 | mean(stds)=1.13e+00 | std(means)/mean(stds)=  0.02 | stds=[1.0683011 1.0170625 1.031302  1.0102284 1.0139476 1.6388232]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.71e-02
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.522079267050614 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.68e-02 | mean(stds)=1.11e+00 | std(means)/mean(stds)=  0.03 | stds=[1.0027388 1.0536721 1.2820129 1.081433  1.1818832 1.0689228]
+eval=6 | not-eval=0 | tau= 0.29 | n_kendall=12
+DEBUG: delta_f=1.57e-02
+DEBUG: tau-population=-0.07 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=-0.07
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=11.087189723688715 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.61e-02 | mean(stds)=1.36e+00 | std(means)/mean(stds)=  0.06 | stds=[1.6001139 1.2861542 1.324832  1.3649458 1.181684  1.4204603]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.57e-02
+DEBUG: tau-population=-0.60 | tau-pop-final=-0.73 | final-target-hit=False
+DEBUG: tau-mean-first=-0.60 | tau-mean-last=-0.47 | tau-LogN=-0.47 | tau-median=-0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.13300748455214 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.09e+01 | mean(stds)=1.36e+00 | std(means)/mean(stds)=  7.97 | stds=[2.6726987 1.1203295 1.0183643 1.2278801 1.1218373 1.0276961]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.57e-02
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.9860764017827 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=35
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.80e-01 | mean(stds)=1.65e+00 | std(means)/mean(stds)=  0.41 | stds=[1.3502938 1.8748746 1.2025298 2.3661046 1.2105793 1.9165772]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.57e-02
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.657443322700258 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.65e-01 | mean(stds)=1.31e+00 | std(means)/mean(stds)=  0.13 | stds=[1.0393031 1.1988715 1.9001882 1.05128   1.5791881 1.1204283]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.18e-02
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.638718765749054 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.46e+00 | mean(stds)=1.57e+00 | std(means)/mean(stds)=  0.93 | stds=[2.380784  1.5090897 1.1427174 1.3127339 1.9015846 1.1533157]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=8.89e-03
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.590439293460863 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.80e+01 | mean(stds)=4.91e+00 | std(means)/mean(stds)=  5.70 | stds=[13.938375   6.1884236  2.04829    1.229321   1.0561678  5.0164037]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.89e-03
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.001926779481517 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=35
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.43e-01 | mean(stds)=1.23e+00 | std(means)/mean(stds)=  0.20 | stds=[1.1648039 1.0104692 1.0249426 1.0115969 1.0294383 2.1287365]
+eval=6 | not-eval=0 | tau= 0.64 | n_kendall=12
+DEBUG: delta_f=8.89e-03
+DEBUG: tau-population= 0.33 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=11.740813883824869 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.51e+00 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  1.06 | stds=[1.4090261 1.3453927 1.8562102 1.7861869 1.0216681 1.1464142]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.63e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.030851490920792 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.83e+01 | mean(stds)=3.34e+01 | std(means)/mean(stds)=  2.04 | stds=[  1.4149854   1.9332466   4.3965225   1.7015635   1.0794877 190.15958  ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.63e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.31578911492124 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=19
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.01e+01 | mean(stds)=3.77e+00 | std(means)/mean(stds)=  2.67 | stds=[4.2908106 6.108222  4.887509  1.1297952 3.8843725 2.3308685]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.66e-03
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+1.00 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.52415405876319 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.40e-02 | mean(stds)=3.26e+00 | std(means)/mean(stds)=  0.02 | stds=[9.035083  2.9605227 1.0102115 2.041912  1.0168707 3.5181377]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.46e-03
+DEBUG: tau-population=-0.20 | tau-pop-final=-0.20 | final-target-hit=False
+DEBUG: tau-mean-first=-0.20 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.977706287937506 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.32e+00 | mean(stds)=2.43e+00 | std(means)/mean(stds)=  0.54 | stds=[3.6546173 1.4950469 1.0844011 5.2569523 1.2473836 1.8338443]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.46e-03
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.251682084232296 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.58e-03 | mean(stds)=1.98e+00 | std(means)/mean(stds)=  0.00 | stds=[1.288994  4.111207  1.4735181 1.0296795 2.4140124 1.5626457]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=5.46e-03
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=-0.20 | tau-LogN=-0.20 | tau-median=-0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=5.9479569483698205 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.85e-03 | mean(stds)=1.49e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2995547 1.1892154 1.2396891 1.1868438 1.1795658 2.8553383]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=4.68e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.805575205791715 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.40e-03 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2206309 1.3482066 1.1127595 1.1045853 1.219032  1.2716098]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.68e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.382559386492131 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8545454545454545 | std(means)=1.15e-03 | mean(stds)=1.86e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1245743 5.4890637 1.2010081 1.1666024 1.1275034 1.049932 ]
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=4.68e-03
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.96201442174067 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.75e-04 | mean(stds)=1.17e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1876993 1.0398194 1.130291  1.0395151 1.1015296 1.5127021]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.47e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.909196678156619 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.51e-04 | mean(stds)=1.47e+00 | std(means)/mean(stds)=  0.00 | stds=[2.3454814 1.030391  1.4305866 1.5568135 1.0789022 1.3956487]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.47e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.173656781559387 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.61e-04 | mean(stds)=1.90e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3448808 1.0655913 1.9294037 1.1667966 2.314369  3.582208 ]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.43e-03
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.67078343917495 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.56e-04 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2802218 1.2662202 1.8824009 1.5479817 1.5858942 1.0267003]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.28e-03
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.882078571814759 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.63e-04 | mean(stds)=1.80e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0140277 1.7852278 2.6290755 1.113106  1.0920644 3.1537325]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=4.28e-03
+DEBUG: tau-population=-0.14 | tau-pop-final=-0.14 | final-target-hit=False
+DEBUG: tau-mean-first=-0.14 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=-0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.820598581454911 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.16e-04 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3006101 1.2869924 1.5362643 1.0251188 1.2623875 2.1055794]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.87e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.963836765524022 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.62e-04 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.00 | stds=[1.022813  1.0599762 1.3373611 1.0073004 1.1136216 1.0205834]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=3.85e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.155944321789782 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.06e-04 | mean(stds)=1.66e+00 | std(means)/mean(stds)=  0.00 | stds=[2.947241  1.1265275 1.235114  1.2107006 2.3950543 1.0286114]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.55e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.97 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.484081551125456 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.20e-04 | mean(stds)=1.13e+00 | std(means)/mean(stds)=  0.00 | stds=[1.5582885 1.0860782 1.0187937 1.0201595 1.0156171 1.0576335]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.12e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.34284391806558 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.93e-04 | mean(stds)=1.17e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0125525 1.4468218 1.0055013 1.3430803 1.100605  1.1333158]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.65e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.456260099717431 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9541685964428458 | std(means)=7.81e-03 | mean(stds)=3.95e+00 | std(means)/mean(stds)=  0.00 | stds=[5.586534  1.0261059 1.1661197 6.8789654 7.9013205 1.1567683]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=2.65e-03
+DEBUG: tau-population=-0.60 | tau-pop-final=-0.73 | final-target-hit=False
+DEBUG: tau-mean-first=-0.60 | tau-mean-last=-0.60 | tau-LogN=-0.60 | tau-median=-0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.764065108806726 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=4.54e-04 | mean(stds)=1.46e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0861185 2.262455  1.0174431 1.0113475 1.7778275 1.5907538]
+eval=6 | not-eval=0 | tau= 0.60 | n_kendall=12
+DEBUG: delta_f=2.45e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.60
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=11.464459638236809 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.64e-03 | mean(stds)=1.36e+00 | std(means)/mean(stds)=  0.00 | stds=[2.7405477 1.0643314 1.1855402 1.085491  1.0094699 1.1010916]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=2.45e-03
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.044647543258057 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.41e-03 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0484121 2.2212203 1.2488395 1.5473479 1.3823205 1.08367  ]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=2.10e-03
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.812563567589674 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=38
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.73e-04 | mean(stds)=1.21e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1031231 1.084476  1.108491  1.2621697 1.6522784 1.0687968]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.10e-03
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.630932795566736 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=7.60e-04 | mean(stds)=1.45e+00 | std(means)/mean(stds)=  0.00 | stds=[1.84343   1.6212745 1.9356222 1.0867773 1.0291675 1.1672245]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.10e-03
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.149654787977575 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=35
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=3.02e-04 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  0.00 | stds=[1.786221  1.0731243 1.0395359 1.4351767 2.189284  1.0619667]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=1.79e-03
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.07 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=-0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.53899267431897 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=34
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.28e-04 | mean(stds)=1.24e+00 | std(means)/mean(stds)=  0.00 | stds=[1.6124948 1.0367755 1.3103983 1.0193095 1.3019121 1.1626384]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.79e-03
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.41
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.844664653469321 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=35
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.68e-04 | mean(stds)=1.56e+00 | std(means)/mean(stds)=  0.00 | stds=[2.3770947 1.0341512 1.0854974 1.179478  2.1481159 1.511292 ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.78e-03
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.359825347179349 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=31
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.04e-04 | mean(stds)=1.12e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0895938 1.2646288 1.2555693 1.0430176 1.02139   1.0453117]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.56e-03
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.673662368583694 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=33
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.69e-05 | mean(stds)=1.73e+00 | std(means)/mean(stds)=  0.00 | stds=[1.7555743 1.391456  1.5158274 1.028153  2.995457  1.7104949]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.24e-03
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.07 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.72237339651054 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=2.22e-03 | mean(stds)=1.67e+00 | std(means)/mean(stds)=  0.00 | stds=[2.0877507 1.0393939 1.5946019 2.784485  1.2080289 1.2902043]
+eval=1 | not-eval=5 | tau= 0.90 | n_kendall=12
+DEBUG: delta_f=8.83e-04
+DEBUG: tau-population= 0.07 | tau-pop-final=-0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.2253415350779555 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9908673886137245 | std(means)=4.22e-04 | mean(stds)=1.12e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0389217 1.0085751 1.032811  1.575615  1.031982  1.0277803]
+eval=1 | not-eval=5 | tau= 0.99 | n_kendall=12
+DEBUG: delta_f=8.83e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.098688094496154 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=6.31e-04 | mean(stds)=1.22e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0314219 1.1003197 1.0233575 1.2524455 1.0094337 1.8806063]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=6.88e-04
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.78218098077447 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.59e-03 | mean(stds)=1.51e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2507638 2.257157  1.111341  1.181373  1.8881009 1.364737 ]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=6.88e-04
+DEBUG: tau-population=-0.55 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.55 | tau-mean-last=-0.60 | tau-LogN=-0.60 | tau-median=-0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.047103697963381 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.12e-02 | mean(stds)=1.73e+00 | std(means)/mean(stds)=  0.01 | stds=[1.0637805 1.1260996 1.0370952 1.0310297 4.689967  1.4241937]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.82e-04
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.20 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=-0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.322329952335059 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=39
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.31e-05 | mean(stds)=1.39e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1920425 2.0677774 1.9902477 1.047235  1.0193877 1.0379292]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=5.82e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.91740428718444 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.80e-04 | mean(stds)=1.39e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1544182 1.0163527 1.8879    1.0737516 1.9132184 1.2775648]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=5.47e-04
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.255612048414307 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.83e-04 | mean(stds)=1.52e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1147768 2.804377  1.2361261 1.0921372 1.8450594 1.0533417]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=3.20e-04
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.920738786248603 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.40e-03 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0246102 2.301919  1.784369  1.1539787 1.1690515 1.8339313]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.866737778494702 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.99e-04 | mean(stds)=1.20e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0199077 1.540242  1.2471097 1.0551038 1.1248419 1.2123523]
+eval=6 | not-eval=0 | tau= 0.60 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.33 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.33
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=11.189188451515719 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=1.31e-02 | mean(stds)=2.69e+00 | std(means)/mean(stds)=  0.00 | stds=[9.150628  1.3076503 1.0689434 1.5402449 1.3131317 1.7821925]
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.572875057018964 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=2.02e-04 | mean(stds)=1.14e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0726142 1.0625825 1.0205092 1.0390886 1.3009686 1.3189241]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.55
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.478014646519055 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=8.92e-05 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0400788 1.0412805 1.2331923 1.0786016 1.0179827 1.0173326]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.00560538629689 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.48e-05 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.00 | stds=[1.054856  1.2086097 1.0595399 1.0729225 1.0480715 1.0704871]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.76e-04
+DEBUG: tau-population= 0.97 | tau-pop-final= 0.97 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.87 | tau-LogN=+0.97 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.130203857993065 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=6.94e-05 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0204567 1.0323417 1.0171999 1.2912567 1.076281  1.0108345]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=2.72e-04
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.653790394509922 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=9.21e-03 | mean(stds)=3.55e+00 | std(means)/mean(stds)=  0.00 | stds=[12.878989   3.2440507  1.0363737  1.0251265  1.019392   2.084601 ]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=2.63e-04
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.622419760568082 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=6.74e-05 | mean(stds)=1.15e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0321171 1.2736685 1.0149773 1.1808146 1.340993  1.0275012]
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall=12
+DEBUG: delta_f=2.63e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.796478673417065 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.13e-05 | mean(stds)=1.34e+00 | std(means)/mean(stds)=  0.00 | stds=[2.049016  1.1871257 1.0278813 1.2459195 1.5062499 1.0534813]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=2.63e-04
+DEBUG: tau-population=-0.28 | tau-pop-final=-0.28 | final-target-hit=False
+DEBUG: tau-mean-first=-0.28 | tau-mean-last=-0.28 | tau-LogN=-0.28 | tau-median=-0.41
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.652790222552799 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9541685964428458 | std(means)=3.20e-05 | mean(stds)=1.51e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3601345 1.2119012 1.0733142 2.1854181 2.164707  1.0921435]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=2.63e-04
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.97 | tau-LogN=+1.00 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.494410423531042 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=5.23e-05 | mean(stds)=1.29e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3173677 1.2172698 1.1116084 1.0911009 1.9394122 1.0606877]
+eval=1 | not-eval=5 | tau= 0.92 | n_kendall=12
+DEBUG: delta_f=2.63e-04
+DEBUG: tau-population= 0.69 | tau-pop-final= 0.97 | final-target-hit=False
+DEBUG: tau-mean-first=+0.69 | tau-mean-last=+0.69 | tau-LogN=+0.69 | tau-median=+0.69
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.33518261138505 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9816498172140428 | std(means)=1.64e-05 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1939116 1.1343272 1.1175376 1.5583289 1.0986323 1.0457268]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=2.51e-04
+DEBUG: tau-population= 0.83 | tau-pop-final= 0.69 | final-target-hit=False
+DEBUG: tau-mean-first=+0.83 | tau-mean-last=+0.75 | tau-LogN=+0.83 | tau-median=+0.83
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.297067530739831 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9723448696087954 | std(means)=1.82e-05 | mean(stds)=1.17e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0493332 1.1586335 1.2389995 1.1261293 1.0776078 1.3806016]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=2.39e-04
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.41 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.399354084603084 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9723448696087954 | std(means)=1.80e-05 | mean(stds)=2.20e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0371714 1.1035731 3.4033642 3.0750833 1.6358871 2.9685411]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=1.56e-04
+DEBUG: tau-population= 0.41 | tau-pop-final= 0.55 | final-target-hit=False
+DEBUG: tau-mean-first=+0.41 | tau-mean-last=+0.00 | tau-LogN=+0.00 | tau-median=+0.28
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.03740757465579 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9272727272727274 | std(means)=7.96e-05 | mean(stds)=1.33e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1995662 1.6476023 1.7676132 1.030188  1.0101622 1.345814 ]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.27e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.751671681924234 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9174698042719671 | std(means)=5.12e-05 | mean(stds)=1.28e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0090934 1.2330679 1.040411  1.0209728 2.3660316 1.0373771]
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall=12
+DEBUG: delta_f=1.24e-04
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.115189490315272 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=39
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.9174698042719671 | std(means)=1.67e-04 | mean(stds)=1.11e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0367914 1.1341286 1.1659836 1.069524  1.2501112 1.032345 ]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=1.19e-04
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.12699248737353 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.93e-05 | mean(stds)=1.55e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3868015 1.3380346 1.8653084 2.2751687 1.1745632 1.2347544]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=6.21e-05
+DEBUG: tau-population= 0.97 | tau-pop-final= 0.97 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.83 | tau-LogN=+0.97 | tau-median=+0.97
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.362301176218486 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=5.04e-04 | mean(stds)=1.30e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1411979 1.120258  1.7061825 1.3887749 1.2935361 1.1699444]
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=6.21e-05
+DEBUG: tau-population=-0.47 | tau-pop-final=-0.47 | final-target-hit=False
+DEBUG: tau-mean-first=-0.47 | tau-mean-last=-0.55 | tau-LogN=-0.60 | tau-median=-0.55
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.833874268217564 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.67e-04 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3164852 1.7667298 1.0550334 1.800176  1.2391835 2.0485725]
+eval=6 | not-eval=0 | tau=-0.13 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population=-0.60 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.60 | tau-mean-last=-0.60 | tau-LogN=-0.60 | tau-median=-0.69
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=7.387614747560909 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=2.51e-04 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1156753 1.0958987 1.0761526 3.7447898 1.1537955 1.0805266]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.761407924502821 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9908673886137245 | std(means)=1.26e-04 | mean(stds)=1.51e+00 | std(means)/mean(stds)=  0.00 | stds=[1.5580671 1.5626627 1.446033  1.9067216 1.1128781 1.4857646]
+eval=1 | not-eval=5 | tau= 0.99 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.70763269395693 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.38e-03 | mean(stds)=1.20e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1684592 1.1760882 1.1911178 1.1596633 1.2056971 1.2882482]
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.07 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.07 | tau-LogN=-0.07 | tau-median=-0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.541021661918334 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.27e-03 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0840826 1.3973986 1.1244324 1.1043968 1.3251405 1.0782864]
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.079892596350286 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.39e-05 | mean(stds)=1.10e+00 | std(means)/mean(stds)=  0.00 | stds=[1.072312  1.1006255 1.0556983 1.1793969 1.1034263 1.0715457]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.97 | tau-pop-final= 0.83 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.87 | tau-LogN=+0.97 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.895574510257836 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9541685964428458 | std(means)=1.22e-05 | mean(stds)=1.05e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0129132 1.0606302 1.0391358 1.0225458 1.1048671 1.0544944]
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.41 | tau-pop-final= 0.41 | final-target-hit=False
+DEBUG: tau-mean-first=+0.41 | tau-mean-last=+0.41 | tau-LogN=+0.41 | tau-median=+0.55
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.87310246948447 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=30
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9816498172140428 | std(means)=2.24e-05 | mean(stds)=1.13e+00 | std(means)/mean(stds)=  0.00 | stds=[1.160011  1.2639517 1.0784729 1.1424013 1.0898832 1.0411699]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.83 | tau-pop-final= 0.83 | final-target-hit=False
+DEBUG: tau-mean-first=+0.83 | tau-mean-last=+0.69 | tau-LogN=+0.83 | tau-median=+0.83
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.398893552255515 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=31
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=4.03e-04 | mean(stds)=1.30e+00 | std(means)/mean(stds)=  0.00 | stds=[1.9898493 1.4354409 1.1456383 1.0567538 1.0662299 1.1340961]
+eval=1 | not-eval=5 | tau= 0.99 | n_kendall=12
+DEBUG: delta_f=1.19e-05
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.636348426944863 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=32
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9908673886137245 | std(means)=1.73e-04 | mean(stds)=1.11e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0181742 1.0522696 1.169222  1.1253743 1.2599406 1.031137 ]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.28 | tau-pop-final= 0.28 | final-target-hit=False
+DEBUG: tau-mean-first=+0.28 | tau-mean-last=+0.28 | tau-LogN=+0.20 | tau-median=+0.28
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.840264707372453 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=36
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9816498172140428 | std(means)=2.49e-05 | mean(stds)=2.24e+00 | std(means)/mean(stds)=  0.00 | stds=[1.4180112 2.4874659 1.4566381 3.4471295 1.2938212 3.3389535]
+eval=6 | not-eval=0 | tau=-0.07 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population=-0.41 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.41 | tau-mean-last=-0.20 | tau-LogN=-0.30 | tau-median=-0.30
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=12.138992338374742 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=33
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9541685964428458 | std(means)=4.28e-04 | mean(stds)=1.24e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1438438 1.0620791 1.0782622 1.1134717 1.9873506 1.0304327]
+eval=1 | not-eval=5 | tau= 0.95 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.788543390751377 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9816498172140428 | std(means)=7.63e-06 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2933694 1.1139928 1.1922725 1.2591872 1.133251  1.1368603]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.97 | tau-LogN=+1.00 | tau-median=+0.93
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.036971379005141 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=29
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9723448696087954 | std(means)=5.82e-03 | mean(stds)=2.85e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1206224 2.10217   9.020958  2.3629515 1.2189031 1.2933948]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.97 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.73 | tau-LogN=+0.83 | tau-median=+0.75
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.139003751482957 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=31
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9816498172140428 | std(means)=9.60e-06 | mean(stds)=1.15e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0516119 1.2622733 1.1272804 1.2515876 1.1040893 1.1183056]
+eval=1 | not-eval=5 | tau= 0.95 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.83 | tau-pop-final= 0.69 | final-target-hit=False
+DEBUG: tau-mean-first=+0.83 | tau-mean-last=+0.83 | tau-LogN=+0.83 | tau-median=+0.93
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.286160976876005 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=26
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9723448696087954 | std(means)=5.59e-05 | mean(stds)=1.26e+00 | std(means)/mean(stds)=  0.00 | stds=[1.4965098 1.1947399 1.2221916 1.0591218 1.1309787 1.462427 ]
+eval=1 | not-eval=5 | tau= 0.98 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.00 | tau-pop-final= 0.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.00 | tau-mean-last=+0.08 | tau-LogN=+0.15 | tau-median=-0.14
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.56058789752201 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=30
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9629500128629352 | std(means)=1.68e-05 | mean(stds)=1.29e+00 | std(means)/mean(stds)=  0.00 | stds=[1.4286537 1.1241399 1.4486055 1.276947  1.1823925 1.2613761]
+eval=1 | not-eval=5 | tau= 0.95 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.28 | tau-pop-final= 0.28 | final-target-hit=False
+DEBUG: tau-mean-first=+0.28 | tau-mean-last=+0.33 | tau-LogN=+0.28 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.188574092555669 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=29
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9629500128629352 | std(means)=4.92e-06 | mean(stds)=1.13e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1330125 1.1361866 1.2237998 1.1167736 1.045778  1.1289471]
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.93 | tau-pop-final= 0.93 | final-target-hit=False
+DEBUG: tau-mean-first=+0.93 | tau-mean-last=+0.89 | tau-LogN=+0.93 | tau-median=+0.75
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.537995671749107 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=28
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9438798074485389 | std(means)=5.39e-06 | mean(stds)=1.13e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1175368 1.3109283 1.1117309 1.0435542 1.111486  1.1110034]
+eval=1 | not-eval=5 | tau= 0.95 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.93 | tau-pop-final= 0.97 | final-target-hit=False
+DEBUG: tau-mean-first=+0.93 | tau-mean-last=+0.97 | tau-LogN=+0.93 | tau-median=+0.93
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.751225207783985 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9438798074485389 | std(means)=4.92e-06 | mean(stds)=1.17e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1905402 1.319673  1.3232377 1.0458474 1.0364752 1.1249015]
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.93 | tau-pop-final= 0.83 | final-target-hit=False
+DEBUG: tau-mean-first=+0.93 | tau-mean-last=+0.93 | tau-LogN=+0.93 | tau-median=+0.93
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.956825024594918 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=23
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9145291883606756 | std(means)=3.48e-06 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.00 | stds=[1.7099907 1.1237382 1.1301138 1.1452713 1.0220139 1.0267786]
+eval=1 | not-eval=5 | tau= 0.92 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.26 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.560053173608862 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9045340337332909 | std(means)=1.80e-04 | mean(stds)=1.58e+00 | std(means)/mean(stds)=  0.00 | stds=[1.027262  2.27644   1.0461465 2.4805367 1.0299178 1.5900658]
+eval=1 | not-eval=5 | tau= 0.89 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population=-0.89 | tau-pop-final=-0.97 | final-target-hit=False
+DEBUG: tau-mean-first=-0.89 | tau-mean-last=-0.89 | tau-LogN=-0.89 | tau-median=-0.89
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.538987770010127 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8738628975053029 | std(means)=5.39e-06 | mean(stds)=1.18e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0668082 1.4669573 1.0364962 1.4218621 1.063773  1.0383164]
+eval=1 | not-eval=5 | tau= 0.85 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.37 | tau-pop-final= 0.26 | final-target-hit=False
+DEBUG: tau-mean-first=+0.37 | tau-mean-last=+0.37 | tau-LogN=+0.37 | tau-median=+0.37
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.90307736922893 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=24
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.8738628975053029 | std(means)=4.12e-06 | mean(stds)=1.27e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3902359 1.3227025 1.2228118 1.4990922 1.1658499 1.0417618]
+eval=1 | not-eval=5 | tau= 0.89 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.21 | tau-pop-final= 0.14 | final-target-hit=False
+DEBUG: tau-mean-first=+0.21 | tau-mean-last=+0.23 | tau-LogN=+0.21 | tau-median=+0.21
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.171650633600853 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=25
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8738628975053029 | std(means)=4.12e-06 | mean(stds)=1.24e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3016028 1.025107  1.098948  1.8931162 1.0164874 1.1181282]
+eval=1 | not-eval=5 | tau= 0.89 | n_kendall=12
+DEBUG: delta_f=8.74e-06
+DEBUG: tau-population= 0.21 | tau-pop-final= 0.21 | final-target-hit=False
+DEBUG: tau-mean-first=+0.21 | tau-mean-last=+0.21 | tau-LogN=+0.21 | tau-median=+0.21
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.32283769799178 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=27
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8842048302391149 | std(means)=3.48e-06 | mean(stds)=1.19e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0936124 1.355716  1.0657897 1.5225446 1.0399103 1.0884949]
+eval=1 | not-eval=5 | tau= 0.90 | n_kendall=12
+DEBUG: delta_f=7.94e-06
+DEBUG: tau-population= 0.70 | tau-pop-final= 0.79 | final-target-hit=False
+DEBUG: tau-mean-first=+0.70 | tau-mean-last=+0.70 | tau-LogN=+0.70 | tau-median=+0.70
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.039676552135134 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=30
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8420753583206845 | std(means)=3.48e-06 | mean(stds)=1.39e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1303703 1.1574184 1.9165882 1.2567699 1.0223155 1.8567947]
+eval=1 | not-eval=5 | tau= 0.86 | n_kendall=12
+DEBUG: delta_f=7.94e-06
+DEBUG: tau-population=-0.09 | tau-pop-final= 0.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.09 | tau-mean-last=-0.18 | tau-LogN=-0.18 | tau-median=-0.18
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.00521523983248 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=34
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8201995322647245 | std(means)=4.12e-06 | mean(stds)=1.22e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1334982 1.0149491 1.0844213 1.4723014 1.2728357 1.3698748]
+eval=2 | not-eval=4 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=6.18e-06
+DEBUG: tau-population= 0.70 | tau-pop-final= 0.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.70 | tau-mean-last=+0.70 | tau-LogN=+0.70 | tau-median=+0.70
+evaluated=2 | not-evaluated=4
+DEBUG: subset-max-norm=11.481074110037873 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=37
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.894427190999916 | std(means)=5.17e-06 | mean(stds)=1.23e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1712712 1.183674  1.2418888 1.1747003 1.1010798 1.4822602]
+eval=6 | not-eval=0 | tau= 0.61 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.79 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.79 | tau-mean-last=+0.79 | tau-LogN=+0.70 | tau-median=+0.70
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=8.697840503828864 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8842048302391149 | std(means)=3.48e-06 | mean(stds)=1.15e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1547815 1.2756932 1.2236853 1.0157607 1.1353129 1.0781813]
+eval=1 | not-eval=5 | tau= 0.89 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.43 | tau-pop-final= 0.15 | final-target-hit=False
+DEBUG: tau-mean-first=+0.43 | tau-mean-last=+0.43 | tau-LogN=+0.43 | tau-median=+0.43
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.76858118630989 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8633970960424556 | std(means)=2.20e-06 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0640006 1.0668331 1.1179432 1.0482266 1.0765787 1.0208186]
+eval=1 | not-eval=5 | tau= 0.86 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.54 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.23592069920463 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8528028654224417 | std(means)=2.70e-06 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0882521 1.1108878 1.0250645 1.0698309 1.2085931 1.0152974]
+eval=6 | not-eval=0 | tau= 0.53 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.23 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.23 | tau-mean-last=+0.23 | tau-LogN=+0.23 | tau-median=+0.23
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=9.649827284020192 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.8420753583206845 | std(means)=3.81e-06 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00 | stds=[1.4000143 1.0648948 1.1417165 1.0318167 1.1402335 3.457989 ]
+eval=6 | not-eval=0 | tau= 0.77 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.86 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.86 | tau-mean-last=+0.86 | tau-LogN=+0.86 | tau-median=+0.86
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=7.111905887833825 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8201995322647245 | std(means)=1.66e-01 | mean(stds)=6.58e+00 | std(means)/mean(stds)=  0.03 | stds=[ 1.0158036  1.0568196  1.3907456 33.619614   1.2456429  1.1537629]
+eval=5 | not-eval=1 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=5.08e-06
+DEBUG: tau-population= 0.97 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.97 | tau-LogN=+0.97 | tau-median=+0.97
+evaluated=5 | not-evaluated=1
+DEBUG: subset-max-norm=7.995933631626484 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8842048302391149 | std(means)=4.46e+00 | mean(stds)=4.31e+01 | std(means)/mean(stds)=  0.10 | stds=[122.83136     1.3788037   1.1626564   1.4132236 130.49132     1.164218 ]
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=4.56e-06
+DEBUG: tau-population= 0.97 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.97 | tau-mean-last=+0.87 | tau-LogN=+0.97 | tau-median=+0.97
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.646813091079824 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8420753583206845 | std(means)=1.56e-06 | mean(stds)=1.65e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0461434 1.0919977 3.3668337 1.0392255 1.0859712 2.2638745]
+eval=6 | not-eval=0 | tau= 0.68 | n_kendall=12
+DEBUG: delta_f=3.51e-06
+DEBUG: tau-population= 0.58 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.73 | tau-LogN=+0.58 | tau-median=+0.73
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.1885218333005407 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8909090909090909
+DEBUG: tau-archive=0.7977240352174656 | std(means)=6.77e-02 | mean(stds)=3.58e+01 | std(means)/mean(stds)=  0.00 | stds=[  3.4129143   1.0694388  95.409424    1.0145545 103.599976   10.545382 ]
+eval=6 | not-eval=0 | tau= 0.67 | n_kendall=12
+DEBUG: delta_f=1.93e-06
+DEBUG: tau-population= 0.75 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.75 | tau-mean-last=+0.97 | tau-LogN=+0.47 | tau-median=+0.97
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=2.4918849643994356 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8909090909090909
+DEBUG: tau-archive=0.8131156281817417 | std(means)=3.08e-02 | mean(stds)=2.00e+01 | std(means)/mean(stds)=  0.00 | stds=[102.8782      1.0201528   5.942491    5.574572    1.3086095   3.0545635]
+eval=6 | not-eval=0 | tau= 0.30 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.14 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.14 | tau-mean-last=+0.07 | tau-LogN=+0.07 | tau-median=+0.14
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=1.1017690467790935 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8909090909090909
+DEBUG: tau-archive=0.9145291883606756 | std(means)=1.64e-03 | mean(stds)=1.22e+01 | std(means)/mean(stds)=  0.00 | stds=[ 1.4277017 11.789927   1.328131   1.2530998  1.577449  56.110134 ]
+eval=1 | not-eval=5 | tau= 0.90 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.87 | tau-LogN=+1.00 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=1.1189707672955966 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8181818181818182
+DEBUG: tau-archive=0.8738628975053029 | std(means)=4.29e-04 | mean(stds)=1.29e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1096698 1.454938  1.1188896 1.1016685 1.7961016 1.1487646]
+eval=1 | not-eval=5 | tau= 0.85 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.93 | tau-pop-final= 0.83 | final-target-hit=False
+DEBUG: tau-mean-first=+0.93 | tau-mean-last=+0.83 | tau-LogN=+0.93 | tau-median=+0.93
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.1580384220166327 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.8201995322647245 | std(means)=2.83e-05 | mean(stds)=6.51e+01 | std(means)/mean(stds)=  0.00 | stds=[  1.0483805  36.361553   10.375865    8.834033  103.95364   230.20602  ]
+eval=6 | not-eval=0 | tau= 0.52 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.55 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.55 | tau-mean-last=+0.83 | tau-LogN=+0.97 | tau-median=+0.36
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=1.7152307015719057 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8738628975053029 | std(means)=7.34e-02 | mean(stds)=2.73e+01 | std(means)/mean(stds)=  0.00 | stds=[132.28954     3.3378997  17.321407    1.2216084   8.404808    1.0789632]
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.0723128862979814 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8842048302391149 | std(means)=6.06e-05 | mean(stds)=1.58e+00 | std(means)/mean(stds)=  0.00 | stds=[2.2876294 2.1324093 1.1637781 1.474102  1.3516935 1.0494126]
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.86 | tau-pop-final= 0.79 | final-target-hit=False
+DEBUG: tau-mean-first=+0.86 | tau-mean-last=+0.86 | tau-LogN=+0.86 | tau-median=+0.86
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.614688081056941 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.8842048302391149 | std(means)=1.20e-05 | mean(stds)=5.63e+01 | std(means)/mean(stds)=  0.00 | stds=[160.47333     1.7998986 168.34325     2.5461848   2.3357723   2.4912806]
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.47 | tau-median=+0.41
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=2.607101057698366 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8842048302391149 | std(means)=3.11e-06 | mean(stds)=1.60e+00 | std(means)/mean(stds)=  0.00 | stds=[1.2903254 1.2047094 1.3126066 1.48887   2.7008333 1.6129148]
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population=-0.55 | tau-pop-final=-0.23 | final-target-hit=False
+DEBUG: tau-mean-first=-0.55 | tau-mean-last=-0.43 | tau-LogN=-0.55 | tau-median=-0.55
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.707944547074355 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8738628975053029 | std(means)=4.67e-06 | mean(stds)=1.09e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0333089 1.1461207 1.068421  1.0998995 1.0808994 1.1029339]
+eval=1 | not-eval=5 | tau= 0.85 | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population= 0.58 | tau-pop-final= 0.77 | final-target-hit=False
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.58 | tau-LogN=+0.58 | tau-median=+0.58
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=4.7070860941050805 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.8420753583206845 | std(means)=3.81e-06 | mean(stds)=1.39e+00 | std(means)/mean(stds)=  0.00 | stds=[1.3747964 1.1923379 1.4456022 1.4908367 1.3298075 1.4814532]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=5.687306039738861 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=nan | std(means)=3.81e-06 | mean(stds)=1.08e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0157435 1.0769641 1.0393162 1.106528  1.22189   1.0434929]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=6.69e-07
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=4.795673108717479 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=nan | std(means)=3.81e-06 | mean(stds)=1.07e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0454539 1.0246599 1.106039  1.1192205 1.0404536 1.088462 ]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=6.46e-07
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=2.5567036049499805 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=nan | std(means)=6.79e-06 | mean(stds)=2.94e+00 | std(means)/mean(stds)=  0.00 | stds=[1.1623583 1.5297656 3.5504253 4.083948  1.0769892 6.232214 ]
+eval=6 | not-eval=0 | tau= 0.53 | n_kendall=12
+DEBUG: delta_f=6.46e-07
+DEBUG: tau-population= 0.39 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.39 | tau-mean-last=+0.45 | tau-LogN=+0.45 | tau-median=+0.45
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=1.5430732396677733 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.7006490497453707 | std(means)=5.31e-04 | mean(stds)=2.52e+00 | std(means)/mean(stds)=  0.00 | stds=[9.055963  1.283977  1.250882  1.3367599 1.0542133 1.1343601]
+eval=6 | not-eval=0 | tau= 0.27 | n_kendall=12
+DEBUG: delta_f=1.06e-07
+DEBUG: tau-population= 0.15 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.15 | tau-mean-last=+0.15 | tau-LogN=+0.36 | tau-median=+0.36
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=2.0313065747924814 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9272727272727274
+DEBUG: tau-archive=0.8350049111119213 | std(means)=2.71e-04 | mean(stds)=2.54e+00 | std(means)/mean(stds)=  0.00 | stds=[1.5859085 9.044236  1.438616  1.0541775 1.0956142 1.0381743]
+eval=6 | not-eval=0 | tau= 0.84 | n_kendall=12
+DEBUG: delta_f=1.06e-07
+DEBUG: tau-population= 0.89 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.89 | tau-mean-last=+0.77 | tau-LogN=+0.89 | tau-median=+0.89
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=1.7839071221789784 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.8909090909090909
+DEBUG: tau-archive=0.832250378576479 | std(means)=4.67e-06 | mean(stds)=1.15e+00 | std(means)/mean(stds)=  0.00 | stds=[1.4113762 1.1973101 1.038309  1.0849975 1.095579  1.0959643]
+eval=6 | not-eval=0 | tau= 0.15 | n_kendall=12
+DEBUG: delta_f=1.06e-07
+DEBUG: tau-population=-0.35 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=-0.35 | tau-mean-last=-0.35 | tau-LogN=-0.35 | tau-median=-0.35
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=2.9521958394693804 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.42640143271122083 | std(means)=8.53e-06 | mean(stds)=6.10e+00 | std(means)/mean(stds)=  0.00 | stds=[29.998903   1.0293704  1.0370958  1.9718558  1.0385528  1.5168505]
+eval=6 | not-eval=0 | tau= 0.45 | n_kendall=12
+DEBUG: delta_f=1.04e-07
+DEBUG: tau-population= 0.58 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.58 | tau-LogN=+0.58 | tau-median=+0.58
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.2797890737631388 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.5877538136452586 | std(means)=8.10e-03 | mean(stds)=3.95e+02 | std(means)/mean(stds)=  0.00 | stds=[2.0394064e+03 1.6602504e+00 1.0869148e+00 3.2625772e+02 1.0573398e+00
+ 1.2402482e+00]
+eval=6 | not-eval=0 | tau= 0.61 | n_kendall=12
+DEBUG: delta_f=1.04e-07
+DEBUG: tau-population= 0.77 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.77 | tau-mean-last=+0.77 | tau-LogN=+0.77 | tau-median=+0.60
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.8721122243600785 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.7006490497453707 | std(means)=5.83e-06 | mean(stds)=1.27e+00 | std(means)/mean(stds)=  0.00 | stds=[1.7815566 1.3475384 1.1244453 1.1615467 1.2143761 1.0186273]
+eval=6 | not-eval=0 | tau= 0.45 | n_kendall=12
+DEBUG: delta_f=1.04e-07
+DEBUG: tau-population= 0.58 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.58 | tau-LogN=+0.58 | tau-median=+0.58
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=6.079632840422174 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.5877538136452586 | std(means)=3.81e-06 | mean(stds)=1.17e+00 | std(means)/mean(stds)=  0.00 | stds=[1.25101   1.3128642 1.1085767 1.2103688 1.0432104 1.0898957]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=1.04e-07
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=5.580447643617261 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=nan | std(means)=4.41e-05 | mean(stds)=2.13e+00 | std(means)/mean(stds)=  0.00 | stds=[1.8708682 4.3845534 1.1239886 1.0696715 1.3073659 3.0191977]
+eval=6 | not-eval=0 | tau= 0.45 | n_kendall=12
+DEBUG: delta_f=1.00e-07
+DEBUG: tau-population= 0.58 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.58 | tau-LogN=+0.58 | tau-median=+0.58
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=2.061070416421836 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.42640143271122083 | std(means)=3.81e-06 | mean(stds)=1.45e+00 | std(means)/mean(stds)=  0.00 | stds=[1.0082823 1.052579  1.0188363 1.0265934 3.0984306 1.4707611]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=2.96e-08
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.0701805909431235 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=nan | std(means)=3.81e-06 | mean(stds)=1.25e+00 | std(means)/mean(stds)=  0.00 | stds=[1.129406  1.8284973 1.1679238 1.1150784 1.1204318 1.1323268]
+eval=6 | not-eval=0 | tau=  nan | n_kendall=12
+DEBUG: delta_f=2.96e-08
+DEBUG: tau-population=  nan | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first= +nan | tau-mean-last= +nan | tau-LogN= +nan | tau-median= +nan
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=4.263537128450839 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=40
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.5877538136452586 | std(means)=1.66e-04 | mean(stds)=2.27e+00 | std(means)/mean(stds)=  0.00 | stds=[4.6850047 1.6158286 1.0501035 2.8200045 1.5365582 1.8966573]
+eval=3 | not-eval=3 | tau= 0.56 | n_kendall=12
+DEBUG: delta_f=5.96e-09
+DEBUG: tau-population= 0.58 | tau-pop-final= 0.69 | final-target-hit=True
+DEBUG: tau-mean-first=+0.58 | tau-mean-last=+0.58 | tau-LogN=+0.58 | tau-median=+0.58
+evaluated=3 | not-evaluated=3
+ 2D  6-fun   1-inst  500-budget  True-solved 423-evals 1428-cma-evals 7922s 0-restarts  6-init-pop (Surrogate(model=Eaf, subset=ClosestToEachTestPoint(Mahalanobis, n_max_coef=20), x_tf=ShiftAndScaleByEs, y_tf=MinAdjustedLog), EvaluateUntilKendallThreshold(mean_criterion, tau_threshold=0.85, offset=True), n_min_fn=get_dim) 6.0e-09-delta-f          1-seed

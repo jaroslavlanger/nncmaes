@@ -1,0 +1,338 @@
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sun Apr 21 12:12:19 2024)
+subset-max-norm=0.813101423315702 | norm-max=12.13941703508117
+subset-idx-size=6
+tau-train-ens=0.9999999999999999
+tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7 | std(means)/mean(stds)=  2.93 | std(means)=1.68e+05 | mean(stds)=5.73e+04
+tau-population= 0.60
+subset-max-norm=1.5226906446847963 | norm-max=12.13941703508117
+subset-idx-size=7
+tau-train-ens=1.0
+tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall= 8 | std(means)/mean(stds)=  0.25 | std(means)=2.05e+04 | mean(stds)=8.28e+04
+tau-population= 0.20
+subset-max-norm=1.0051826618864168 | norm-max=12.13941703508117
+subset-idx-size=8
+tau-train-ens=0.9285714285714285
+tau-archive=0.9047619047619049
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall= 9 | std(means)/mean(stds)=  1.44 | std(means)=1.53e+05 | mean(stds)=1.06e+05
+tau-population= 0.20
+subset-max-norm=1.6353023687896717 | norm-max=12.13941703508117
+subset-idx-size=9
+tau-train-ens=0.9444444444444445
+tau-archive=0.9285714285714285
+eval=1 | not-eval=5 | tau= 0.96 | n_kendall=10 | std(means)/mean(stds)=  2.73 | std(means)=5.01e+04 | mean(stds)=1.84e+04
+tau-population= 0.73
+subset-max-norm=1.8075219486692207 | norm-max=12.13941703508117
+subset-idx-size=10
+tau-train-ens=0.911111111111111
+tau-archive=0.8888888888888888
+eval=6 | not-eval=0 | tau= 0.60 | n_kendall=12 | std(means)/mean(stds)=  2.89 | std(means)=6.36e+04 | mean(stds)=2.20e+04
+tau-population= 1.00
+subset-max-norm=2.759316872876844 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.9272727272727274
+tau-archive=0.9272727272727274
+eval=6 | not-eval=0 | tau= 0.47 | n_kendall=12 | std(means)/mean(stds)=  2.31 | std(means)=1.74e+04 | mean(stds)=7.54e+03
+tau-population= 0.20
+subset-max-norm=1.0465050981757982 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.8545454545454545
+tau-archive=0.7454545454545454
+eval=6 | not-eval=0 | tau= 0.47 | n_kendall=12 | std(means)/mean(stds)= 12.11 | std(means)=8.46e+03 | mean(stds)=6.98e+02
+tau-population= 0.73
+subset-max-norm=0.902761551151371 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.7454545454545454
+tau-archive=0.38181818181818183
+eval=6 | not-eval=0 | tau= 0.56 | n_kendall=12 | std(means)/mean(stds)=  6.14 | std(means)=3.84e+03 | mean(stds)=6.26e+02
+tau-population= 0.87
+subset-max-norm=1.534055054445317 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.7818181818181819
+tau-archive=0.45454545454545453
+eval=6 | not-eval=0 | tau= 0.47 | n_kendall=12 | std(means)/mean(stds)=  2.38 | std(means)=9.91e+02 | mean(stds)=4.17e+02
+tau-population= 0.33
+subset-max-norm=0.9857908533753799 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.8181818181818182
+tau-archive=0.5272727272727272
+eval=6 | not-eval=0 | tau= 0.33 | n_kendall=12 | std(means)/mean(stds)=  8.01 | std(means)=4.09e+03 | mean(stds)=5.10e+02
+tau-population= 0.33
+subset-max-norm=1.038731967594591 | norm-max=12.13941703508117
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.5636363636363636
+(Pdb) 1269 	    def __call__(
+1270 	        self,
+1271 	        *,
+1272 	        x_train: NDArray[np.float64],
+1273 	        y_train: NDArray[np.float64],
+1274 	        x_test: NDArray[np.float64],
+1275 	        weights: Optional[NDArray[np.float64]] = None,
+1276 	    ):
+1277 	        # lr=0.06
+1278 	        # width=1024
+1279 	        afs = [
+1280 	            F.sigmoid,
+1281 	            # F.hardsigmoid,
+1282 	            F.relu,
+1283 	            # F.softplus,
+1284 	            # F.gelu,
+1285 	            F.silu,
+1286 	            # F.mish,
+1287 	            # F.leaky_relu,
+1288 	            # F.elu,
+1289 	            # F.celu,
+1290 	            # F.selu,
+1291 	            # F.tanh,
+1292 	            F.hardtanh,
+1293 	            # F.softsign,
+1294 	            torch.erf,
+1295 	        ]
+1296 	        dim = x_train.shape[-1]
+1297 	        device = (
+1298 	            "cuda"
+1299 	            if torch.cuda.is_available()
+1300 	            else "mps"
+1301 	            if torch.backends.mps.is_available()
+1302 	            else "cpu"
+1303 	        )
+1304 	        nets = {f.__name__: NeuralNetwork(f, width=self.width, dropout_p=.0, dim=dim).to(device) for f in afs}
+1305 	
+1306 	        # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+1307 	        # weights = (1 / (1 + norms))**2
+1308 	        # weights = (1 / (1 + np.linalg.norm(x_train - x_test[0], axis=1)))**4
+1309 	        # weights = (1 + np.linalg.norm(x_train - x_test[0], axis=1))**4
+1310 	
+1311 	        if weights is None:
+1312 	            # Hansen's 20..1
+1313 	            # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
+1314 	            weights = np.ones_like(y_train)
+1315 	
+1316 	        losses = {}
+1317 	        for name, net in nets.items():
+1318 	            losses[name] = train_network(net, x_train, y_train,
+1319 	                                         weights=weights,
+1320 	                                         epochs=self.epochs,
+1321 	                                         mse_stop=self.mse_stop,
+1322 	                                         lr=self.lr,
+1323 	                                         device=device,
+1324 	                                         )
+1325 	
+1326 	        if __debug__:
+1327 	            with torch.no_grad():
+1328 	                _max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)  # for kendall only
+1329 	                _n_kendall_archive = _max_model_size - 1
+1330 	                x = torch.Tensor(x_train[-_n_kendall_archive:]).to(device)
+1331 	                y = np.array([net.eval()(x).cpu().numpy() for net in nets.values()])
+1332 	                tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(y, axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+1333 	                if tau < 0.7:
+1334 	                    breakpoint()
+1335 ->	                print("tau-train-ens={}".format(tau))
+1336 	
+1337 	        def eaf(x_test):
+1338 	            x_test_tsr = torch.Tensor(x_test).to(device)
+1339 	            y_preds = {}
+1340 	            with torch.no_grad():
+1341 	                for name, net in nets.items():
+1342 	                    y_preds[name] = net.eval()(x_test_tsr).cpu().numpy()
+1343 	
+1344 	            # y_preds_scaled = {name: scale_y_back(y_) for name, y_ in y_preds.items()}
+1345 	            y_pred_arr = np.array(list(y_preds.values()))
+1346 	
+1347 	            pred_mean = y_pred_arr.mean(axis=0)
+1348 	            pred_std = y_pred_arr.std(axis=0)
+1349 	
+1350 	            if len(pred_mean) < len(x_test):
+1351 	                raise ValueError("len(pred_mean) < len(x_test)")
+1352 	            return Prediction(pred_mean, pred_std)
+1353 	
+1354 	        return eaf
+(Pdb) array([[ 6.00017199],
+       [ 0.49144967],
+       [-0.23141684],
+       [-0.19274952],
+       [-0.24385863],
+       [ 1.88106058],
+       [-0.21090988],
+       [-0.22526254],
+       [-0.24177152],
+       [-0.22616859],
+       [-0.23106178],
+       [-0.23108603]])
+(Pdb) array([[-4.67898807e-01],
+       [ 6.76175058e-02],
+       [ 1.91597883e-03],
+       [-1.43388616e-04],
+       [ 1.81538063e-02],
+       [-7.91636338e-03],
+       [-7.73772481e-03],
+       [-1.83497987e-03],
+       [-2.72795309e-02],
+       [-4.69761758e-03],
+       [-3.98958137e-02],
+       [-2.24067126e-04]])
+(Pdb) tau-train-ens=0.5636363636363636
+tau-archive=0.5636363636363636
+eval=6 | not-eval=0 | tau= 0.16 | n_kendall=12 | std(means)/mean(stds)=  1.20 | std(means)=1.39e+02 | mean(stds)=1.16e+02
+tau-population=-0.20
+subset-max-norm=1.2327919968370409 | norm-max=12.13941703508117
+subset-idx-size=12
+tau-train-ens=0.7090909090909091
+tau-archive=0.2727272727272727
+eval=6 | not-eval=0 | tau= 0.11 | n_kendall=12 | std(means)/mean(stds)=  7.67 | std(means)=3.88e+03 | mean(stds)=5.06e+02
+tau-population= 0.33
+subset-max-norm=0.7329691442994697 | norm-max=12.13941703508117
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.6000000000000001
+(Pdb) array([[ 1.29972533],
+       [-0.19793287],
+       [-0.39784139],
+       [ 0.17986112],
+       [-0.39727397],
+       [ 4.01585951],
+       [-0.39668809],
+       [-0.39900028],
+       [-0.39819829],
+       [-0.39901366],
+       [-0.39982582],
+       [-0.40004395]])
+(Pdb) array([0.47398566, 0.49626081, 0.41320366, 0.51617678, 0.36445709,
+       0.29073173, 0.28825445, 0.66036606, 0.41835555, 0.51713583,
+       0.86633494, 0.92958486])
+(Pdb) array([[0.47398566],
+       [0.49626081],
+       [0.41320366],
+       [0.51617678],
+       [0.36445709],
+       [0.29073173],
+       [0.28825445],
+       [0.66036606],
+       [0.41835555],
+       [0.51713583],
+       [0.86633494],
+       [0.92958486]])
+(Pdb) array([[-0.00111336],
+       [ 0.02004039],
+       [-0.00067732],
+       [-0.00490041],
+       [ 0.00234639],
+       [-0.00300662],
+       [ 0.00891665],
+       [ 0.02166456],
+       [-0.00354145],
+       [-0.0010156 ],
+       [ 0.00508007],
+       [-0.00643726]])
+(Pdb) tau-train-ens=0.6000000000000001
+tau-archive=-0.16363636363636364
+eval=6 | not-eval=0 | tau= 0.38 | n_kendall=12 | std(means)/mean(stds)= 24.59 | std(means)=2.51e+03 | mean(stds)=1.02e+02
+tau-population= 0.33
+subset-max-norm=0.7933530929512651 | norm-max=12.13941703508117
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.5272727272727272
+(Pdb) array([0.12691978, 0.12769882, 0.37569535, 0.12608262, 0.64391339,
+       0.39549058, 0.47702916, 0.67295067, 0.63779211, 0.42734753,
+       0.64509993, 0.76609393])
+(Pdb) array([[0.12691978],
+       [0.12769882],
+       [0.37569535],
+       [0.12608262],
+       [0.64391339],
+       [0.39549058],
+       [0.47702916],
+       [0.67295067],
+       [0.63779211],
+       [0.42734753],
+       [0.64509993],
+       [0.76609393]])
+(Pdb) array([[ 3.63592629],
+       [ 1.86374626],
+       [-0.06504352],
+       [ 4.81345647],
+       [-0.29782845],
+       [-0.29689994],
+       [-0.29784393],
+       [-0.29878422],
+       [-0.29903675],
+       [-0.04142572],
+       [-0.29837661],
+       [-0.29849144]])
+(Pdb) *** SyntaxError: unmatched ')'
+(Pdb) array([[ 2.0775857 ],
+       [ 1.8665146 ],
+       [ 0.16436154],
+       [ 2.0271058 ],
+       [-0.3047875 ],
+       [-0.31780136],
+       [-0.24297667],
+       [-0.27477634],
+       [-0.31327105],
+       [-0.0113331 ],
+       [-0.37008423],
+       [-0.28832835]], dtype=float32)
+(Pdb) array([[-0.19778425],
+       [ 0.00035351],
+       [ 0.08618641],
+       [-0.35131039],
+       [-0.00448102],
+       [-0.00826631],
+       [ 0.02617329],
+       [ 0.01615612],
+       [-0.00907852],
+       [ 0.01286001],
+       [-0.04625858],
+       [ 0.00778588]])
+(Pdb) *** NameError: name 'y_trian' is not defined
+(Pdb) array([[ 3.63592629],
+       [ 1.86374626],
+       [-0.06504352],
+       [ 4.81345647],
+       [-0.29782845],
+       [-0.29689994],
+       [-0.29784393],
+       [-0.29878422],
+       [-0.29903675],
+       [-0.04142572],
+       [-0.29837661],
+       [-0.29849144]])
+(Pdb) tau-train-ens=0.5272727272727272
+tau-archive=-0.018181818181818184
+eval=6 | not-eval=0 | tau= 0.47 | n_kendall=12 | std(means)/mean(stds)=  5.09 | std(means)=3.38e+03 | mean(stds)=6.63e+02
+tau-population= 0.87
+subset-max-norm=1.4463185752458223 | norm-max=12.13941703508117
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.5272727272727272
+(Pdb) array([[ 2.99421802],
+       [ 6.54835694],
+       [-0.27160137],
+       [ 0.8397965 ],
+       [-0.27383088],
+       [-0.27541907],
+       [-0.27583871],
+       [ 0.15223306],
+       [-0.27474175],
+       [-0.27493257],
+       [-0.27406305],
+       [-0.27603553]])
+(Pdb) array([0.14556545, 0.0675193 , 0.17963256, 0.23852265, 0.4876847 ,
+       0.85924067, 0.65681588, 0.19557696, 0.31032807, 0.70942877,
+       0.39528151, 0.43213165])
+(Pdb) tau-train-ens=0.5272727272727272
+tau-archive=0.45454545454545453
+eval=6 | not-eval=0 | tau= 0.29 | n_kendall=12 | std(means)/mean(stds)=  2.45 | std(means)=4.86e+02 | mean(stds)=1.98e+02
+tau-population= 0.47
+subset-max-norm=1.47994746885837 | norm-max=12.13941703508117
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.4909090909090909
+(Pdb) 

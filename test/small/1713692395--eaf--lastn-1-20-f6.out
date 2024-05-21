@@ -1,0 +1,297 @@
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sun Apr 21 11:27:16 2024)
+subset-idx-size=6
+tau-train-ens=0.9999999999999999
+tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7 | std(means)/mean(stds)=  3.47 | std(means)=1.64e+05 | mean(stds)=4.71e+04
+tau-population= 0.60
+subset-idx-size=7
+tau-train-ens=1.0
+tau-archive=0.9999999999999999
+eval=1 | not-eval=5 | tau= 0.93 | n_kendall= 8 | std(means)/mean(stds)=  0.13 | std(means)=1.04e+04 | mean(stds)=8.23e+04
+tau-population=-0.87
+subset-idx-size=8
+tau-train-ens=0.9999999999999998
+tau-archive=1.0
+eval=1 | not-eval=5 | tau= 0.89 | n_kendall= 9 | std(means)/mean(stds)=  2.99 | std(means)=2.85e+05 | mean(stds)=9.52e+04
+tau-population= 0.60
+subset-idx-size=9
+tau-train-ens=1.0
+tau-archive=0.9999999999999998
+eval=1 | not-eval=5 | tau= 0.87 | n_kendall=10 | std(means)/mean(stds)=  0.31 | std(means)=2.30e+04 | mean(stds)=7.38e+04
+tau-population=-0.73
+subset-idx-size=10
+tau-train-ens=0.9555555555555554
+tau-archive=0.9444444444444445
+eval=6 | not-eval=0 | tau=-0.42 | n_kendall=12 | std(means)/mean(stds)=  0.66 | std(means)=7.57e+04 | mean(stds)=1.15e+05
+tau-population=-0.73
+subset-idx-size=12
+tau-train-ens=1.0
+tau-archive=1.0
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12 | std(means)/mean(stds)=  1.90 | std(means)=2.83e+03 | mean(stds)=1.49e+03
+tau-population= 0.60
+subset-idx-size=12
+tau-train-ens=0.9636363636363636
+tau-archive=0.9636363636363636
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12 | std(means)/mean(stds)=  3.34 | std(means)=1.10e+03 | mean(stds)=3.29e+02
+tau-population= 0.47
+subset-idx-size=12
+tau-train-ens=1.0
+tau-archive=1.0
+eval=6 | not-eval=0 | tau= 0.29 | n_kendall=12 | std(means)/mean(stds)=  5.05 | std(means)=1.08e+02 | mean(stds)=2.13e+01
+tau-population=-0.07
+subset-idx-size=12
+tau-train-ens=0.9272727272727274
+tau-archive=0.9272727272727274
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12 | std(means)/mean(stds)=  2.82 | std(means)=1.29e+04 | mean(stds)=4.56e+03
+tau-population= 0.33
+subset-idx-size=12
+tau-train-ens=0.9636363636363636
+tau-archive=0.9636363636363636
+eval=1 | not-eval=5 | tau= 0.88 | n_kendall=12 | std(means)/mean(stds)=  3.97 | std(means)=4.71e+04 | mean(stds)=1.19e+04
+tau-population= 0.07
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) 0.5636363636363636
+(Pdb) 1269 	    def __call__(
+1270 	        self,
+1271 	        *,
+1272 	        x_train: NDArray[np.float64],
+1273 	        y_train: NDArray[np.float64],
+1274 	        x_test: NDArray[np.float64],
+1275 	        weights: Optional[NDArray[np.float64]] = None,
+1276 	    ):
+1277 	        # lr=0.06
+1278 	        # width=1024
+1279 	        afs = [
+1280 	            F.sigmoid,
+1281 	            # F.hardsigmoid,
+1282 	            F.relu,
+1283 	            # F.softplus,
+1284 	            # F.gelu,
+1285 	            F.silu,
+1286 	            # F.mish,
+1287 	            # F.leaky_relu,
+1288 	            # F.elu,
+1289 	            # F.celu,
+1290 	            # F.selu,
+1291 	            # F.tanh,
+1292 	            F.hardtanh,
+1293 	            # F.softsign,
+1294 	            torch.erf,
+1295 	        ]
+1296 	        dim = x_train.shape[-1]
+1297 	        device = (
+1298 	            "cuda"
+1299 	            if torch.cuda.is_available()
+1300 	            else "mps"
+1301 	            if torch.backends.mps.is_available()
+1302 	            else "cpu"
+1303 	        )
+1304 	        nets = {f.__name__: NeuralNetwork(f, width=self.width, dropout_p=.0, dim=dim).to(device) for f in afs}
+1305 	
+1306 	        # norms = np.linalg.norm(x_train - x_test.mean(axis=0), axis=1)
+1307 	        # weights = (1 / (1 + norms))**2
+1308 	        # weights = (1 / (1 + np.linalg.norm(x_train - x_test[0], axis=1)))**4
+1309 	        # weights = (1 + np.linalg.norm(x_train - x_test[0], axis=1))**4
+1310 	
+1311 	        if weights is None:
+1312 	            # Hansen's 20..1
+1313 	            # weights = np.linspace(1, 20, y_train.shape[0])[:, None]
+1314 	            weights = np.ones_like(y_train)
+1315 	
+1316 	        losses = {}
+1317 	        for name, net in nets.items():
+1318 	            losses[name] = train_network(net, x_train, y_train,
+1319 	                                         weights=weights,
+1320 	                                         epochs=self.epochs,
+1321 	                                         mse_stop=self.mse_stop,
+1322 	                                         lr=self.lr,
+1323 	                                         device=device,
+1324 	                                         )
+1325 	
+1326 	        if __debug__:
+1327 	            with torch.no_grad():
+1328 	                _max_model_size = max(x_test.shape[0], dim * (dim + 3) + 2)  # for kendall only
+1329 	                _n_kendall_archive = _max_model_size - 1
+1330 	                x = torch.Tensor(x_train[-_n_kendall_archive:]).to(device)
+1331 	                y = np.array([net.eval()(x).cpu().numpy() for net in nets.values()])
+1332 	                tau = kendalltau(y_train[-_n_kendall_archive:], np.mean(y, axis=0)).statistic  # pyright: ignore [reportOperatorIssue,reportPossiblyUnboundVariable]
+1333 	                if tau < 0.7:
+1334 	                    breakpoint()
+1335 ->	                print("tau-train-ens={}".format(tau))
+1336 	
+1337 	        def eaf(x_test):
+1338 	            x_test_tsr = torch.Tensor(x_test).to(device)
+1339 	            y_preds = {}
+1340 	            with torch.no_grad():
+1341 	                for name, net in nets.items():
+1342 	                    y_preds[name] = net.eval()(x_test_tsr).cpu().numpy()
+1343 	
+1344 	            # y_preds_scaled = {name: scale_y_back(y_) for name, y_ in y_preds.items()}
+1345 	            y_pred_arr = np.array(list(y_preds.values()))
+1346 	
+1347 	            pred_mean = y_pred_arr.mean(axis=0)
+1348 	            pred_std = y_pred_arr.std(axis=0)
+1349 	
+1350 	            if len(pred_mean) < len(x_test):
+1351 	                raise ValueError("len(pred_mean) < len(x_test)")
+1352 	            return Prediction(pred_mean, pred_std)
+1353 	
+1354 	        return eaf
+(Pdb) array([[-0.06581035],
+       [-0.25159794],
+       [-0.25407612],
+       [ 3.8620884 ],
+       [-0.21849856],
+       [-0.25612432],
+       [-0.26165158],
+       [-0.2632739 ],
+       [-0.26397738],
+       [-0.2628117 ],
+       [-0.26713753]], dtype=float32)
+(Pdb) (11, 1)
+(Pdb) (12, 1)
+(Pdb) array([[-0.26355343],
+       [-0.25987037],
+       [-0.2619661 ],
+       [ 3.86383444],
+       [-0.22130986],
+       [-0.25589772],
+       [-0.26189997],
+       [-0.26222969],
+       [-0.26394395],
+       [-0.26371473],
+       [-0.26323324]])
+(Pdb) (12, 1)
+(Pdb) tau-train-ens=0.5636363636363636
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1337)__call__()
+-> def eaf(x_test):
+(Pdb) tau-archive=0.5636363636363636
+eval=6 | not-eval=0 | tau= 0.24 | n_kendall=12 | std(means)/mean(stds)=  1.73 | std(means)=5.52e+03 | mean(stds)=3.19e+03
+tau-population= 0.60
+subset-idx-size=12
+tau-train-ens=0.9636363636363636
+tau-archive=0.9636363636363636
+eval=6 | not-eval=0 | tau= 0.29 | n_kendall=12 | std(means)/mean(stds)=  2.92 | std(means)=2.07e+03 | mean(stds)=7.10e+02
+tau-population=-0.33
+subset-idx-size=12
+> /home/jarda/Desktop/thesis/nncmaes/code/nncmaes.py(1335)__call__()
+-> print("tau-train-ens={}".format(tau))
+(Pdb) *** NameError: name 'train_x' is not defined
+(Pdb) array([[-5.15245299e-02, -2.04448191e+00],
+       [ 3.12019545e+00, -1.89320348e+00],
+       [ 2.22870005e+00, -2.19239675e+00],
+       [ 1.47519204e+00, -6.64520518e-01],
+       [ 1.11971951e+00, -2.07931147e+00],
+       [ 5.13062550e-01,  9.81531782e-01],
+       [-1.98794073e+00, -2.64019042e-01],
+       [ 3.61678944e+00, -6.40320076e-01],
+       [ 7.68628253e-01, -5.24335294e-01],
+       [ 4.75664598e-01, -5.24722753e-01],
+       [ 3.60849881e-02,  1.40390363e-01],
+       [-7.46491974e-02,  1.85326779e-03]])
+(Pdb) *** TypeError: linear(): argument 'input' (position 1) must be Tensor, not numpy.ndarray
+(Pdb) array([[-0.1861957 ],
+       [-0.31361553],
+       [-0.3149407 ],
+       [-0.31571989],
+       [-0.31598443],
+       [-0.31661137],
+       [ 3.17594823],
+       [-0.31264167],
+       [-0.31630537],
+       [-0.31657911],
+       [-0.31683267],
+       [-0.31684305]])
+(Pdb) tensor([[-0.2087],
+        [-0.3145],
+        [-0.3238],
+        [-0.3018],
+        [-0.3144],
+        [-0.3131],
+        [ 3.1749],
+        [-0.3135],
+        [-0.3130],
+        [-0.3216],
+        [-0.3278],
+        [-0.3072]])
+(Pdb) *** TypeError: 'dict_values' object is not subscriptable
+(Pdb) *** Error in argument: '(nets.values())[0]'
+(Pdb) NeuralNetwork(
+  (l_1): Linear(in_features=2, out_features=128, bias=True)
+  (l__1): Linear(in_features=128, out_features=1, bias=True)
+)
+(Pdb) tensor([[-0.2087],
+        [-0.3145],
+        [-0.3238],
+        [-0.3018],
+        [-0.3144],
+        [-0.3131],
+        [ 3.1749],
+        [-0.3135],
+        [-0.3130],
+        [-0.3216],
+        [-0.3278],
+        [-0.3072]])
+(Pdb) array([[ 1.        ],
+       [ 2.72727273],
+       [ 4.45454545],
+       [ 6.18181818],
+       [ 7.90909091],
+       [ 9.63636364],
+       [11.36363636],
+       [13.09090909],
+       [14.81818182],
+       [16.54545455],
+       [18.27272727],
+       [20.        ]])
+(Pdb) array([[-0.20865695],
+       [-0.31446782],
+       [-0.32381138],
+       [-0.30182424],
+       [-0.31440917],
+       [-0.31313795],
+       [ 3.1749218 ],
+       [-0.31349117],
+       [-0.31299862],
+       [-0.32161233],
+       [-0.327849  ],
+       [-0.30719444]], dtype=float32)
+(Pdb) tensor([[-0.2087],
+        [-0.8576],
+        [-1.4424],
+        [-1.8658],
+        [-2.4867],
+        [-3.0175],
+        [36.0787],
+        [-4.1039],
+        [-4.6381],
+        [-5.3212],
+        [-5.9907],
+        [-6.1439]], dtype=torch.float64)
+(Pdb) array([[-0.1861957 ],
+       [-0.31361553],
+       [-0.3149407 ],
+       [-0.31571989],
+       [-0.31598443],
+       [-0.31661137],
+       [ 3.17594823],
+       [-0.31264167],
+       [-0.31630537],
+       [-0.31657911],
+       [-0.31683267],
+       [-0.31684305]])
+(Pdb) array([[ 1.        ],
+       [ 2.72727273],
+       [ 4.45454545],
+       [ 6.18181818],
+       [ 7.90909091],
+       [ 9.63636364],
+       [11.36363636],
+       [13.09090909],
+       [14.81818182],
+       [16.54545455],
+       [18.27272727],
+       [20.        ]])
+(Pdb) 

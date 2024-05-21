@@ -1,0 +1,1941 @@
+Arguments: Namespace(dim=2, fun=1, inst=None, crit='mean')
+(3_w,6)-aCMA-ES (mu_w=2.0,w_1=63%) in dimension 2 (seed=1, Sat Apr 27 23:06:35 2024)
+iohexp--d-2--f-1--i-1--b-500__pycma--init-pop-6__(Surrogate(model=Raf(data_noise=0.01), subset=ClosestToEachTestPoint(Mahalanobis, n_max_coef=20), x_tf=ShiftAndScaleByEs, y_tf=MinAdjustedLog), EvaluateUntilKendallThreshold(mean_criterion, tau_threshold=0.85, offset=True), n_min_fn=get_dim)
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=1.9895193088575056 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=6
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 3.178 , loss_anch 5.575 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.117 , loss_anch 2.368 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.095 , loss_anch 1.889 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.078 , loss_anch 1.709 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.06 , loss_anch 1.577 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.149 , loss_anch 9.838 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.07 , loss_anch 6.244 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.04 , loss_anch 4.856 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.03 , loss_anch 4.433 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.027 , loss_anch 4.298 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 2.548 , loss_anch 17.672 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.102 , loss_anch 13.626 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.718 , loss_anch 11.522 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.502 , loss_anch 10.185 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.358 , loss_anch 9.184 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 0.466 , loss_anch 10.022 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.166 , loss_anch 7.225 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.125 , loss_anch 6.704 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.107 , loss_anch 6.292 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.106 , loss_anch 6.261 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.222 , loss_anch 17.99 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.13 , loss_anch 11.838 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.085 , loss_anch 9.206 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.064 , loss_anch 8.252 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.056 , loss_anch 7.918 tau-train= 1.00
+DEBUG: tau-train-ens=0.9999999999999999
+DEBUG: tau-archive=0.9999999999999999 | std(means)=2.06e+00 | mean(stds)=1.60e+00 | std(means)/mean(stds)=  1.29
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 7
+DEBUG: delta_f=5.81e-01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.7869160623381033 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=7
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 1.13 , loss_anch 11.769 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.53 , loss_anch 9.384 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.413 , loss_anch 8.001 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.33 , loss_anch 7.088 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.265 , loss_anch 6.434 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.16 , loss_anch 49.49 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.243 , loss_anch 33.337 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.793 , loss_anch 27.453 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.69 , loss_anch 25.647 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.627 , loss_anch 24.118 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 24.32 , loss_anch 65.517 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 7.677 , loss_anch 40.902 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.135 , loss_anch 32.236 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.705 , loss_anch 27.589 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.984 , loss_anch 24.587 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 12.982 , loss_anch 66.334 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 7.758 , loss_anch 50.505 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.809 , loss_anch 35.251 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.342 , loss_anch 33.193 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.015 , loss_anch 32.185 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.162 , loss_anch 23.971 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.316 , loss_anch 13.815 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.223 , loss_anch 10.786 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.181 , loss_anch 9.328 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.132 , loss_anch 7.923 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9999999999999999 | std(means)=4.67e-01 | mean(stds)=1.90e+00 | std(means)/mean(stds)=  0.25
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall= 8
+DEBUG: delta_f=5.81e-01
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.20 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.33 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=3.7078885951048823 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=8
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 44.886 , loss_anch 57.967 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 12.87 , loss_anch 30.735 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 5.078 , loss_anch 23.875 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.107 , loss_anch 20.669 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.377 , loss_anch 18.831 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.468 , loss_anch 25.683 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 0.564 , loss_anch 16.554 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.289 , loss_anch 12.859 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.151 , loss_anch 10.278 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.119 , loss_anch 9.209 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 16.392 , loss_anch 45.769 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 7.054 , loss_anch 32.967 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.276 , loss_anch 27.226 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.94 , loss_anch 22.914 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.097 , loss_anch 20.207 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 19.46 , loss_anch 63.085 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 8.214 , loss_anch 44.884 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 6.663 , loss_anch 40.68 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 5.744 , loss_anch 38.329 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 3.966 , loss_anch 34.108 tau-train= 0.93
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.799 , loss_anch 25.38 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.844 , loss_anch 18.438 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.586 , loss_anch 15.153 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.31 , loss_anch 12.438 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.248 , loss_anch 10.693 tau-train= 1.00
+DEBUG: tau-train-ens=0.9999999999999998
+DEBUG: tau-archive=1.0 | std(means)=2.79e+00 | mean(stds)=6.06e+00 | std(means)/mean(stds)=  0.46
+eval=6 | not-eval=0 | tau= 0.73 | n_kendall=12
+DEBUG: delta_f=3.42e-01
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.60
+evaluated=6 | not-evaluated=0
+DEBUG: subset-max-norm=3.5793519651874477 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 9.674 , loss_anch 19.137 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 4.092 , loss_anch 13.123 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.498 , loss_anch 10.148 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.888 , loss_anch 9.086 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.616 , loss_anch 8.421 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.692 , loss_anch 15.559 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.265 , loss_anch 9.175 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.157 , loss_anch 7.298 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.09 , loss_anch 6.055 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.067 , loss_anch 5.457 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 4.563 , loss_anch 22.769 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.794 , loss_anch 17.392 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 6.844 , loss_anch 21.561 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.339 , loss_anch 13.708 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.281 , loss_anch 12.622 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.091 , loss_anch 18.664 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 0.44 , loss_anch 10.767 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.256 , loss_anch 8.636 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.185 , loss_anch 7.636 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.183 , loss_anch 7.523 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.263 , loss_anch 10.823 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.078 , loss_anch 5.41 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.042 , loss_anch 4.027 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.03 , loss_anch 3.598 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.026 , loss_anch 3.407 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.79e-01 | mean(stds)=1.33e+00 | std(means)/mean(stds)=  0.43
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.08e-01
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.33 | tau-LogN=+0.33 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.2522907535028125 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 42.149 , loss_anch 50.922 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 10.749 , loss_anch 20.768 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 5.642 , loss_anch 15.777 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.135 , loss_anch 13.892 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.207 , loss_anch 12.541 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.239 , loss_anch 11.599 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.134 , loss_anch 7.454 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.092 , loss_anch 6.266 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.068 , loss_anch 5.468 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.057 , loss_anch 5.111 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 7.734 , loss_anch 18.491 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.064 , loss_anch 12.952 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 66.75 , loss_anch 75.809 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.644 , loss_anch 9.015 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.683 , loss_anch 11.447 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.445 , loss_anch 39.074 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 0.953 , loss_anch 28.432 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.518 , loss_anch 21.547 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.392 , loss_anch 18.493 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.338 , loss_anch 17.381 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.346 , loss_anch 20.652 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.291 , loss_anch 14.139 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.245 , loss_anch 12.543 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.182 , loss_anch 10.547 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.169 , loss_anch 10.252 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.23e-01 | mean(stds)=1.38e+00 | std(means)/mean(stds)=  0.52
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.10e-01
+DEBUG: tau-population= 0.47 | tau-pop-final= 0.47 | final-target-hit=False
+DEBUG: tau-mean-first=+0.47 | tau-mean-last=+0.47 | tau-LogN=+0.60 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.453392146592439 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 12.073 , loss_anch 21.683 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 4.237 , loss_anch 13.577 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.671 , loss_anch 10.281 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.722 , loss_anch 8.534 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.381 , loss_anch 7.45 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.484 , loss_anch 23.627 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.347 , loss_anch 17.397 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.263 , loss_anch 15.24 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.215 , loss_anch 13.536 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.187 , loss_anch 12.807 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 29.091 , loss_anch 37.056 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 8.311 , loss_anch 16.736 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 3.714 , loss_anch 12.001 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 1.6 , loss_anch 9.713 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.725 , loss_anch 8.669 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.787 , loss_anch 34.741 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.235 , loss_anch 26.125 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.943 , loss_anch 20.903 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.615 , loss_anch 17.81 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.45 , loss_anch 15.593 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.249 , loss_anch 14.983 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.186 , loss_anch 10.571 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.131 , loss_anch 8.72 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.067 , loss_anch 7.131 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.049 , loss_anch 6.049 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.78e-01 | mean(stds)=1.57e+00 | std(means)/mean(stds)=  0.11
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.10e-01
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.058323834109073 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 22.447 , loss_anch 27.555 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 7.446 , loss_anch 13.378 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.293 , loss_anch 10.316 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 17.942 , loss_anch 23.911 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.731 , loss_anch 7.611 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.693 , loss_anch 40.346 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.438 , loss_anch 28.79 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.327 , loss_anch 24.059 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.284 , loss_anch 21.845 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.278 , loss_anch 20.856 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 15.831 , loss_anch 35.091 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.745 , loss_anch 23.191 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.621 , loss_anch 19.026 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.651 , loss_anch 16.881 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.308 , loss_anch 15.383 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 6.846 , loss_anch 86.219 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 5.876 , loss_anch 74.293 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.82 , loss_anch 61.986 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.058 , loss_anch 55.372 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.558 , loss_anch 49.861 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.226 , loss_anch 41.812 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.913 , loss_anch 33.663 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.695 , loss_anch 27.381 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.689 , loss_anch 25.431 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.681 , loss_anch 23.887 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.32e-02 | mean(stds)=1.91e+00 | std(means)/mean(stds)=  0.04
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.76e-02
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.47 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.516561019677077 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 38.904 , loss_anch 53.656 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 7.846 , loss_anch 23.341 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.698 , loss_anch 19.395 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.147 , loss_anch 17.079 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.286 , loss_anch 15.546 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.305 , loss_anch 70.057 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.055 , loss_anch 61.444 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.91 , loss_anch 56.785 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.739 , loss_anch 52.743 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.585 , loss_anch 48.538 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 11.781 , loss_anch 24.875 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.175 , loss_anch 15.598 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.253 , loss_anch 13.149 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.612 , loss_anch 12.074 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.405 , loss_anch 11.513 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 6.878 , loss_anch 95.232 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 5.341 , loss_anch 77.058 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.661 , loss_anch 70.068 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.408 , loss_anch 60.258 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.997 , loss_anch 54.421 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 10.663 , loss_anch 115.365 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 10.17 , loss_anch 108.1 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 9.872 , loss_anch 104.629 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 9.567 , loss_anch 101.903 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 9.368 , loss_anch 100.224 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.18e-02 | mean(stds)=1.63e+00 | std(means)/mean(stds)=  0.03
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.76e-02
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.559948096980426 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=12
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 72.774 , loss_anch 82.07 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 24.192 , loss_anch 33.871 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 10.567 , loss_anch 20.339 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 5.304 , loss_anch 15.014 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.932 , loss_anch 12.488 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.111 , loss_anch 34.411 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.574 , loss_anch 26.585 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.292 , loss_anch 22.572 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.176 , loss_anch 20.894 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.114 , loss_anch 20.178 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 95.554 , loss_anch 116.641 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 25.108 , loss_anch 50.702 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.425 , loss_anch 31.935 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.886 , loss_anch 24.41 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.388 , loss_anch 20.816 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 12.77 , loss_anch 90.743 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 8.779 , loss_anch 76.236 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.866 , loss_anch 68.469 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 7.447 , loss_anch 63.585 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 5.615 , loss_anch 57.228 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 3.148 , loss_anch 56.192 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.676 , loss_anch 39.188 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.288 , loss_anch 34.224 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.012 , loss_anch 30.008 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.966 , loss_anch 28.13 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9636363636363636 | std(means)=4.34e-02 | mean(stds)=2.17e+00 | std(means)/mean(stds)=  0.02
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=9.76e-02
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.60 | tau-LogN=+0.33 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.728978025236398 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=12
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 24.119 , loss_anch 33.425 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 11.808 , loss_anch 22.745 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 441.807 , loss_anch 452.55 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 0.641 , loss_anch 10.952 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.433 , loss_anch 10.292 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 7.424 , loss_anch 80.362 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 6.804 , loss_anch 70.61 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 6.2 , loss_anch 63.138 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.504 , loss_anch 54.871 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.325 , loss_anch 53.098 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 196.651 , loss_anch 214.32 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 59.703 , loss_anch 80.395 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 10.81 , loss_anch 32.101 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 1.556 , loss_anch 22.804 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.422 , loss_anch 21.203 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 10.01 , loss_anch 93.122 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 9.143 , loss_anch 80.554 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.264 , loss_anch 71.862 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 6.3 , loss_anch 66.03 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.808 , loss_anch 59.738 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 23.362 , loss_anch 84.605 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 6.001 , loss_anch 64.95 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.86 , loss_anch 56.832 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.14 , loss_anch 50.696 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.681 , loss_anch 47.116 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.9272727272727274 | std(means)=7.62e-03 | mean(stds)=4.62e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.91 | n_kendall=12
+DEBUG: delta_f=9.42e-02
+DEBUG: tau-population=-0.07 | tau-pop-final=-0.07 | final-target-hit=False
+DEBUG: tau-mean-first=-0.07 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.846333317070387 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 58.268 , loss_anch 74.77 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 14.624 , loss_anch 33.986 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 8.216 , loss_anch 27.224 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.802 , loss_anch 22.676 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 6.596 , loss_anch 23.219 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.477 , loss_anch 55.335 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.871 , loss_anch 49.057 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.63 , loss_anch 44.502 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.499 , loss_anch 42.455 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.314 , loss_anch 38.928 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 28.411 , loss_anch 47.102 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 8.115 , loss_anch 25.099 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.745 , loss_anch 20.169 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.934 , loss_anch 18.136 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.664 , loss_anch 15.932 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 7.895 , loss_anch 86.459 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.763 , loss_anch 63.771 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.884 , loss_anch 51.228 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.851 , loss_anch 48.376 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.766 , loss_anch 46.621 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.658 , loss_anch 67.619 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.261 , loss_anch 52.723 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.895 , loss_anch 44.089 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.771 , loss_anch 41.375 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.632 , loss_anch 39.271 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.91e-03 | mean(stds)=2.85e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=6.79e-02
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=-0.33 | tau-LogN=-0.33 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.969286026113965 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=12
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 31.205 , loss_anch 40.113 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 8.53 , loss_anch 17.58 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.567 , loss_anch 10.684 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.224 , loss_anch 8.835 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.125 , loss_anch 8.006 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.238 , loss_anch 7.153 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.104 , loss_anch 5.102 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.076 , loss_anch 4.179 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.062 , loss_anch 3.744 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.054 , loss_anch 3.561 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 4.866 , loss_anch 12.275 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.486 , loss_anch 8.115 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.492 , loss_anch 6.324 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.199 , loss_anch 5.482 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.105 , loss_anch 4.981 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 0.703 , loss_anch 25.179 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.33 , loss_anch 15.272 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.211 , loss_anch 12.142 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.179 , loss_anch 11.099 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.128 , loss_anch 9.793 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.341 , loss_anch 12.526 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.228 , loss_anch 9.592 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.19 , loss_anch 8.718 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.158 , loss_anch 8.341 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.149 , loss_anch 8.161 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=0.6727272727272727 | std(means)=4.45e-02 | mean(stds)=1.95e+00 | std(means)/mean(stds)=  0.02
+eval=2 | not-eval=4 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=3.86e-02
+DEBUG: tau-population= 0.20 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.20 | tau-mean-last=+0.20 | tau-LogN=+0.47 | tau-median=+0.07
+evaluated=2 | not-evaluated=4
+DEBUG: subset-max-norm=10.576064097334376 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 16.18 , loss_anch 22.016 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 4.028 , loss_anch 10.495 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.952 , loss_anch 7.899 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.033 , loss_anch 6.625 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.619 , loss_anch 5.921 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.363 , loss_anch 18.047 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.293 , loss_anch 14.889 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.245 , loss_anch 13.663 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.227 , loss_anch 12.932 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.201 , loss_anch 12.344 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 78.779 , loss_anch 89.966 tau-train= 0.78
+DEBUG: epoch: 400 , mse_ 22.265 , loss_anch 35.076 tau-train= 0.85
+DEBUG: epoch: 600 , mse_ 10.151 , loss_anch 22.75 tau-train= 0.85
+DEBUG: epoch: 800 , mse_ 4.526 , loss_anch 16.843 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 1.96 , loss_anch 13.976 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 0.867 , loss_anch 19.942 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.365 , loss_anch 12.669 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.252 , loss_anch 10.588 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.201 , loss_anch 9.676 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.158 , loss_anch 9.073 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.54 , loss_anch 16.032 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.355 , loss_anch 12.216 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.255 , loss_anch 10.293 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.306 , loss_anch 9.571 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.267 , loss_anch 9.184 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.27e-02 | mean(stds)=1.64e+00 | std(means)/mean(stds)=  0.01
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.61e-02
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.33 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.99667408163513 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 14.745 , loss_anch 21.84 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 5.082 , loss_anch 12.009 tau-train= 0.85
+DEBUG: epoch: 600 , mse_ 1.969 , loss_anch 8.732 tau-train= 0.85
+DEBUG: epoch: 800 , mse_ 0.7 , loss_anch 7.285 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.361 , loss_anch 6.716 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.205 , loss_anch 7.305 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.175 , loss_anch 6.388 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.841 , loss_anch 6.222 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.106 , loss_anch 4.761 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.104 , loss_anch 4.537 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 69.761 , loss_anch 90.214 tau-train= 0.64
+DEBUG: epoch: 400 , mse_ 15.076 , loss_anch 36.865 tau-train= 0.85
+DEBUG: epoch: 600 , mse_ 5.081 , loss_anch 26.379 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 2.446 , loss_anch 22.259 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 1.459 , loss_anch 19.668 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 0.744 , loss_anch 14.006 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.291 , loss_anch 9.528 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.135 , loss_anch 7.286 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.087 , loss_anch 6.009 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.077 , loss_anch 5.417 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.136 , loss_anch 14.972 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.1 , loss_anch 11.801 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.088 , loss_anch 10.342 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.078 , loss_anch 9.299 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.063 , loss_anch 8.176 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.35e-02 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  0.01
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=1.10e-02
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.356293962863099 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 23.081 , loss_anch 32.115 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 4.001 , loss_anch 12.56 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 2.086 , loss_anch 10.051 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.423 , loss_anch 8.865 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.088 , loss_anch 8.071 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.486 , loss_anch 22.669 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.344 , loss_anch 17.545 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.283 , loss_anch 15.489 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.239 , loss_anch 14.392 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.22 , loss_anch 13.54 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 25.904 , loss_anch 41.7 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.113 , loss_anch 16.835 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.928 , loss_anch 12.939 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.259 , loss_anch 10.795 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.862 , loss_anch 9.283 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.669 , loss_anch 39.507 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.083 , loss_anch 28.659 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.987 , loss_anch 25.916 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.825 , loss_anch 24.117 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.714 , loss_anch 23.06 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.601 , loss_anch 22.589 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.553 , loss_anch 18.703 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.411 , loss_anch 15.386 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.367 , loss_anch 13.934 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.307 , loss_anch 12.6 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.48e-02 | mean(stds)=1.34e+00 | std(means)/mean(stds)=  0.01
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=1.10e-02
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.684066122946014 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=19
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 13.828 , loss_anch 17.827 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.645 , loss_anch 9.217 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.159 , loss_anch 7.017 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.295 , loss_anch 6.165 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.94 , loss_anch 5.679 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.968 , loss_anch 38.756 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.644 , loss_anch 31.915 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.528 , loss_anch 29.647 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.483 , loss_anch 28.396 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.445 , loss_anch 27.026 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 35.56 , loss_anch 51.339 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 11.554 , loss_anch 26.28 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 5.526 , loss_anch 18.159 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.759 , loss_anch 14.704 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 2.706 , loss_anch 12.507 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 2.355 , loss_anch 68.047 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.974 , loss_anch 53.84 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.418 , loss_anch 46.116 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.126 , loss_anch 41.936 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.788 , loss_anch 37.127 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.79 , loss_anch 41.663 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.093 , loss_anch 32.912 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.783 , loss_anch 27.975 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.692 , loss_anch 26.33 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.653 , loss_anch 25.468 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.26e-02 | mean(stds)=1.64e+00 | std(means)/mean(stds)=  0.02
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=8.70e-03
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.73 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.699914920179049 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 83.154 , loss_anch 105.214 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 18.884 , loss_anch 41.839 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 9.603 , loss_anch 31.315 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 6.598 , loss_anch 26.757 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 9.077 , loss_anch 27.892 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.644 , loss_anch 24.134 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.558 , loss_anch 17.529 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.447 , loss_anch 15.785 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.306 , loss_anch 13.07 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.269 , loss_anch 12.327 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 94.38 , loss_anch 110.063 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 19.818 , loss_anch 37.964 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 8.171 , loss_anch 25.349 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 4.349 , loss_anch 20.051 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 2.761 , loss_anch 17.591 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 2.489 , loss_anch 39.477 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.764 , loss_anch 32.157 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.443 , loss_anch 29.245 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.816 , loss_anch 24.81 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.56 , loss_anch 21.936 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.154 , loss_anch 30.301 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.852 , loss_anch 24.897 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.758 , loss_anch 23.744 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.691 , loss_anch 23.035 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.547 , loss_anch 22.062 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.42e-02 | mean(stds)=1.51e+00 | std(means)/mean(stds)=  0.01
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.040507025252088 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 7.026 , loss_anch 15.476 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 1.706 , loss_anch 10.174 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.083 , loss_anch 8.675 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.771 , loss_anch 7.548 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.553 , loss_anch 6.656 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.453 , loss_anch 14.56 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.311 , loss_anch 12.301 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.304 , loss_anch 11.671 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.282 , loss_anch 11.377 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.264 , loss_anch 11.169 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 11.425 , loss_anch 16.654 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.054 , loss_anch 8.082 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.884 , loss_anch 6.631 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.293 , loss_anch 5.846 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.944 , loss_anch 5.306 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 0.927 , loss_anch 21.115 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.527 , loss_anch 14.496 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.303 , loss_anch 11.558 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.253 , loss_anch 10.579 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.224 , loss_anch 10.194 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.2 , loss_anch 23.854 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.951 , loss_anch 14.154 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.442 , loss_anch 10.066 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.243 , loss_anch 7.903 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.234 , loss_anch 7.006 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.35e-03 | mean(stds)=2.03e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.47 | tau-LogN=+0.47 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.295415773949165 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 100.974 , loss_anch 116.203 tau-train= 0.85
+DEBUG: epoch: 400 , mse_ 19.03 , loss_anch 38.529 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 7.159 , loss_anch 27.986 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.806 , loss_anch 24.402 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.23 , loss_anch 22.077 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.381 , loss_anch 27.597 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.522 , loss_anch 22.956 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.326 , loss_anch 20.687 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.098 , loss_anch 18.817 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.861 , loss_anch 17.291 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 9.711 , loss_anch 20.134 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 2.183 , loss_anch 11.551 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.535 , loss_anch 9.304 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.163 , loss_anch 8.43 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.075 , loss_anch 7.938 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 4.449 , loss_anch 56.761 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.007 , loss_anch 39.511 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.52 , loss_anch 33.366 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.079 , loss_anch 27.048 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.964 , loss_anch 23.536 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.702 , loss_anch 17.472 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.453 , loss_anch 13.7 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.342 , loss_anch 11.766 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.299 , loss_anch 10.338 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.258 , loss_anch 9.81 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=6.98e-03 | mean(stds)=2.05e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=8.721954289493121 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 43.119 , loss_anch 55.435 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 12.18 , loss_anch 26.547 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.09 , loss_anch 21.495 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.388 , loss_anch 18.51 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.601 , loss_anch 16.318 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.054 , loss_anch 28.444 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.442 , loss_anch 22.271 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.362 , loss_anch 18.05 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.285 , loss_anch 15.552 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.563 , loss_anch 14.216 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 35.549 , loss_anch 48.723 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 9.076 , loss_anch 22.665 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 5.464 , loss_anch 18.959 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.204 , loss_anch 16.581 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.985 , loss_anch 15.192 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.785 , loss_anch 43.755 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.3 , loss_anch 32.362 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.095 , loss_anch 26.573 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.814 , loss_anch 22.414 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.639 , loss_anch 18.683 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.408 , loss_anch 20.112 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.293 , loss_anch 16.294 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.256 , loss_anch 13.704 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.172 , loss_anch 10.676 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.151 , loss_anch 9.418 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.62e-03 | mean(stds)=1.43e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=6.657366470711378 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 29.302 , loss_anch 33.99 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 9.118 , loss_anch 15.774 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 5.578 , loss_anch 11.985 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 42.126 , loss_anch 48.159 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.931 , loss_anch 10.719 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.203 , loss_anch 19.277 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.372 , loss_anch 12.927 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.096 , loss_anch 11.08 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.929 , loss_anch 10.026 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.688 , loss_anch 9.099 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 9.486 , loss_anch 21.193 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 5.8 , loss_anch 14.086 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.793 , loss_anch 11.706 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.03 , loss_anch 10.078 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.302 , loss_anch 8.721 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 3.795 , loss_anch 44.975 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.764 , loss_anch 39.436 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.31 , loss_anch 36.18 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.2 , loss_anch 33.444 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.986 , loss_anch 30.69 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 3.403 , loss_anch 26.31 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.831 , loss_anch 21.466 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.839 , loss_anch 17.212 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.674 , loss_anch 15.017 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.591 , loss_anch 13.27 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.67e-03 | mean(stds)=1.62e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.407961895920302 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=20
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 197.245 , loss_anch 211.682 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 126.067 , loss_anch 140.557 tau-train= 0.89
+DEBUG: epoch: 600 , mse_ 71.588 , loss_anch 87.727 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 35.686 , loss_anch 54.568 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 17.255 , loss_anch 38.252 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.698 , loss_anch 41.154 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.881 , loss_anch 32.138 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.725 , loss_anch 28.43 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.654 , loss_anch 26.714 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.4 , loss_anch 24.727 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 63.536 , loss_anch 76.478 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 18.707 , loss_anch 34.071 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 8.297 , loss_anch 23.129 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.663 , loss_anch 18.404 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.133 , loss_anch 15.773 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 4.437 , loss_anch 62.619 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.082 , loss_anch 47.853 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.235 , loss_anch 42.627 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.148 , loss_anch 40.243 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.131 , loss_anch 39.023 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.687 , loss_anch 47.13 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.01 , loss_anch 34.875 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.967 , loss_anch 29.138 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.958 , loss_anch 26.849 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.906 , loss_anch 25.597 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.06e-03 | mean(stds)=2.55e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.20
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.347068002834169 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 148.525 , loss_anch 159.458 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 61.194 , loss_anch 76.043 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 28.983 , loss_anch 47.091 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 16.717 , loss_anch 36.6 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 11.897 , loss_anch 32.275 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.573 , loss_anch 54.476 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.185 , loss_anch 47.406 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.77 , loss_anch 42.525 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.629 , loss_anch 40.231 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.406 , loss_anch 37.987 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 188.948 , loss_anch 203.668 tau-train= 0.67
+DEBUG: epoch: 400 , mse_ 59.0 , loss_anch 82.051 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 23.81 , loss_anch 45.956 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 11.649 , loss_anch 33.133 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 6.64 , loss_anch 27.785 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 5.954 , loss_anch 70.024 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.923 , loss_anch 51.207 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.593 , loss_anch 42.362 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.496 , loss_anch 37.112 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.015 , loss_anch 33.856 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.623 , loss_anch 38.045 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.955 , loss_anch 32.95 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.518 , loss_anch 30.179 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.272 , loss_anch 27.516 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.197 , loss_anch 25.0 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=4.24e-03 | mean(stds)=1.28e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.57619196747956 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 113.472 , loss_anch 125.446 tau-train= 0.85
+DEBUG: epoch: 400 , mse_ 18.802 , loss_anch 35.259 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 10.89 , loss_anch 27.834 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 8.796 , loss_anch 24.917 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 7.607 , loss_anch 22.797 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.562 , loss_anch 26.37 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.262 , loss_anch 18.187 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.687 , loss_anch 14.02 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.582 , loss_anch 12.708 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.504 , loss_anch 11.83 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 40.551 , loss_anch 69.792 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 11.397 , loss_anch 33.618 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 6.407 , loss_anch 25.085 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.674 , loss_anch 21.208 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.852 , loss_anch 18.981 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 6.201 , loss_anch 54.928 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.229 , loss_anch 46.376 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.374 , loss_anch 40.916 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.08 , loss_anch 38.631 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.858 , loss_anch 37.301 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 5.86 , loss_anch 40.631 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.262 , loss_anch 30.551 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.836 , loss_anch 24.32 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.263 , loss_anch 21.062 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.901 , loss_anch 18.2 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.40e-04 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.60e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.998238236085989 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 174.588 , loss_anch 183.419 tau-train= 0.75
+DEBUG: epoch: 400 , mse_ 73.334 , loss_anch 85.05 tau-train= 0.82
+DEBUG: epoch: 600 , mse_ 30.485 , loss_anch 44.204 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 14.288 , loss_anch 28.88 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 8.154 , loss_anch 22.839 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.734 , loss_anch 40.457 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.882 , loss_anch 30.77 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.673 , loss_anch 25.885 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.541 , loss_anch 23.72 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.493 , loss_anch 22.486 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 24.743 , loss_anch 38.049 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 10.126 , loss_anch 23.32 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.459 , loss_anch 19.859 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 6.1 , loss_anch 17.668 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 5.082 , loss_anch 15.951 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 2.759 , loss_anch 47.448 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.586 , loss_anch 36.689 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.533 , loss_anch 32.968 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.417 , loss_anch 30.888 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.339 , loss_anch 29.353 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.757 , loss_anch 15.365 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.38 , loss_anch 12.28 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.273 , loss_anch 10.796 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.237 , loss_anch 9.997 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.168 , loss_anch 9.355 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.99e-03 | mean(stds)=1.83e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.13e-04
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.988095383360807 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=21
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 46.694 , loss_anch 50.838 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 21.024 , loss_anch 26.369 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 13.937 , loss_anch 19.505 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 10.527 , loss_anch 16.079 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 8.178 , loss_anch 13.573 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 4.817 , loss_anch 55.319 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.281 , loss_anch 41.535 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.923 , loss_anch 37.46 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.869 , loss_anch 34.986 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.952 , loss_anch 32.588 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 18.45 , loss_anch 27.836 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 12.867 , loss_anch 19.155 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 10.205 , loss_anch 15.314 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 8.514 , loss_anch 13.32 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 7.334 , loss_anch 12.101 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 8.502 , loss_anch 58.83 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 6.182 , loss_anch 46.963 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.738 , loss_anch 40.953 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.849 , loss_anch 34.852 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.276 , loss_anch 29.654 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 4.453 , loss_anch 51.341 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.802 , loss_anch 42.21 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.942 , loss_anch 35.712 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.657 , loss_anch 30.941 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.402 , loss_anch 28.105 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.23e-03 | mean(stds)=1.62e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.73e-04
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=12.02911293956846 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=22
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 51.295 , loss_anch 59.022 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 20.052 , loss_anch 30.155 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 10.036 , loss_anch 20.884 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.814 , loss_anch 15.968 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.831 , loss_anch 12.909 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.118 , loss_anch 32.562 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.954 , loss_anch 25.478 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.892 , loss_anch 22.275 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.867 , loss_anch 19.957 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.834 , loss_anch 18.732 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 28.442 , loss_anch 38.097 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 12.353 , loss_anch 22.317 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 5.471 , loss_anch 15.213 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.338 , loss_anch 11.592 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.172 , loss_anch 9.793 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 3.231 , loss_anch 47.218 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.598 , loss_anch 33.866 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.245 , loss_anch 28.888 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.94 , loss_anch 25.299 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.696 , loss_anch 22.59 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.6 , loss_anch 27.045 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.833 , loss_anch 21.669 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.758 , loss_anch 19.665 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.688 , loss_anch 18.407 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.612 , loss_anch 16.717 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.55e-04 | mean(stds)=1.30e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=1.73e-04
+DEBUG: tau-population= 0.33 | tau-pop-final= 0.33 | final-target-hit=False
+DEBUG: tau-mean-first=+0.33 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.33
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.021337463746661 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 118.794 , loss_anch 139.494 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 44.578 , loss_anch 68.032 tau-train= 0.89
+DEBUG: epoch: 600 , mse_ 13.934 , loss_anch 39.806 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 4.216 , loss_anch 31.066 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 1.661 , loss_anch 28.018 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.039 , loss_anch 43.748 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.584 , loss_anch 33.398 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.57 , loss_anch 29.635 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.554 , loss_anch 27.739 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.512 , loss_anch 26.047 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 38.738 , loss_anch 52.918 tau-train= 0.85
+DEBUG: epoch: 400 , mse_ 2.482 , loss_anch 18.752 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.786 , loss_anch 15.712 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.643 , loss_anch 14.235 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.617 , loss_anch 13.174 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 2.637 , loss_anch 56.275 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.148 , loss_anch 46.391 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.787 , loss_anch 40.681 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.292 , loss_anch 35.424 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.156 , loss_anch 32.291 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.586 , loss_anch 53.343 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.948 , loss_anch 36.159 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.861 , loss_anch 32.268 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.796 , loss_anch 30.873 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.66 , loss_anch 29.35 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.17e-04 | mean(stds)=4.28e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.48e-05
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.93250214382606 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 32.855 , loss_anch 42.993 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 3.571 , loss_anch 14.834 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.99 , loss_anch 12.133 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 293.538 , loss_anch 304.215 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 0.264 , loss_anch 10.473 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.983 , loss_anch 44.306 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.585 , loss_anch 32.542 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.431 , loss_anch 27.11 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.376 , loss_anch 25.225 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.345 , loss_anch 24.174 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 7.756 , loss_anch 21.426 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.237 , loss_anch 15.581 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.349 , loss_anch 14.011 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.993 , loss_anch 12.978 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.774 , loss_anch 12.154 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 3.032 , loss_anch 58.151 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.789 , loss_anch 40.583 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.212 , loss_anch 31.338 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.031 , loss_anch 28.301 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.987 , loss_anch 27.668 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.549 , loss_anch 37.742 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.512 , loss_anch 21.055 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.453 , loss_anch 17.818 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.326 , loss_anch 14.759 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.302 , loss_anch 13.036 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.39e-04 | mean(stds)=1.73e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.34e-05
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.60 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.890685092438673 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 6.233 , loss_anch 15.541 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.456 , loss_anch 10.698 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.71 , loss_anch 9.481 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.427 , loss_anch 8.756 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.305 , loss_anch 8.225 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.691 , loss_anch 46.787 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.342 , loss_anch 38.217 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.179 , loss_anch 32.278 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.072 , loss_anch 30.86 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.046 , loss_anch 30.212 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 23.405 , loss_anch 30.08 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 9.461 , loss_anch 16.131 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.887 , loss_anch 11.684 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.763 , loss_anch 9.612 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.71 , loss_anch 8.491 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 5.259 , loss_anch 83.757 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.115 , loss_anch 60.525 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.35 , loss_anch 51.268 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.759 , loss_anch 42.982 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.225 , loss_anch 36.037 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.874 , loss_anch 29.886 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.707 , loss_anch 23.619 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.664 , loss_anch 21.897 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.642 , loss_anch 21.219 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.624 , loss_anch 20.897 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.60e-04 | mean(stds)=1.75e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=6.11e-06
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.533605860839356 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 7.516 , loss_anch 13.53 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.575 , loss_anch 7.435 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.001 , loss_anch 6.423 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.693 , loss_anch 5.696 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.473 , loss_anch 5.125 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.105 , loss_anch 31.299 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.795 , loss_anch 24.795 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.548 , loss_anch 18.806 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.481 , loss_anch 17.694 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.239 , loss_anch 15.36 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 6.823 , loss_anch 17.219 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.863 , loss_anch 12.544 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.461 , loss_anch 10.298 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.109 , loss_anch 9.229 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.418 , loss_anch 7.91 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 2.53 , loss_anch 42.542 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.567 , loss_anch 33.877 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.32 , loss_anch 29.453 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.171 , loss_anch 26.717 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.171 , loss_anch 25.725 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.513 , loss_anch 19.035 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.318 , loss_anch 14.212 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.295 , loss_anch 11.446 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.267 , loss_anch 10.793 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.247 , loss_anch 10.413 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.03e-05 | mean(stds)=1.79e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=6.11e-06
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.60 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.6907341673236385 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 128.302 , loss_anch 137.247 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 63.789 , loss_anch 74.451 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 34.654 , loss_anch 46.528 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 18.602 , loss_anch 31.363 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 9.526 , loss_anch 22.829 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.427 , loss_anch 42.153 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.012 , loss_anch 33.663 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.859 , loss_anch 29.189 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.798 , loss_anch 28.435 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.747 , loss_anch 27.852 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 41.591 , loss_anch 55.426 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 23.575 , loss_anch 36.77 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 14.905 , loss_anch 27.803 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 8.997 , loss_anch 21.703 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 5.362 , loss_anch 17.933 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 4.073 , loss_anch 79.126 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.898 , loss_anch 61.807 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.019 , loss_anch 54.47 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.624 , loss_anch 48.281 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.363 , loss_anch 43.553 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.742 , loss_anch 50.555 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.32 , loss_anch 42.443 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.214 , loss_anch 37.267 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.083 , loss_anch 34.036 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.056 , loss_anch 33.414 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=2.15e-05 | mean(stds)=1.63e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.22e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.222103679099726 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 52.434 , loss_anch 60.55 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 4.486 , loss_anch 12.913 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.541 , loss_anch 9.95 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.916 , loss_anch 9.214 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.6 , loss_anch 8.76 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.596 , loss_anch 60.087 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.464 , loss_anch 52.541 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.262 , loss_anch 47.48 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.204 , loss_anch 44.531 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.964 , loss_anch 39.987 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 23.373 , loss_anch 29.1 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 8.226 , loss_anch 14.309 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 5.043 , loss_anch 11.076 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.339 , loss_anch 9.226 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.188 , loss_anch 7.909 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 5.07 , loss_anch 98.371 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.976 , loss_anch 74.393 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.052 , loss_anch 63.008 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.447 , loss_anch 57.542 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.447 , loss_anch 53.627 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.492 , loss_anch 56.702 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.22 , loss_anch 46.326 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.092 , loss_anch 42.059 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.95 , loss_anch 38.029 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.916 , loss_anch 36.846 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.86e-05 | mean(stds)=1.82e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.22e-07
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.60 | tau-LogN=+0.47 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.356784831041912 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=17
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 92.177 , loss_anch 98.121 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 25.144 , loss_anch 31.979 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 8.265 , loss_anch 15.697 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.933 , loss_anch 11.528 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.213 , loss_anch 9.757 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.38 , loss_anch 53.046 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.121 , loss_anch 46.416 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.053 , loss_anch 45.19 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.938 , loss_anch 43.403 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.934 , loss_anch 42.016 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 75.287 , loss_anch 87.629 tau-train= 0.85
+DEBUG: epoch: 400 , mse_ 28.983 , loss_anch 41.781 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 15.794 , loss_anch 28.643 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 9.347 , loss_anch 22.164 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 6.163 , loss_anch 18.863 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 4.129 , loss_anch 84.168 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.794 , loss_anch 64.917 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.874 , loss_anch 55.101 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.73 , loss_anch 49.54 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.664 , loss_anch 48.417 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 7.464 , loss_anch 109.51 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 5.681 , loss_anch 91.731 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.897 , loss_anch 84.428 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 4.601 , loss_anch 80.053 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.36 , loss_anch 74.21 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.14e-04 | mean(stds)=2.39e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=8.22e-07
+DEBUG: tau-population= 0.60 | tau-pop-final= 0.60 | final-target-hit=False
+DEBUG: tau-mean-first=+0.60 | tau-mean-last=+0.33 | tau-LogN=+0.20 | tau-median=+0.47
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.82272482384123 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=18
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 56.711 , loss_anch 69.812 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 29.419 , loss_anch 42.769 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 18.063 , loss_anch 31.486 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 12.431 , loss_anch 25.804 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 9.487 , loss_anch 22.75 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.347 , loss_anch 49.108 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.902 , loss_anch 37.055 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.757 , loss_anch 31.143 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.758 , loss_anch 29.219 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.701 , loss_anch 27.737 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 58.892 , loss_anch 66.18 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 14.91 , loss_anch 22.913 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 4.263 , loss_anch 12.508 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.595 , loss_anch 9.823 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.745 , loss_anch 8.811 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 9.776 , loss_anch 108.643 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 7.258 , loss_anch 93.186 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 6.316 , loss_anch 87.23 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 5.437 , loss_anch 82.546 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 4.94 , loss_anch 79.628 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.683 , loss_anch 59.235 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.099 , loss_anch 44.027 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.96 , loss_anch 38.727 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.85 , loss_anch 36.046 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.826 , loss_anch 35.165 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.52e-05 | mean(stds)=1.42e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.14e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.279997894477674 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=16
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 54.115 , loss_anch 64.379 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 20.246 , loss_anch 31.708 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 11.968 , loss_anch 23.811 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 8.057 , loss_anch 19.914 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 5.649 , loss_anch 17.306 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.966 , loss_anch 55.837 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.913 , loss_anch 39.043 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.714 , loss_anch 34.37 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.588 , loss_anch 31.701 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.428 , loss_anch 29.663 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 193.192 , loss_anch 234.426 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 44.293 , loss_anch 87.428 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 13.683 , loss_anch 54.986 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 6.419 , loss_anch 43.901 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.514 , loss_anch 38.399 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 6.039 , loss_anch 76.961 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.772 , loss_anch 62.934 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.437 , loss_anch 55.476 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.181 , loss_anch 52.226 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.85 , loss_anch 47.911 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 3.608 , loss_anch 54.452 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.322 , loss_anch 42.881 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.499 , loss_anch 37.242 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.196 , loss_anch 33.335 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.956 , loss_anch 30.21 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=5.94e-06 | mean(stds)=2.07e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.14e-07
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.172705430864694 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 233.883 , loss_anch 247.881 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 78.389 , loss_anch 98.082 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 41.624 , loss_anch 63.741 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 26.723 , loss_anch 49.65 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 18.577 , loss_anch 41.689 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 6.323 , loss_anch 53.902 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.025 , loss_anch 45.037 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.093 , loss_anch 36.761 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.793 , loss_anch 33.337 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.642 , loss_anch 31.811 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 230.887 , loss_anch 246.773 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 83.537 , loss_anch 107.011 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 33.348 , loss_anch 60.438 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 18.875 , loss_anch 46.777 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 13.974 , loss_anch 40.997 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 8.489 , loss_anch 99.718 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.333 , loss_anch 67.802 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.07 , loss_anch 56.25 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.874 , loss_anch 51.334 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.391 , loss_anch 46.553 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.212 , loss_anch 67.703 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.092 , loss_anch 56.473 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.872 , loss_anch 50.239 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.729 , loss_anch 46.318 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.662 , loss_anch 43.943 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.47e-06 | mean(stds)=2.43e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 1.00 | n_kendall=12
+DEBUG: delta_f=4.14e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.60
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=11.707256985770636 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 360.847 , loss_anch 372.693 tau-train= 0.82
+DEBUG: epoch: 400 , mse_ 141.601 , loss_anch 157.119 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 57.071 , loss_anch 77.155 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 25.444 , loss_anch 48.546 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 12.874 , loss_anch 37.05 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.302 , loss_anch 82.106 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.165 , loss_anch 66.222 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.649 , loss_anch 57.254 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.218 , loss_anch 53.684 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.915 , loss_anch 50.961 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 117.88 , loss_anch 137.059 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 29.481 , loss_anch 51.586 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 14.475 , loss_anch 35.332 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 9.467 , loss_anch 28.641 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 6.523 , loss_anch 24.349 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 14.459 , loss_anch 152.723 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 8.754 , loss_anch 126.649 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 6.262 , loss_anch 104.193 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 5.548 , loss_anch 97.447 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 4.949 , loss_anch 91.73 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.341 , loss_anch 87.987 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.914 , loss_anch 67.862 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.713 , loss_anch 59.44 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.562 , loss_anch 55.851 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.427 , loss_anch 53.242 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=8.32e-06 | mean(stds)=1.98e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.14e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.518897634516083 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=13
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 65.473 , loss_anch 92.304 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 12.117 , loss_anch 39.321 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 7.492 , loss_anch 32.509 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 6.342 , loss_anch 28.995 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 5.42 , loss_anch 26.301 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 2.747 , loss_anch 69.889 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.384 , loss_anch 64.357 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.137 , loss_anch 61.91 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.931 , loss_anch 59.934 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.789 , loss_anch 58.307 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 12.226 , loss_anch 20.614 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 5.711 , loss_anch 12.543 tau-train= 0.89
+DEBUG: epoch: 600 , mse_ 3.693 , loss_anch 9.808 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 2.443 , loss_anch 8.152 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 1.669 , loss_anch 7.086 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 5.568 , loss_anch 91.533 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.327 , loss_anch 78.232 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.87 , loss_anch 69.601 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.296 , loss_anch 64.01 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.194 , loss_anch 61.459 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.836 , loss_anch 78.366 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.183 , loss_anch 64.213 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.01 , loss_anch 60.789 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.9 , loss_anch 59.016 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.866 , loss_anch 58.204 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.85e-06 | mean(stds)=2.51e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.73e-07
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.088928997187642 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 104.609 , loss_anch 120.521 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 56.256 , loss_anch 75.136 tau-train= 0.89
+DEBUG: epoch: 600 , mse_ 41.283 , loss_anch 59.992 tau-train= 0.89
+DEBUG: epoch: 800 , mse_ 29.703 , loss_anch 48.176 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 20.554 , loss_anch 39.115 tau-train= 0.93
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 3.82 , loss_anch 78.662 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.13 , loss_anch 65.472 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.791 , loss_anch 60.725 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.433 , loss_anch 56.722 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.369 , loss_anch 55.54 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 87.043 , loss_anch 101.656 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 33.491 , loss_anch 50.561 tau-train= 0.93
+DEBUG: epoch: 600 , mse_ 18.51 , loss_anch 35.853 tau-train= 0.93
+DEBUG: epoch: 800 , mse_ 10.069 , loss_anch 27.635 tau-train= 0.93
+DEBUG: epoch: 1000 , mse_ 5.576 , loss_anch 23.108 tau-train= 0.93
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 12.075 , loss_anch 182.257 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 9.63 , loss_anch 147.231 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 7.61 , loss_anch 133.156 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 6.977 , loss_anch 122.822 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 6.82 , loss_anch 120.181 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 6.392 , loss_anch 116.871 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.505 , loss_anch 88.892 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.188 , loss_anch 80.126 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.934 , loss_anch 76.047 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.741 , loss_anch 74.084 tau-train= 1.00
+DEBUG: tau-train-ens=0.9636363636363636
+DEBUG: tau-archive=0.9636363636363636 | std(means)=3.56e-06 | mean(stds)=1.54e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=6.58e-08
+DEBUG: tau-population= 0.87 | tau-pop-final= 0.87 | final-target-hit=False
+DEBUG: tau-mean-first=+0.87 | tau-mean-last=+0.87 | tau-LogN=+0.87 | tau-median=+1.00
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=5.382927778522271 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=13
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 4.184 , loss_anch 16.155 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.052 , loss_anch 12.56 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.545 , loss_anch 10.922 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.338 , loss_anch 9.636 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 21.523 , loss_anch 29.907 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.268 , loss_anch 36.963 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.667 , loss_anch 28.67 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.514 , loss_anch 24.073 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.422 , loss_anch 20.485 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.333 , loss_anch 17.551 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 4.778 , loss_anch 9.942 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 1.3 , loss_anch 6.229 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.352 , loss_anch 5.077 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.125 , loss_anch 4.626 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.062 , loss_anch 4.348 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 3.481 , loss_anch 77.368 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 1.964 , loss_anch 52.607 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 1.201 , loss_anch 39.483 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 1.001 , loss_anch 35.204 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.89 , loss_anch 32.582 tau-train= 0.96
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 0.623 , loss_anch 22.294 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 0.329 , loss_anch 14.564 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 0.254 , loss_anch 12.374 tau-train= 0.96
+DEBUG: epoch: 800 , mse_ 0.226 , loss_anch 11.754 tau-train= 0.96
+DEBUG: epoch: 1000 , mse_ 0.221 , loss_anch 11.57 tau-train= 0.96
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.10e-06 | mean(stds)=1.32e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.94 | n_kendall=12
+DEBUG: delta_f=6.58e-08
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=False
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=7.9269350068874385 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=14
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 6.766 , loss_anch 22.662 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.468 , loss_anch 14.901 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.254 , loss_anch 12.312 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.2 , loss_anch 10.5 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.156 , loss_anch 9.17 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 0.685 , loss_anch 24.515 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.297 , loss_anch 13.483 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.211 , loss_anch 10.995 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.173 , loss_anch 9.977 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.153 , loss_anch 9.365 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 12.477 , loss_anch 21.412 tau-train= 0.93
+DEBUG: epoch: 400 , mse_ 1.484 , loss_anch 11.044 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.441 , loss_anch 9.347 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.216 , loss_anch 8.488 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.149 , loss_anch 7.871 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 1.394 , loss_anch 42.455 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.046 , loss_anch 31.744 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.793 , loss_anch 27.15 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.684 , loss_anch 24.991 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.145 , loss_anch 24.509 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 1.139 , loss_anch 35.828 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.613 , loss_anch 22.116 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.354 , loss_anch 15.779 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.248 , loss_anch 14.257 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.244 , loss_anch 12.967 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=7.00e-07 | mean(stds)=1.47e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.21e-08
+DEBUG: tau-population= 1.00 | tau-pop-final= 1.00 | final-target-hit=False
+DEBUG: tau-mean-first=+1.00 | tau-mean-last=+1.00 | tau-LogN=+1.00 | tau-median=+0.87
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=9.655845214006284 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 52.931 , loss_anch 67.343 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 15.363 , loss_anch 33.53 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 6.166 , loss_anch 23.262 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.683 , loss_anch 18.532 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 5.722 , loss_anch 20.259 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.501 , loss_anch 56.47 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 1.042 , loss_anch 39.81 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.911 , loss_anch 35.121 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.802 , loss_anch 31.632 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.762 , loss_anch 30.361 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 40.079 , loss_anch 56.617 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 4.831 , loss_anch 22.65 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.057 , loss_anch 18.144 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.04 , loss_anch 15.349 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.597 , loss_anch 13.417 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 4.986 , loss_anch 100.192 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 3.495 , loss_anch 77.3 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.04 , loss_anch 68.038 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.357 , loss_anch 59.507 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.208 , loss_anch 56.253 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 2.681 , loss_anch 78.862 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.092 , loss_anch 64.034 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 1.94 , loss_anch 57.421 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 1.77 , loss_anch 53.938 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 1.629 , loss_anch 50.783 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=1.72e-07 | mean(stds)=1.57e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=4.21e-08
+DEBUG: tau-population= 0.07 | tau-pop-final= 0.07 | final-target-hit=False
+DEBUG: tau-mean-first=+0.07 | tau-mean-last=+0.20 | tau-LogN=+0.20 | tau-median=+0.07
+evaluated=1 | not-evaluated=5
+DEBUG: subset-max-norm=10.821377810564467 | norm-max=12.13941703508117
+DEBUG: subset_idx.size=15
+DEBUG:
+DEBUG: NN: 0
+DEBUG: epoch: 200 , mse_ 86.167 , loss_anch 98.502 tau-train= 0.89
+DEBUG: epoch: 400 , mse_ 38.493 , loss_anch 53.237 tau-train= 0.96
+DEBUG: epoch: 600 , mse_ 23.535 , loss_anch 39.166 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 14.097 , loss_anch 30.393 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 7.901 , loss_anch 24.744 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 1
+DEBUG: epoch: 200 , mse_ 1.607 , loss_anch 52.502 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 0.66 , loss_anch 39.165 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 0.868 , loss_anch 32.976 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.833 , loss_anch 31.438 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.787 , loss_anch 30.354 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 2
+DEBUG: epoch: 200 , mse_ 28.014 , loss_anch 37.281 tau-train= 0.96
+DEBUG: epoch: 400 , mse_ 7.104 , loss_anch 16.596 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.294 , loss_anch 11.318 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 0.872 , loss_anch 9.501 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 0.503 , loss_anch 8.765 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 3
+DEBUG: epoch: 200 , mse_ 8.273 , loss_anch 125.523 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 4.818 , loss_anch 89.822 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 3.73 , loss_anch 76.82 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 3.413 , loss_anch 72.243 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 3.094 , loss_anch 67.921 tau-train= 1.00
+DEBUG:
+DEBUG: NN: 4
+DEBUG: epoch: 200 , mse_ 3.387 , loss_anch 77.266 tau-train= 1.00
+DEBUG: epoch: 400 , mse_ 2.653 , loss_anch 65.024 tau-train= 1.00
+DEBUG: epoch: 600 , mse_ 2.422 , loss_anch 60.425 tau-train= 1.00
+DEBUG: epoch: 800 , mse_ 2.088 , loss_anch 56.524 tau-train= 1.00
+DEBUG: epoch: 1000 , mse_ 2.01 , loss_anch 53.485 tau-train= 1.00
+DEBUG: tau-train-ens=1.0
+DEBUG: tau-archive=1.0 | std(means)=3.98e-07 | mean(stds)=1.46e+00 | std(means)/mean(stds)=  0.00
+eval=1 | not-eval=5 | tau= 0.97 | n_kendall=12
+DEBUG: delta_f=2.53e-09
+DEBUG: tau-population= 0.73 | tau-pop-final= 0.73 | final-target-hit=True
+DEBUG: tau-mean-first=+0.73 | tau-mean-last=+0.73 | tau-LogN=+0.73 | tau-median=+0.73
+evaluated=1 | not-evaluated=5
+ 2D  1-fun   1-inst  500-budget  True-solved  56-evals  264-cma-evals  605s 0-restarts  6-init-pop (Surrogate(model=Raf(data_noise=0.01), subset=ClosestToEachTestPoint(Mahalanobis, n_max_coef=20), x_tf=ShiftAndScaleByEs, y_tf=MinAdjustedLog), EvaluateUntilKendallThreshold(mean_criterion, tau_threshold=0.85, offset=True), n_min_fn=get_dim) 2.5e-09-delta-f          1-seed
