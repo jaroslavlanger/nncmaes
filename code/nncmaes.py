@@ -354,8 +354,10 @@ YArch = np.ndarray[tuple[ARCHSIZE, Literal[1]], np.dtype[np.float64]]
 
 
 class Cma(ABC):
+    sigma0 = 2
+
     @abstractmethod
-    def __init__(self, *, x0: X, lb, ub, lambda_=None, verbose=None): ...
+    def __init__(self, *, x0: X, lb=None, ub=None, lambda_=None, sigma0=None, verbose=None): ...
 
     @property
     @abstractmethod
@@ -401,6 +403,7 @@ class Pycma(Cma):
         lb=None,
         ub=None,
         lambda_=None,
+        sigma0=None,
         verbose=None,
         seed=None,
     ):
@@ -413,12 +416,14 @@ class Pycma(Cma):
         self.__prev_evals = 0
         self.__restarts = 0
         self.__x0, self.__verbose, self.__lb, self.__ub = x0, verbose, lb, ub
+        self.__sigma0 = sigma0 if sigma0 is not None else self.sigma0
 
         self.__seed = seed
 
         self.__es = self.make_cmaes(
             x0=self.__x0,
             lambda_=lambda_,
+            sigma0=sigma0,
             lb=self.__lb,
             ub=self.__ub,
             seed=self.__seed,
@@ -451,11 +456,11 @@ class Pycma(Cma):
         return self.__es.mahalanobis_norm(delta)
 
     @staticmethod
-    def make_cmaes(*, x0, lambda_, lb, ub, seed, verbose):
+    def make_cmaes(*, x0, lambda_, sigma0, lb, ub, seed, verbose):
         # `Options <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/evolution_strategy.py#L415-L517>`_
         return CMAEvolutionStrategy(
             x0,
-            2,
+            sigma0,
             {
                 "popsize": lambda_,
                 "verbose": verbose,
@@ -475,6 +480,7 @@ class Pycma(Cma):
             self.__es = self.make_cmaes(
                 x0=self.__x0,
                 lambda_=lambda_,
+                sigma0=self.sigma0,
                 lb=self.__lb,
                 ub=self.__ub,
                 seed=self.__seed,
@@ -1433,7 +1439,6 @@ class ShiftAndScaleByEs(ShiftAndScale):
 class MinAdjustedLog(Transformation):
     """Parameters for the transform inverse are estimated from the last `transform` call."""
 
-    # improvement = 1e-12
     q_improve = 0.07  # 0.03
     # q_scale = 0.5
 
@@ -1460,7 +1465,12 @@ class MinAdjustedLog(Transformation):
         data_sub_min = data - self.__min
         self.__improve = quantile(data_sub_min, self.q_improve)
         if self.__improve == 0:
-            self.__improve = data_sub_min[flatnonzero(data_sub_min)].min()
+            try:
+                self.__improve = data_sub_min[flatnonzero(data_sub_min)].min()
+            except ValueError as e:
+                print("WARNING:", f"{data=}")
+                print("WARNING:", f"{repr(e)=}")
+                self.__improve = 1e-12
         return np.log(data_sub_min + self.__improve)
 
     def transform_inv(
@@ -1797,18 +1807,22 @@ class EvaluateBestPointsByCriterion(EvolutionControl):
 class EvaluateUntilKendallThreshold(EvolutionControl):
     """Inspired by pycma's `fitness_models <https://github.com/CMA-ES/pycma/blob/r3.3.0/cma/fitness_models.py#L258-L323>`_"""
 
+    kendall_thold = 0.85
+
     def __init__(
         self,
         *,
         criterion: AcquisitionFunction,
-        tau_thold: float = 0.85,
+        kendall_thold: Optional[float] = None,
         offset_non_evaluated: bool = False,
         verbose=True,
         show_pred=False,
         debug=False,
     ):
         self.__criterion = criterion
-        self.__tau_thold = tau_thold
+        self.__kendall_thold = (
+            kendall_thold if kendall_thold is not None else self.kendall_thold
+        )
         self.__offset_non_evaluated = offset_non_evaluated
         self.__show_pred = show_pred
         self.__verbose = verbose
@@ -1828,7 +1842,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
         return repr_default(
             self,
             self.__criterion,
-            tau_threshold=self.__tau_thold,
+            kendall_thold=self.__kendall_thold,
             offset=self.__offset_non_evaluated,
         )
 
@@ -1910,7 +1924,7 @@ class EvaluateUntilKendallThreshold(EvolutionControl):
                 else np.nan
             )  # noqa: F841
             if (
-                tau >= self.__tau_thold
+                tau >= self.__kendall_thold
                 or problem.all_evals_used
                 or problem.final_target_hit
             ):
@@ -2320,22 +2334,26 @@ if __name__ == "__main__":
     if should_test_all:
         test_all(dim=args.dim, fun=args.fun, inst=args.inst)
     else:
+        data_noise = float(os.environ["NOISE"])
+        kendall_thold = float(os.environ["THOLD"])
         surrogate_and_ec = SurrogateAndEc(
             surrogate=Surrogate(
-                ensemble=Raf(debug=True),
+                ensemble=Raf(data_noise=data_noise, debug=True),
                 subset=ClosestToEachTestPoint(norm=Mahalanobis, verbose=True),
             ),
             evolution_control=EvaluateUntilKendallThreshold(
+                kendall_thold=kendall_thold,
                 criterion=args.crit,
                 offset_non_evaluated=True,
                 debug=True,
             ),
         )
-        test(
-            dim=args.dim,
-            fun=args.fun,
-            inst=args.inst,
-            problem_class=ProblemIoh,
-            es_class=Pycma,
-            surrogate_and_ec=surrogate_and_ec,
-        )
+        for inst in args.inst if args.inst is not None else [None]:
+            test(
+                dim=args.dim,
+                fun=args.fun,
+                inst=inst,
+                problem_class=ProblemIoh,
+                es_class=Pycma,
+                surrogate_and_ec=surrogate_and_ec,
+            )
